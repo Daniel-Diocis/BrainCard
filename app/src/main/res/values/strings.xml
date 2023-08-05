@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="subject_name">Nome Materia</string>
+    <string name="creator_name">Nome del creatore</string>
+    <string name="deck1">Deck 1</string>
+    <string name="deck2">Deck 2</string>
+    <string name="deck3">Deck 3</string>
+    <string name="short_text">Eventuale breve messaggio da parte del creatore</string>
 </resources>
