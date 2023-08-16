@@ -9,4 +9,26 @@
     <string name="deck2">Deck 2</string>
     <string name="deck3">Deck 3</string>
     <string name="short_text">Eventuale breve messaggio da parte del creatore</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="baseline_arrow_back_24_description">freccia back</string>
+    <string name="default_title">BrainCard</string>
+    <string name="default_numbers">null</string>
+    <string name="Hint_mod_crea">Domanda base</string>
+    <string name="risposta_card">Risposta base</string>
+    <string name="gira_flashcard">Gira</string>
+    <string name="Bottone_salva">Salva</string>
+    <string name="domanda">Domanda base</string>
+    <string name="risposta">risposta base</string>
+    <string name="tick_description">corretto</string>
+    <string name="cross_description">Sbagliata</string>
 </resources>
