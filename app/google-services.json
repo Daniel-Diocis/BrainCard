@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "345943717367",
+    "project_id": "braincard-726d8",
+    "storage_bucket": "braincard-726d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345943717367:android:046d73cd5ea06b431f2af2",
+        "android_client_info": {
+          "package_name": "com.example.braincard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345943717367-q9p8n2nh7a9i5mckl4e4tblhf8450umr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqjk4_WsH23jKDiC5Uo6BJebmDM5hqW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345943717367-q9p8n2nh7a9i5mckl4e4tblhf8450umr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class FlashcardStudioViewModel(private val repository: CardRepository) : ViewModel() {
-    /    // LiveData per i dettagli della carta.
+    // LiveData per i dettagli della carta.
     val cardLiveData = MutableLiveData<Card>()
 
     // Funzione per caricare una carta dal database dato il codice univoco
@@ -22,4 +22,6 @@ class FlashcardStudioViewModel(private val repository: CardRepository) : ViewMod
         return repository.getFlashcardsByCodiceDeck(codiceDeck)
     }
 }
-//TODO: Creare CardRepository e Model Card
+// TODO: Creare CardRepository e Model Card codice, codiceDeck, domanda, risposta, numero
+// TODO: Model Deck-> codiceDeck, numeroCarteTot, punteggio, completato
+// TODO: Model Utente->User,PSW,...
