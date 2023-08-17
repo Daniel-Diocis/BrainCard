@@ -1,9 +1,11 @@
 package com.example.braincard
 
+import CardRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.braincard.data.model.Card
 import kotlinx.coroutines.launch
 
 class FlashcardStudioViewModel(private val repository: CardRepository) : ViewModel() {

@@ -1,5 +1,6 @@
 package com.example.braincard
 
+import Database
 import android.animation.ObjectAnimator
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,8 +11,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.example.braincard.data.model.Card
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
 import com.example.braincard.databinding.FragmentModCreaCardBinding
+import com.google.firebase.database.FirebaseDatabase
+
 
 class FlashcardStudio : Fragment() {
 
@@ -26,10 +30,15 @@ class FlashcardStudio : Fragment() {
     var dom=""
     var risp=""
 
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val cardDao=Database.cardDao()
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
         binding.flashcard.setOnClickListener {
             toggleFlashcardVisibility()
