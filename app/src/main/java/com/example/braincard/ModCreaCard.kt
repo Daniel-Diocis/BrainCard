@@ -40,7 +40,7 @@ class Modcreacard : Fragment() {
         viewModel.loadCardByCode(cardCode)
 
         // Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
-        viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card ->
+        viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card : Card ->
             // Aggiorna l'interfaccia utente con i dati della carta
             binding.editDomanda.setText(card.domanda)
             binding.editRisposta.setText(card.risposta)
