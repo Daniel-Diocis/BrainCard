@@ -25,5 +25,28 @@ class DeckRepository(private val deckDao: DeckDAO) {
     fun getCardsFromDeck(deckId: String): List<Card> {
         return deckDao.getCardsFromDeck(deckId)
     }
+    fun findCardPositionInDeck(deckId: String, cardId: String): Int {
+        val cards = deckDao.getCardsFromDeck(deckId)
+        for ((index, card) in cards.withIndex()) {
+            if (card.id == cardId) {
+                return index
+            }
+        }
+        return -1 // Carta non trovata
+    }
+    fun isCardIdInDeck(deckId: String, cardId: String): Boolean {
+        val cards = deckDao.getCardsFromDeck(deckId)
+        return cards.any { card -> card.id == cardId }
+    }
+    fun findDeckIdForCard(cardsList: List<Deck>, cardId: String): String? {
+        for (deck in cardsList) {
+            if (deck.cards.any { it.id == cardId }) {
+                return deck.id
+            }
+        }
+        return null
+    }
+
+
 }
 

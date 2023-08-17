@@ -23,6 +23,10 @@ class CardRepository(private val cardDao: CardDAO) {
     suspend fun getCardById(cardId: String): Card {
         return cardDao.getCardByID(cardId)
     }
+    suspend fun isCardIdInDatabase(cardId: String): Boolean {
+        val allCards = cardDao.getAllCards()
+        return allCards.any { card -> card.id == cardId }
+    }
 }
 
 

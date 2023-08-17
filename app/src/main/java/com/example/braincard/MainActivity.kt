@@ -1,6 +1,6 @@
 package com.example.braincard
 
-import Database
+import AppDatabase
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.example.braincard.databinding.ActivityMainBinding
 import com.google.firebase.FirebaseApp
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.DatabaseReference
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val appDatabase = Room.databaseBuilder(
             this,
-            Database::class.java, "my-database-name"
+            AppDatabase::class.java, "my-database-name"
         ).build()
         FirebaseApp.initializeApp(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
