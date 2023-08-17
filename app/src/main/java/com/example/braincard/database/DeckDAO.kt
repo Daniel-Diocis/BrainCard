@@ -20,9 +20,9 @@ interface DeckDAO {
     fun deleteDeck(deckId : String)
 
     @Update
-    fun updateDeck(deckId: String)
+    fun updateDeck(deck: Deck)
 
     @Query("SELECT cards FROM Deck WHERE id== :deckId ")
-    fun getCardsFromDeck(deckId: String)
+    fun getCardsFromDeck(deckId: String) : List<Card>
 
 }

@@ -22,6 +22,6 @@ interface CardDAO {
     fun updateCard(card: Card)
 
     @Query("SELECT * FROM Card WHERE id== :cardId ")
-    fun getCardByID(cardId: String)
+    fun getCardByID(cardId: String) : Card
 
 }
