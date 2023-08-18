@@ -77,24 +77,21 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/flashcard"
-            android:layout_width="379dp"
-            android:layout_height="544dp"
+            android:layout_width="235dp"
+            android:layout_height="263dp"
             android:layout_gravity="center"
             app:cardBackgroundColor="#D1D1D1"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/statusBar"
-            app:layout_constraintVertical_bias="0.572">
+            tools:layout_editor_absoluteX="90dp"
+            tools:layout_editor_absoluteY="126dp">
 
             <!-- Add the content for the front side of the flashcard here -->
 
             <EditText
                 android:id="@+id/editDomanda"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="195dp"
                 android:layout_gravity="start|top"
                 android:background="@null"
                 android:ems="10"
@@ -118,9 +115,9 @@
                     android:background="@null"
                     android:ems="10"
                     android:gravity="start|top"
-                    android:text="@string/risposta_card"
                     android:hint="@string/Hint_mod_crea"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:text="@string/risposta_card" />
 
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
@@ -159,11 +156,13 @@
             android:layout_marginTop="16dp"
             android:background="#4CAF50"
             android:backgroundTint="#4CAF50"
-            android:text="@string/Bottone_salva"
             android:onClick="onSalvaButtonClick"
+            android:text="@string/Bottone_salva"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flashcard" />
+            app:layout_constraintTop_toBottomOf="@+id/flashcard"
+            app:layout_constraintVertical_bias="0.013" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

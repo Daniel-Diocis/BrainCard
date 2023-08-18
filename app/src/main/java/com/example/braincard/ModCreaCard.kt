@@ -1,18 +1,17 @@
 package com.example.braincard
 
 
-import com.example.braincard.ModCreaCardViewModel
 import android.animation.ObjectAnimator
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.example.braincard.data.model.Card
+import com.example.braincard.data.model.Deck
 import com.example.braincard.database.CardRepository
 import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentModCreaCardBinding
@@ -52,6 +51,9 @@ class ModCreaCard : Fragment() {
         binding = FragmentModCreaCardBinding.inflate(inflater, container, false)
         binding.giraCard.setOnClickListener {
             toggleFlashcardVisibility()
+        }
+        binding.bottoneSalva.setOnClickListener{
+            onSalvaButtonClick()
         }
         return binding.root
     }
@@ -105,30 +107,36 @@ class ModCreaCard : Fragment() {
         if(risp != "") binding.editRisposta.setText(risp)
 
     }
-    fun onSalvaButtonClick() {
-        lateinit var existingFlashcard : Card
+    public fun onSalvaButtonClick() {
+        lateinit var existingFlashcard: Card
         val domanda = binding.editDomanda.text.toString()
         val risposta = binding.editRisposta.text.toString()
+        var deckProvaID: String = generateRandomString(20)
+        var deckProva: Deck = Deck(deckProvaID, 0)
+
 
 
 
 
         fragmentScope.launch {
-            if (bool) existingFlashcard =
-                cardRepository.getCardById(viewModel.cardIdLiveData.toString())
+            withContext(Dispatchers.IO) {
+                deckRepository.insertDeck(deckProva)
+                if (bool) {
+                    existingFlashcard =
+                        cardRepository.getCardById(viewModel.cardIdLiveData.toString())
 
 
-            if (existingFlashcard != null) {
-                // Aggiorna la domanda e la risposta della flashcard esistente
-                existingFlashcard.domanda = domanda
-                existingFlashcard.risposta = risposta
-                cardRepository.updateCard(existingFlashcard)
-            } else {
+                    // Aggiorna la domanda e la risposta della flashcard esistente
+                    existingFlashcard.domanda = domanda
+                    existingFlashcard.risposta = risposta
+                    cardRepository.updateCard(existingFlashcard)
+                } else {
 
-                val newFlashcard = Card(cardCode, domanda, risposta, false, "PROVA DA CAMBIARE")
-                cardRepository.insertCard(newFlashcard)
-                //TODO : Passare al fragment in cui si sceglie a che deck assegnare la card
+                    val newFlashcard = Card(cardCode, domanda, risposta, false, deckProvaID)
+                    cardRepository.insertCard(newFlashcard)
+                    //TODO : Passare al fragment in cui si sceglie a che deck assegnare la card
 
+                }
             }
         }
     }
