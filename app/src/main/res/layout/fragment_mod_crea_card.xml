@@ -12,157 +12,102 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
         <!-- Status bar -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/statusBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#4CAF50"
-            android:elevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!-- Left back arrow -->
-            <ImageView
-                android:id="@+id/backArrow"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="18dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="@string/baseline_arrow_back_24_description"
-                android:src="@drawable/baseline_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/titleTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.515" />
-
-            <!-- Center variable title -->
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="164dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/default_title"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backArrow"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Right numbers -->
-            <TextView
-                android:id="@+id/numbersTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
-                android:text="@string/default_numbers"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/titleTextView"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <!-- Flashcard design -->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/flashcard"
-            android:layout_width="235dp"
-            android:layout_height="263dp"
+            android:layout_width="303dp"
+            android:layout_height="550dp"
             android:layout_gravity="center"
+            android:visibility="visible"
             app:cardBackgroundColor="#D1D1D1"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            tools:layout_editor_absoluteX="90dp"
-            tools:layout_editor_absoluteY="126dp">
+            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gira_card">
 
             <!-- Add the content for the front side of the flashcard here -->
 
             <EditText
                 android:id="@+id/editDomanda"
                 android:layout_width="match_parent"
-                android:layout_height="195dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="start|top"
                 android:background="@null"
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/Hint_mod_crea"
                 android:inputType="text" />
+        </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/flashcardBack"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/flashcardBack"
+            android:layout_width="302dp"
+            android:layout_height="549dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#D1D1D1"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gira_card">
+
+            <EditText
+                android:id="@+id/editRisposta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                app:cardBackgroundColor="#D1D1D1"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp">
+                android:background="@null"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/Hint_mod_crea"
+                android:inputType="text"
+                android:text="@string/risposta_card" />
 
-                <EditText
-                    android:id="@+id/editRisposta"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="@string/Hint_mod_crea"
-                    android:inputType="text"
-                    android:text="@string/risposta_card" />
-
-            </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/gira_card"
             android:layout_width="84dp"
             android:layout_height="48dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginTop="16dp"
             android:checkable="false"
             android:onClick="onChipClick"
-            android:text="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/gira_flashcard"
+            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.165"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.086" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="108dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="3dp"
-            android:layout_marginEnd="188dp"
-            android:text="@string/gira_flashcard"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.074"
-            app:layout_constraintStart_toEndOf="@+id/gira_card"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.104" />
+            app:layout_constraintVertical_bias="0.009"
+            tools:text="@string/gira_flashcard" />
 
         <Button
             android:id="@+id/bottone_salva"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#4CAF50"
-            android:backgroundTint="#4CAF50"
+            android:layout_marginBottom="16dp"
             android:onClick="onSalvaButtonClick"
             android:text="@string/Bottone_salva"
+            app:backgroundTint="#4CAF50"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flashcard"
-            app:layout_constraintVertical_bias="0.013" />
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/numbersTextView"
+            android:layout_width="104dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="104dp"
+            android:text="@string/default_numbers"
+            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/gira_card"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.034" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

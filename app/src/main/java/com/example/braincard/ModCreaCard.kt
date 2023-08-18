@@ -1,8 +1,11 @@
 package com.example.braincard
 
 
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,17 +99,33 @@ class ModCreaCard : Fragment() {
 
         if (binding.flashcardBack.visibility == View.GONE) dom=binding.editDomanda.text.toString()
         else risp=binding.editRisposta.text.toString()
-        val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) 0f else 180f
+        val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
+            Log.e("Vis", "true")
+            0f} else 180f
+        val rotation2 = if (binding.flashcardBack.visibility == View.VISIBLE) {
+            Log.e("Vis2", "false")
+            180f} else 0f
         val anim = ObjectAnimator.ofFloat(binding.flashcard, "rotationY", rotation)
+        val anim2 = ObjectAnimator.ofFloat(binding.flashcardBack, "rotationY", rotation2)
         anim.duration = 300
+        anim2.duration = 300
         anim.start()
+        anim2.start()
 
-        binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
-        binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
-        if(dom != "") binding.editDomanda.setText(dom)
-        if(risp != "") binding.editRisposta.setText(risp)
+        val handler = Handler()
+        handler.postDelayed({
+            binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
+            binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
+
+            if (dom != "") binding.editDomanda.setText(dom)
+            if (risp != "") binding.editRisposta.setText(risp)
+        }, 320) // Ritardo di 300ms
+        binding.editDomanda.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
+        binding.editRisposta.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
 
     }
+
+
     public fun onSalvaButtonClick() {
         lateinit var existingFlashcard: Card
         val domanda = binding.editDomanda.text.toString()
