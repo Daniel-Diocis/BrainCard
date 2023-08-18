@@ -1,7 +1,7 @@
 package com.example.braincard
 
-import AppDatabase
-import ModCreaCardViewModel
+
+import com.example.braincard.ModCreaCardViewModel
 import android.animation.ObjectAnimator
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -10,23 +10,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.room.Database
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.braincard.data.model.Card
-import com.example.braincard.database.CardDAO
 import com.example.braincard.database.CardRepository
-import com.example.braincard.database.DeckDAO
 import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentModCreaCardBinding
+import com.example.braincard.factories.ModCreaCardViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class Modcreacard : Fragment() {
+class ModCreaCard : Fragment() {
 
     private lateinit var viewModel: ModCreaCardViewModel
     private lateinit var binding: FragmentModCreaCardBinding
+    private lateinit var sharedViewModel: SharedViewModel
     var dom : String = ""
     var risp : String = ""
     lateinit var cardRepository : CardRepository
@@ -40,9 +41,11 @@ class Modcreacard : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val db = Room.databaseBuilder(requireContext(), AppDatabase::class.java, "app-database").build()
-        val cardDao = db.cardDao()
-        val deckDAO = db.deckDao()
+
+        sharedViewModel = ViewModelProvider(requireActivity())
+            .get(SharedViewModel::class.java)
+        val cardDao = sharedViewModel.appDatabase.cardDao()
+        val deckDAO = sharedViewModel.appDatabase.deckDao()
         cardRepository=CardRepository(cardDao)
         deckRepository= DeckRepository(deckDAO)
 
@@ -56,26 +59,34 @@ class Modcreacard : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(ModCreaCardViewModel::class.java)
+        viewModel = ViewModelProvider(this, ModCreaCardViewModelFactory(cardRepository)).get(ModCreaCardViewModel::class.java)
 
         // Carica la carta con un codice univoco
         cardCode = generateRandomString(20) // TODO: NON VA BENE
 
 // Controlla se la carta è già presente nel database
-        if (viewModel.isCardIdInDatabase(cardCode)) {
-            bool=true
-            // Se la carta è presente, carica i dettagli nel layout XML
-            viewModel.loadCardByCode(cardCode)
 
-            // Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
-            viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card: Card ->
-                // Aggiorna l'interfaccia utente con i dati della carta
-                binding.editDomanda.setText(card.domanda)
-                binding.editRisposta.setText(card.risposta)
-                binding.numbersTextView.setText(deckRepository.findCardPositionInDeck(deckRepository.findDeckIdForCard(deckRepository.getAllDeck(),cardCode).toString(), cardCode))
-            })
-        } else {
-            // La carta non è presente nel database, fai qualcos'altro o mostra un messaggio
+        viewLifecycleOwner.lifecycleScope.launch {
+            val isCardInDatabase = withContext(Dispatchers.IO) {
+                viewModel.isCardIdInDatabase(cardCode)
+            }
+
+            if (isCardInDatabase) {
+                bool = true
+                // Se la carta è presente, carica i dettagli nel layout XML
+                viewModel.loadCardByCode(cardCode)
+
+                // Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
+                viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card: Card ->
+                    // Aggiorna l'interfaccia utente con i dati della carta
+                    binding.editDomanda.setText(card.domanda)
+                    binding.editRisposta.setText(card.risposta)
+
+                    binding.numbersTextView.setText(viewModel.howManyInDeck(cardCode) + 1)
+                })
+            } else {
+                // La carta non è presente nel database, fai qualcos'altro o mostra un messaggio
+            }
         }
 
     }
@@ -114,7 +125,7 @@ class Modcreacard : Fragment() {
                 cardRepository.updateCard(existingFlashcard)
             } else {
 
-                val newFlashcard = Card(cardCode, domanda, risposta, false)
+                val newFlashcard = Card(cardCode, domanda, risposta, false, "PROVA DA CAMBIARE")
                 cardRepository.insertCard(newFlashcard)
                 //TODO : Passare al fragment in cui si sceglie a che deck assegnare la card
 

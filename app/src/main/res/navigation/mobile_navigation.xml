@@ -37,6 +37,6 @@
     </fragment>
     <fragment
         android:id="@+id/modcreacard2"
-        android:name="com.example.braincard.Modcreacard"
+        android:name="com.example.braincard.ModCreaCard"
         android:label="Modcreacard" />
 </navigation>

@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class FlashcardStudioViewModel(private val repository: CardRepository, private val repository2: DeckRepository) : ViewModel() {
     // LiveData per i dettagli della carta.
     val cardLiveData = MutableLiveData<Card>()
+    val cardsLiveData = MutableLiveData<List<Card>>()
 
     // Funzione per caricare una carta dal database dato il codice univoco
     fun loadCardByCode(cardCode: String) {
@@ -22,8 +23,12 @@ class FlashcardStudioViewModel(private val repository: CardRepository, private v
         }
 
     }
-    fun getFlashcardsByCodiceDeck(codiceDeck: String): List<Card> {
-        return repository2.getCardsFromDeck(codiceDeck)
+    fun getFlashcardsByCodiceDeck(codiceDeck: String): LiveData<List<Card>> {
+        viewModelScope.launch {
+            val cards = repository.getCardByDeckID(codiceDeck)
+            cardsLiveData.postValue(cards)
+        }
+        return cardsLiveData
     }
 }
 

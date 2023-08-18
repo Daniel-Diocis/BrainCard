@@ -16,12 +16,15 @@ interface CardDAO {
     fun insertCard(card: Card)
 
     @Delete
-    fun deleteCard(cardId : String)
+    fun deleteCard(card : Card)
 
     @Update
     fun updateCard(card: Card)
 
     @Query("SELECT * FROM Card WHERE id== :cardId ")
     fun getCardByID(cardId: String) : Card
+
+    @Query("SELECT * FROM Card WHERE deckID== :deckId")
+    fun getCardsByDeckID(deckId : String) : List<Card>
 
 }

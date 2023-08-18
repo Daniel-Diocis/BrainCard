@@ -17,12 +17,12 @@ interface DeckDAO {
     fun insertDeck(deck: Deck)
 
     @Delete
-    fun deleteDeck(deckId : String)
+    fun deleteDeck(deck : Deck)
 
     @Update
     fun updateDeck(deck: Deck)
 
-    @Query("SELECT cards FROM Deck WHERE id== :deckId ")
-    fun getCardsFromDeck(deckId: String) : List<Card>
+
+
 
 }

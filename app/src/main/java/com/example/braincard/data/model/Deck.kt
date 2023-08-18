@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class Deck (
     @PrimaryKey val id : String = "",
     var percentualeCompletamento : Int = 0,
-    var cards : List<Card>
+
 )

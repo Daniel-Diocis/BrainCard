@@ -1,29 +1,30 @@
 package com.example.braincard
 
-import AppDatabase
+import com.example.braincard.database.BrainCardDatabase
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.room.Room
 import com.example.braincard.databinding.ActivityMainBinding
+import com.example.braincard.factories.SharedViewModelFactory
 import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appDatabase = Room.databaseBuilder(
-            this,
-            AppDatabase::class.java, "my-database-name"
-        ).build()
-        FirebaseApp.initializeApp(this)
+        val appDatabase = Room.databaseBuilder(this, BrainCardDatabase::class.java, "BrainCard").build()
+        sharedViewModel = ViewModelProvider(this, SharedViewModelFactory(appDatabase))
+            .get(SharedViewModel::class.java)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

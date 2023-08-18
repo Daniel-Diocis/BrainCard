@@ -8,5 +8,6 @@ data class Card (
     @PrimaryKey val id : String = "",
     var domanda : String = "",
     var risposta : String = "",
-    var completata : Boolean = false
+    var completata : Boolean = false,
+    var deckID : String
 )

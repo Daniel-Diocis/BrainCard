@@ -1,3 +1,5 @@
+package com.example.braincard
+
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,10 +20,13 @@ class ModCreaCardViewModel(private val repository: CardRepository) : ViewModel()
             cardIdLiveData.postValue(card.id)
         }
     }
-    fun isCardIdInDatabase(cardId: String): Boolean {
-        var bool : Boolean = false
-        viewModelScope.launch { bool= repository.isCardIdInDatabase(cardId) }
-        return bool
+    suspend fun isCardIdInDatabase(cardId: String): Boolean {
+        return repository.isCardIdInDatabase(cardId)
+    }
+    fun howManyInDeck(deckId : String): Int{
+        var num : Int = 0
+        viewModelScope.launch {  num = repository.getCardByDeckID(deckId).size}
+        return num
     }
 }
 //TODO: Creare CardRepository e Model Card

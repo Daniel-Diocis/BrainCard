@@ -1,6 +1,6 @@
 package com.example.braincard
 
-import AppDatabase
+
 import android.animation.ObjectAnimator
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -36,7 +36,7 @@ class FlashcardStudio : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val cardDao=AppDatabase.cardDao()
+
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
         binding.flashcard.setOnClickListener {
             toggleFlashcardVisibility()
@@ -53,7 +53,7 @@ class FlashcardStudio : Fragment() {
 
             // Popola la lista con i dati delle flashcard ottenute dal database
             for (flashcard in flashcards) {
-                flashcardDataList.add(Card(flashcard.domanda, flashcard.risposta))
+                flashcardDataList.add(Card(flashcard.id,flashcard.domanda,flashcard.risposta,false,flashcard.deckID))
             }
         }
         return binding.root
@@ -72,7 +72,7 @@ class FlashcardStudio : Fragment() {
             // Aggiorna l'interfaccia utente con i dati della carta
             binding.textDomanda.setText(card.domanda)
             binding.textRisposta.setText(card.risposta)
-            binding.numbersTextView.setText(card.numero)
+            //binding.numbersTextView.setText(card.numero)
         })
     }
 

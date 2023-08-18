@@ -12,8 +12,8 @@ class CardRepository(private val cardDao: CardDAO) {
         cardDao.insertCard(card)
     }
 
-    suspend fun deleteCard(cardId: String) {
-        cardDao.deleteCard(cardId)
+    suspend fun deleteCard(card: Card) {
+        cardDao.deleteCard(card)
     }
 
     suspend fun updateCard(card: Card) {
@@ -23,9 +23,13 @@ class CardRepository(private val cardDao: CardDAO) {
     suspend fun getCardById(cardId: String): Card {
         return cardDao.getCardByID(cardId)
     }
+    suspend fun getCardByDeckID(deckId : String): List<Card>{
+        return cardDao.getCardsByDeckID(deckId)
+    }
     suspend fun isCardIdInDatabase(cardId: String): Boolean {
-        val allCards = cardDao.getAllCards()
-        return allCards.any { card -> card.id == cardId }
+        val bool = cardDao.getCardByID(cardId) != null
+        return bool
+
     }
 }
 
