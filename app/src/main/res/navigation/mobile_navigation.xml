@@ -3,17 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/flashcardStudio">
-
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.braincard.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_home_to_materiaFragment"
-            app:destination="@id/materiaFragment" />
-    </fragment>
+    app:startDestination="@id/homeFragment2">
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -27,15 +17,6 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/materiaFragment"
-        android:name="com.example.braincard.MateriaFragment"
-        android:label="fragment_materia"
-        tools:layout="@layout/fragment_materia" >
-        <action
-            android:id="@+id/action_materiaFragment_to_navigation_home"
-            app:destination="@id/navigation_home" />
-    </fragment>
-    <fragment
         android:id="@+id/modcreacard2"
         android:name="com.example.braincard.ModCreaCard"
         android:label="Modcreacard" />
@@ -43,4 +24,18 @@
         android:id="@+id/flashcardStudio"
         android:name="com.example.braincard.FlashcardStudio"
         android:label="FlashcardStudio" />
+    <fragment
+        android:id="@+id/materiaFragment"
+        android:name="com.example.braincard.MateriaFragment"
+        android:label="fragment_materia"
+        tools:layout="@layout/fragment_materia" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.braincard.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.example.braincard.ui.home.HomeFragment"
+        android:label="HomeFragment" />
 </navigation>
