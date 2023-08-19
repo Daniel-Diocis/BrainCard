@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/modcreacard2">
+    app:startDestination="@id/flashcardStudio">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -39,4 +39,8 @@
         android:id="@+id/modcreacard2"
         android:name="com.example.braincard.ModCreaCard"
         android:label="Modcreacard" />
+    <fragment
+        android:id="@+id/flashcardStudio"
+        android:name="com.example.braincard.FlashcardStudio"
+        android:label="FlashcardStudio" />
 </navigation>

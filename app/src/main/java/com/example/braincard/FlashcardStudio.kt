@@ -4,15 +4,26 @@ package com.example.braincard
 import android.animation.ObjectAnimator
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.GestureDetector
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.braincard.data.model.Card
+import com.example.braincard.database.CardRepository
+import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
+import com.example.braincard.factories.FlashcardStudioViewModelFactory
+import com.example.braincard.factories.ModCreaCardViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class FlashcardStudio : Fragment() {
@@ -22,13 +33,14 @@ class FlashcardStudio : Fragment() {
     }
 
     private lateinit var viewModel: FlashcardStudioViewModel
+    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: FragmentFlashcardStudioBinding
     private var currentFlashcardPosition = 0
     private val flashcardDataList = mutableListOf<Card>()
-    var dom=""
-    var risp=""
-
-
+    lateinit var cardRepository: CardRepository
+    lateinit var deckRepository: DeckRepository
+    var dom = ""
+    var risp = ""
 
 
     override fun onCreateView(
@@ -36,7 +48,12 @@ class FlashcardStudio : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
+        sharedViewModel = ViewModelProvider(requireActivity())
+            .get(SharedViewModel::class.java)
+        val cardDao = sharedViewModel.appDatabase.cardDao()
+        val deckDAO = sharedViewModel.appDatabase.deckDao()
+        cardRepository = CardRepository(cardDao)
+        deckRepository = DeckRepository(deckDAO)
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
         binding.flashcard.setOnClickListener {
             toggleFlashcardVisibility()
@@ -44,39 +61,63 @@ class FlashcardStudio : Fragment() {
         binding.flashcardBack.setOnClickListener {
             toggleFlashcardVisibility()
         }
-        val codiceDeck = "il_tuo_codice_deck"
-        // TODO : Modo per passare codice deck
-        viewModel.getFlashcardsByCodiceDeck(codiceDeck).observe(viewLifecycleOwner) { flashcards : List<Card> ->
 
-            // Pulisci la lista esistente
-            flashcardDataList.clear()
-
-            // Popola la lista con i dati delle flashcard ottenute dal database
-            for (flashcard in flashcards) {
-                flashcardDataList.add(Card(flashcard.id,flashcard.domanda,flashcard.risposta,false,flashcard.deckID))
-            }
-        }
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FlashcardStudioViewModel::class.java)
-        // TODO: Use the ViewModel
-        // Carica la carta con un codice univoco
-        val cardCode = "CODICE_UNIVOCO" // Sostituisci con il tuo codice
-        // TODO : implementare funzione che definisce codice
-        viewModel.loadCardByCode(cardCode)
-        // Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
-        viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card : Card ->
-            // Aggiorna l'interfaccia utente con i dati della carta
-            binding.textDomanda.setText(card.domanda)
-            binding.textRisposta.setText(card.risposta)
-            //binding.numbersTextView.setText(card.numero)
-        })
+        viewModel = ViewModelProvider(
+            this,
+            FlashcardStudioViewModelFactory(cardRepository, deckRepository)
+        ).get(FlashcardStudioViewModel::class.java)
+
+        val codiceDeck = "MIYqkjpt4WmSvxBBPpra"
+        // TODO : Modo per passare codice deck
+        viewLifecycleOwner.lifecycleScope.launch() {
+            val flashcardsLiveData : LiveData<List<Card>>
+           withContext(Dispatchers.IO) {flashcardsLiveData = viewModel.getFlashcardsByCodiceDeck(codiceDeck)}
+
+            withContext(Dispatchers.Main) {
+                flashcardsLiveData.observe(viewLifecycleOwner) { flashcards: List<Card> ->
+                    // Pulisci la lista esistente
+                    flashcardDataList.clear()
+
+                    // Popola la lista con i dati delle flashcard ottenute dal database
+                    flashcards.forEach { flashcard ->
+                        flashcardDataList.add(
+                            Card(
+                                flashcard.id,
+                                flashcard.domanda,
+                                flashcard.risposta,
+                                false,
+                                flashcard.deckID
+                            )
+                        )
+                    }
+
+                    // Ora puoi aggiornare la UI con le flashcard caricate
+                    updateFlashcardContent()
+                }
+            }
+
+
+// TODO: Carica la carta con un codice univoco
+            val cardCode = "DVX1UqFxKevoDiMN9Dp3" // Sostituisci con il tuo codice
+// TODO : implementare funzione che definisce codice
+            withContext(Dispatchers.IO){ viewModel.loadCardByCode(cardCode)}
+
+// Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
+            viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card: Card ->
+                // Aggiorna l'interfaccia utente con i dati della carta
+                binding.textDomanda.setText(card.domanda)
+                binding.textRisposta.setText(card.risposta)
+                //binding.numbersTextView.setText(card.numero)
+            })
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
@@ -112,14 +153,31 @@ class FlashcardStudio : Fragment() {
 
     private fun toggleFlashcardVisibility() {
 
-        val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) 0f else 180f
+        if (binding.flashcardBack.visibility == View.GONE) dom=binding.textDomanda.text.toString()
+        else risp=binding.textRisposta.text.toString()
+        val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
+            Log.e("Vis", "true")
+            0f} else 180f
+        val rotation2 = if (binding.flashcardBack.visibility == View.VISIBLE) {
+            Log.e("Vis2", "false")
+            180f} else 0f
         val anim = ObjectAnimator.ofFloat(binding.flashcard, "rotationY", rotation)
+        val anim2 = ObjectAnimator.ofFloat(binding.flashcardBack, "rotationY", rotation2)
         anim.duration = 300
+        anim2.duration = 300
         anim.start()
+        anim2.start()
 
-        binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
-        binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
+        val handler = Handler()
+        handler.postDelayed({
+            binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
+            binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
 
+            if (dom != "") binding.textDomanda.setText(dom)
+            if (risp != "") binding.textRisposta.setText(risp)
+        }, 320) // Ritardo di 300ms
+        binding.textDomanda.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
+        binding.textRisposta.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
 
     }
 
