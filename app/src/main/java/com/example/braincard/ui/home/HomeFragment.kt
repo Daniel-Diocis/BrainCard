@@ -31,20 +31,8 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val deckContainer:LinearLayout =binding.deckContainer
-        homeViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
-            deckContainer.removeAllViews()
-            for (deck in decks) {
-                Log.e("controllo","ok")
 
-                val deckButton = Button(requireContext())
-                deckButton.text = "gino" // O qualsiasi altra proprietà del mazzo che vuoi visualizzare
-                deckButton.setOnClickListener {
-                    // Qui gestisci il click sul bottone del mazzo
-                }
-                deckContainer.addView(deckButton)
-            }
-        })
+
 
 
 
