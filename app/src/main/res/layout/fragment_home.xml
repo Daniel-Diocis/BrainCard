@@ -8,7 +8,7 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/deckContainer"
+        android:id="@+id/deckContainer1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

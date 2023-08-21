@@ -23,7 +23,7 @@ abstract class BrainCardDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     BrainCardDatabase::class.java,
-                    "BrainCard"
+                    "BrainCard1"
                 ).build()
                 INSTANCE = instance
                 instance
