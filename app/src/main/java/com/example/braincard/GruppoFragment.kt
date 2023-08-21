@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.braincard.data.model.Gruppo
 
 
 class GruppoFragment : Fragment() {
@@ -21,10 +22,21 @@ class GruppoFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
+
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
+        val gruppoId = arguments?.getString("gruppoid")
+
+
         val gruppoViewModel=ViewModelProvider(this).get(GruppoViewModel::class.java)
+        if (gruppoId != null) {
+            gruppoViewModel.aggiornaLista(gruppoId)
+        }
 
         val deckContainer=rootView.findViewById<LinearLayout>(R.id.gruppiContainer)
+        val btn_gen =rootView.findViewById<Button>(R.id.btn)
+        btn_gen.setOnClickListener{
+            gruppoViewModel.creaDeck()
+        }
 
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
             deckContainer.removeAllViews()

@@ -13,19 +13,40 @@ import kotlinx.coroutines.launch
 
 class GruppoViewModel(application: Application) : AndroidViewModel(application){
     private val repository: DeckRepository
-    val AllDeck: LiveData<List<Deck>>
+    lateinit var AllDeck: LiveData<List<Deck>>
+
+    var gruppoid:String=""
+
+
 
     init {
+
 
         val deckDao= BrainCardDatabase.getDatabase(application).deckDao()
         repository= DeckRepository(deckDao)
         AllDeck=repository.AllDeck
+
+
+    }
+    fun aggiornaLista(id:String){
+        gruppoid=id
+        viewModelScope.launch(Dispatchers.IO){
+            AllDeck=repository.getDeckByGruppoID(gruppoid)
+        }
+
     }
     fun creaDeck(){
         viewModelScope.launch(Dispatchers.IO) {
-            val newDeck = Deck("abCDE678901234567890","aldo",0,"09876543210987654321") // Cambia i dettagli del nuovo deck
+            val id=generateRandomString(20)
+            val newDeck = Deck(id,"aldo",0,gruppoid) // Cambia i dettagli del nuovo deck
             repository.insertDeck(newDeck)
         }
         Log.e("controllo","fattoDeck")
+    }
+    fun generateRandomString(length: Int): String {
+        val charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        return (1..length)
+            .map { charset.random() }
+            .joinToString("")
     }
 }

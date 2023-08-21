@@ -7,6 +7,7 @@
     app:startDestination="@id/navigation_home">
 
 
+
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.braincard.ui.dashboard.DashboardFragment"
@@ -37,12 +38,30 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment
-        android:id="@+id/homeFragment2"
-        android:name="com.example.braincard.ui.home.HomeFragment"
-        android:label="HomeFragment" />
-    <fragment
         android:id="@+id/navigation_home"
+        android:name="com.example.braincard.ui.home.HomeFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/action_navigation_home_to_gruppoFragment"
+            app:destination="@id/gruppoFragment">
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/gruppoFragment"
         android:name="com.example.braincard.GruppoFragment"
         android:label="fragment_gruppo"
-        tools:layout="@layout/fragment_gruppo" />
+        tools:layout="@layout/fragment_gruppo">
+
+
+        <argument
+            android:name="gruppoid"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_gruppoFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+
 </navigation>

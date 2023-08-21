@@ -26,7 +26,7 @@ interface DeckDAO {
     fun getDeckByID(deckId: String) : Deck
 
     @Query("SELECT * FROM Deck WHERE idGruppo== :gruppoId")
-    fun getDecksByGruppoID(gruppoId : String) : List<Deck>
+    fun getDecksByGruppoID(gruppoId : String) : LiveData<List<Deck>>
 
 
 
