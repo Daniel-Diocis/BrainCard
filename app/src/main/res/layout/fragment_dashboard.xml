@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
@@ -10,11 +11,7 @@
         android:id="@+id/search_shop"
         android:layout_width="407dp"
         android:layout_height="56dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        android:layout_marginTop="4dp">
     </SearchView>
 
     <LinearLayout
@@ -22,18 +19,13 @@
         android:layout_width="408dp"
         android:layout_height="64dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/scroll_shop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_shop">
+        app:layout_constraintHorizontal_bias="1.0">
 
         <Button
             android:id="@+id/btn_online"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingRight="16dp"
             android:text="Online" />
 
         <Button
@@ -45,24 +37,223 @@
     </LinearLayout>
 
     <ScrollView
-        android:id="@+id/scroll_shop"
-        android:layout_width="423dp"
+        android:id="@+id/scroll_online_shop"
+        android:layout_width="match_parent"
         android:layout_height="559dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
+            android:id="@+id/decks_online_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/deck1_on_container"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck1on"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 1" />
+                <Button
+                    android:id="@+id/num_flashcards_deck1on"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="1" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_download_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck2_on_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck2on"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 2" />
+                <Button
+                    android:id="@+id/num_flashcards_deck2on"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="5" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_download_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck3_on_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck3on"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 3" />
+                <Button
+                    android:id="@+id/num_flashcards_deck3on"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="7" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_download_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck4_on_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck4on"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 4" />
+                <Button
+                    android:id="@+id/num_flashcards_deck4on"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="4" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_download_24" />
+            </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:id="@+id/scroll_local_shop"
+        android:layout_width="match_parent"
+        android:layout_height="559dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/decks_lo_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/deck1_lo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck1lo"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 1" />
+                <Button
+                    android:id="@+id/num_flashcards_deck1lo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="1" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_upload_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck2_lo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck2lo"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 2" />
+                <Button
+                    android:id="@+id/num_flashcards_deck2lo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="5" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_upload_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck3_lo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck3lo"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 3" />
+                <Button
+                    android:id="@+id/num_flashcards_deck3lo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="7" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_upload_24" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/deck4_lo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal">
+                <Button
+                    android:id="@+id/button_deck4lo"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:text="Deck 4" />
+                <Button
+                    android:id="@+id/num_flashcards_deck4lo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="4" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_file_upload_24" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
