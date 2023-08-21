@@ -23,7 +23,7 @@ class GruppoViewModel(application: Application) : AndroidViewModel(application){
     }
     fun creaDeck(){
         viewModelScope.launch(Dispatchers.IO) {
-            val newDeck = Deck("abCDE678901234567890",0) // Cambia i dettagli del nuovo deck
+            val newDeck = Deck("abCDE678901234567890","aldo",0,"09876543210987654321") // Cambia i dettagli del nuovo deck
             repository.insertDeck(newDeck)
         }
         Log.e("controllo","fattoDeck")

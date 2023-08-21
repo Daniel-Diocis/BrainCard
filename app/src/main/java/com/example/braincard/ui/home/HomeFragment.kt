@@ -30,6 +30,25 @@ class HomeFragment : Fragment() {
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val gruppiContainer=binding.gruppiContainer
+        val btn_genera=binding.btnGenera
+
+        homeViewModel.AllGruppo.observe(viewLifecycleOwner, Observer { gruppi ->
+            gruppiContainer.removeAllViews()
+            for (gruppo in gruppi) {
+                Log.e("controllo","Deck trovato")
+
+                val deckButton = Button(requireContext())
+                deckButton.text = gruppo.nome // O qualsiasi altra proprietà del mazzo che vuoi visualizzare
+                deckButton.setOnClickListener {
+                    // Qui gestisci il click sul bottone del mazzo
+                }
+                gruppiContainer.addView(deckButton)
+            }
+        })
+        btn_genera.setOnClickListener{
+            homeViewModel.creaGruppo()
+        }
 
 
 

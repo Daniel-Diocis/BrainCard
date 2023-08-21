@@ -22,6 +22,11 @@ interface DeckDAO {
 
     @Update
     fun updateDeck(deck: Deck)
+    @Query("SELECT * FROM Deck WHERE id== :deckId ")
+    fun getDeckByID(deckId: String) : Deck
+
+    @Query("SELECT * FROM Deck WHERE idGruppo== :gruppoId")
+    fun getDecksByGruppoID(gruppoId : String) : List<Deck>
 
 
 

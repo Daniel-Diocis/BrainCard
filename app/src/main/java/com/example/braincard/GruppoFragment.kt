@@ -24,7 +24,7 @@ class GruppoFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
         val gruppoViewModel=ViewModelProvider(this).get(GruppoViewModel::class.java)
 
-        val deckContainer=rootView.findViewById<LinearLayout>(R.id.deckContainer1)
+        val deckContainer=rootView.findViewById<LinearLayout>(R.id.gruppiContainer)
 
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
             deckContainer.removeAllViews()
