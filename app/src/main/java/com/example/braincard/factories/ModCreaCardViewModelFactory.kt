@@ -1,14 +1,13 @@
 package com.example.braincard.factories
-
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.braincard.ModCreaCardViewModel
-import com.example.braincard.database.CardRepository
 
-class ModCreaCardViewModelFactory(private val repository: CardRepository) : ViewModelProvider.Factory {
+class ModCreaCardViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ModCreaCardViewModel::class.java)) {
-            return ModCreaCardViewModel(repository) as T
+            return ModCreaCardViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -31,4 +31,5 @@
     <string name="risposta">risposta base</string>
     <string name="tick_description">corretto</string>
     <string name="cross_description">Sbagliata</string>
+    <string name="Hint_mod_crea_risposta">Risposta base</string>
 </resources>

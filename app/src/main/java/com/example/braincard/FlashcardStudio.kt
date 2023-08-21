@@ -13,14 +13,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.braincard.data.model.Card
 import com.example.braincard.database.CardRepository
 import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
-import com.example.braincard.factories.FlashcardStudioViewModelFactory
-import com.example.braincard.factories.ModCreaCardViewModelFactory
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,12 +33,9 @@ class FlashcardStudio : Fragment() {
     }
 
     private lateinit var viewModel: FlashcardStudioViewModel
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var binding: FragmentFlashcardStudioBinding
     private var currentFlashcardPosition = 0
     private val flashcardDataList = mutableListOf<Card>()
-    lateinit var cardRepository: CardRepository
-    lateinit var deckRepository: DeckRepository
     var dom = ""
     var risp = ""
 
@@ -47,13 +44,8 @@ class FlashcardStudio : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        sharedViewModel = ViewModelProvider(requireActivity())
-            .get(SharedViewModel::class.java)
-        val cardDao = sharedViewModel.appDatabase.cardDao()
-        val deckDAO = sharedViewModel.appDatabase.deckDao()
-        cardRepository = CardRepository(cardDao)
-        deckRepository = DeckRepository(deckDAO)
+        viewModel = ViewModelProvider(
+            this,).get(FlashcardStudioViewModel::class.java)
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
         binding.flashcard.setOnClickListener {
             toggleFlashcardVisibility()
@@ -67,15 +59,12 @@ class FlashcardStudio : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this,
-            FlashcardStudioViewModelFactory(cardRepository, deckRepository)
-        ).get(FlashcardStudioViewModel::class.java)
+
 
         val codiceDeck = "MIYqkjpt4WmSvxBBPpra"
         // TODO : Modo per passare codice deck
         viewLifecycleOwner.lifecycleScope.launch() {
-            val flashcardsLiveData : LiveData<List<Card>>
+            val flashcardsLiveData : MutableLiveData<MutableList<Card>>
            withContext(Dispatchers.IO) {flashcardsLiveData = viewModel.getFlashcardsByCodiceDeck(codiceDeck)}
 
             withContext(Dispatchers.Main) {

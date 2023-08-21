@@ -1,12 +1,12 @@
 package com.example.braincard.database
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.braincard.data.model.Card
 
 class CardRepository(private val cardDao: CardDAO) {
 
-    suspend fun getAllCards(): List<Card> {
-        return cardDao.getAllCards()
-    }
+
 
     suspend fun insertCard(card: Card) {
         cardDao.insertCard(card)
@@ -23,7 +23,7 @@ class CardRepository(private val cardDao: CardDAO) {
     suspend fun getCardById(cardId: String): Card {
         return cardDao.getCardByID(cardId)
     }
-    suspend fun getCardByDeckID(deckId : String): List<Card>{
+    suspend fun getCardByDeckID(deckId : String): LiveData<MutableList<Card>>{
         return cardDao.getCardsByDeckID(deckId)
     }
     suspend fun isCardIdInDatabase(cardId: String): Boolean {
