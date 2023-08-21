@@ -1,6 +1,7 @@
 package com.example.braincard
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import com.example.braincard.database.DeckRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.properties.Delegates
 
 class ModCreaCardViewModel(application: Application) : ViewModel() {
 
@@ -69,6 +71,33 @@ class ModCreaCardViewModel(application: Application) : ViewModel() {
             repository.getCardByDeckID(deckId).value?.size ?: 0
         }}
         return num
+    }
+
+        fun changePercentualeByDeckID(deckId: String, CardList : MutableList<Card>) {
+            var completedCardCount = 0
+            Log.e("Viewmodel", CardList.toString())
+            CardList.forEach { card ->
+                Log.e("DENTRO", card.toString())
+                if (card.completata) {
+                    Log.e("DENTRO","")
+                    completedCardCount++
+                }
+            }
+            Log.e("Viewmodel",completedCardCount.toString())
+
+            val totalCardCount = CardList.size
+            val newPercentage = (completedCardCount.toDouble() / totalCardCount * 100).toInt()
+            Log.e("Viewmodel", newPercentage.toString())
+            viewModelScope.launch { withContext(Dispatchers.IO){
+                val deck = repository2.getDeckById(deckId)
+                deck.percentualeCompletamento = newPercentage
+                repository2.updateDeck(deck)
+            }
+        }
+    }
+    fun deleteCard(card : Card)
+    {
+        viewModelScope.launch{ withContext(Dispatchers.IO){repository.deleteCard(card)} }
     }
 }
 //TODO: Creare CardRepository e Model Card

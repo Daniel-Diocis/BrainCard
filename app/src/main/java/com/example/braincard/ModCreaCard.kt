@@ -1,6 +1,7 @@
 package com.example.braincard
 
 import android.animation.ObjectAnimator
+
 import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,8 +37,8 @@ class ModCreaCard : Fragment() {
     private lateinit var binding: FragmentModCreaCardBinding
     private lateinit var flashcardPagerAdapter: FlashcardPagerAdapter
     private var currentCardId: String = ""
-    var deckProvaID: String = generateRandomString(20)
-    var deckProva: Deck = Deck(deckProvaID, "ginoleffe",0,"09876543211098765432")
+    var deckProvaID: String = "MIAOMIAO"
+
     var dom: String = ""
     var risp: String = ""
     var bool: Boolean = false
@@ -54,9 +56,7 @@ class ModCreaCard : Fragment() {
         viewModel =
             ViewModelProvider(this, ModCreaCardViewModelFactory(requireActivity().application))
                 .get(ModCreaCardViewModel::class.java)
-        viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO) { viewModel.insertDeck(deckProva) }
-        } //TODO : QUESTO ANDRA' LEVATO
+
 
         viewModel.getAllDeckCard(deckProvaID)
         binding.giraCard.setOnClickListener {
@@ -79,6 +79,9 @@ class ModCreaCard : Fragment() {
         binding.bottoneSalva.setOnClickListener {
             onSalvaButtonClick()
 
+        }
+        binding.bottoneElimina.setOnClickListener{
+            onEliminaButtonClick()
         }
         return binding.root
     }
@@ -117,6 +120,7 @@ class ModCreaCard : Fragment() {
                     binding.numbersTextView.setText("1")
 
                 }
+                viewModel.changePercentualeByDeckID(deckProvaID, cardList)
             })
         }
 
@@ -124,6 +128,9 @@ class ModCreaCard : Fragment() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                binding.bottoneElimina.visibility = View.VISIBLE
+                Log.e("POSIZIONE", flashcardPagerAdapter.itemCount.toString() + " :::::: "+ position.toString())
+                if ( flashcardPagerAdapter.itemCount==0 || (position + 1)==flashcardPagerAdapter.itemCount ) binding.bottoneElimina.visibility = View.GONE
 
                 lastClickedPosition = position
                 if (position != flashcardPagerAdapter.itemCount) {
@@ -177,8 +184,6 @@ class ModCreaCard : Fragment() {
         val domanda: String
         val risposta: String
         if (index != 0 || flashcardPagerAdapter.itemCount != 0) {
-            Log.e("INDEX", index.toString())
-            Log.e("INDEX", flashcardPagerAdapter.itemCount.toString())
             currentCard = flashcardPagerAdapter.getFlashcardAtPosition(index)
             domanda = currentCard.domanda
             risposta = currentCard.risposta
@@ -199,7 +204,9 @@ class ModCreaCard : Fragment() {
                         viewModel.getCardById(currentCardId)
                     existingFlashcard.domanda = domanda
                     existingFlashcard.risposta = risposta
+                    existingFlashcard.completata = false
                     viewModel.updateCard(existingFlashcard)
+
                 } else {
                     //withContext(Dispatchers.Main){flashcardPagerAdapter.addFlashcard(createdFlashcard)}
                     viewModel.insertCard(createdFlashcard)
@@ -207,12 +214,34 @@ class ModCreaCard : Fragment() {
                 }
             }
             // Aggiorna la posizione del ViewPager2 per mostrare la nuova flashcard in cima
-            Log.e("ECCOMI", "")
+
             cardCode = generateRandomString(20)
             viewModel.getAllDeckCard(deckProvaID)
 
+
         }
 
+    }
+    fun onEliminaButtonClick()
+    {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.apply {
+            setTitle("Elimina Carta")
+            setMessage("Sei sicuro di voler eliminare questa carta?")
+            setPositiveButton("Elimina") { _, _ ->
+
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        val card = viewModel.getCardById(currentCardId)
+                        viewModel.deleteCard(card)
+                        viewModel.getAllDeckCard(deckProvaID)
+                    }
+                }
+            }
+            setNegativeButton("Annulla", null)
+            create()
+            show()
+        }
     }
 
     fun generateRandomString(length: Int): String {

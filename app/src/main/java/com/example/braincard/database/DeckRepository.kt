@@ -25,6 +25,9 @@ class DeckRepository(private val deckDao: DeckDAO) {
     suspend fun getDeckById(deckId: String): Deck {
         return deckDao.getDeckByID(deckId)
     }
+    suspend fun getPercentualeDeckByID(deckId: String) : LiveData<Int>{
+        return deckDao.getPercentualeDeckByID(deckId)
+    }
     suspend fun getDeckByGruppoID(gruppoId : String): LiveData<List<Deck>>{
         return deckDao.getDecksByGruppoID(gruppoId)
     }

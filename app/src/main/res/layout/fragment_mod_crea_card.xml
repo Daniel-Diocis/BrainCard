@@ -70,6 +70,22 @@
         </androidx.cardview.widget.CardView>
 
 
+        <Button
+            android:id="@+id/bottone_elimina"
+            android:layout_width="44dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="#00FDFDFD"
+            android:contentDescription="@string/elimina_description"
+            android:drawableLeft="@drawable/baseline_delete_24"
+            android:gravity="center"
+            android:onClick="onEliminaButtonClick"
+            android:paddingStart="8dp"
+            android:text="Elimina"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
         <com.google.android.material.chip.Chip
             android:id="@+id/gira_card"
