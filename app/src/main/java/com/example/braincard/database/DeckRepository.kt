@@ -21,13 +21,13 @@ class DeckRepository(private val deckDao: DeckDAO) {
     suspend fun updateDeck(deck: Deck) {
         deckDao.updateDeck(deck)
     }
+
     suspend fun getDeckById(deckId: String): Deck {
         return deckDao.getDeckByID(deckId)
     }
     suspend fun getDeckByGruppoID(gruppoId : String): LiveData<List<Deck>>{
         return deckDao.getDecksByGruppoID(gruppoId)
     }
-
     }
 
 

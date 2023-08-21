@@ -1,6 +1,7 @@
 package com.example.braincard.database
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -27,6 +28,12 @@ interface DeckDAO {
 
     @Query("SELECT * FROM Deck WHERE idGruppo== :gruppoId")
     fun getDecksByGruppoID(gruppoId : String) : LiveData<List<Deck>>
+
+    @Query("SELECT percentualeCompletamento FROM Deck WHERE id== :deckId ")
+    fun getPercentualeDeckByID(deckId: String) : LiveData<Int>
+
+    @Query("SELECT * FROM Deck WHERE id == :deckId")
+    fun getDeckById(deckId: String) : Deck
 
 
 

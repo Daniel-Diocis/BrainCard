@@ -36,7 +36,6 @@ class ModCreaCard : Fragment() {
     private lateinit var flashcardPagerAdapter: FlashcardPagerAdapter
     private var currentCardId: String = ""
     var deckProvaID: String = generateRandomString(20)
-
     var deckProva: Deck = Deck(deckProvaID, "ginoleffe",0,"09876543211098765432")
     var dom: String = ""
     var risp: String = ""

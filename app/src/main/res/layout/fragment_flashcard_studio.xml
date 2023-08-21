@@ -9,8 +9,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/flashcard"
-        android:layout_width="379dp"
-        android:layout_height="544dp"
+        android:layout_width="330dp"
+        android:layout_height="532dp"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -40,8 +40,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/flashcardBack"
-        android:layout_width="379dp"
-        android:layout_height="544dp"
+        android:layout_width="330dp"
+        android:layout_height="532dp"
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -87,30 +87,37 @@
         app:layout_constraintVertical_bias="0.976">
 
         <!-- Green tick for "Correct" -->
-        <ImageView
+        <ImageButton
             android:id="@+id/CorrettoImageView"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:clickable="true"
+            android:background="@drawable/button_selector"
             android:contentDescription="@string/tick_description"
-            android:focusable="true"
-            android:onClick="onCorrectClicked"
+            android:onClick="CorrettoNextCard"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:scaleType="centerInside"
             android:src="@drawable/baseline_check_circle_24" />
 
-        <!-- Red cross for "Wrong" -->
-        <ImageView
+        <ImageButton
             android:id="@+id/SbagliatoImageView"
-            android:layout_width="48dp"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_gravity="center"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:clickable="true"
+            android:background="@drawable/button_selector"
             android:contentDescription="@string/cross_description"
-            android:focusable="true"
-            android:onClick="onWrongClicked"
+            android:onClick="SbagliatoNextCard"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:scaleType="centerInside"
             android:src="@drawable/baseline_block_24" />
+
+
 
     </LinearLayout>
 

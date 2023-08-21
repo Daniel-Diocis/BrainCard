@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/black" /> <!-- Colore di sfondo premuto -->
+    <stroke android:width="2dp" android:color="#FFFFFF" /> <!-- Larghezza e colore del bordo -->
+    <corners android:radius="8dp" /> <!-- Angoli arrotondati -->
+</shape>

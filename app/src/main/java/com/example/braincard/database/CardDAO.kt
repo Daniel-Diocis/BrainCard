@@ -26,7 +26,7 @@ interface CardDAO {
     @Query("SELECT * FROM Card WHERE id== :cardId ")
     fun getCardByID(cardId: String) : Card
 
-    @Query("SELECT * FROM Card WHERE deckID== :deckId")
+    @Query("SELECT * FROM Card WHERE deckID == :deckId")
     fun getCardsByDeckID(deckId : String) : LiveData<MutableList<Card>>
 
 }

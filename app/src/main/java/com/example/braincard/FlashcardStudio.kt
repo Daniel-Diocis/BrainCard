@@ -20,24 +20,28 @@ import com.example.braincard.data.model.Card
 import com.example.braincard.database.CardRepository
 import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
+import com.example.braincard.factories.FlashcardStudioViewModelFactory
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.properties.Delegates
 
 
 class FlashcardStudio : Fragment() {
 
-    companion object {
-        fun newInstance() = FlashcardStudio()
-    }
+
 
     private lateinit var viewModel: FlashcardStudioViewModel
     private lateinit var binding: FragmentFlashcardStudioBinding
-    private var currentFlashcardPosition = 0
+    private var initialX = 0F
+    private var initialTranslationX = 0F
     private val flashcardDataList = mutableListOf<Card>()
     var dom = ""
     var risp = ""
+    val deckId = "MIAOMIAO"
+    private var index : Int = 0
+    private var perc : Int = 0
 
 
     override fun onCreateView(
@@ -45,14 +49,24 @@ class FlashcardStudio : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProvider(
-            this,).get(FlashcardStudioViewModel::class.java)
+            this, FlashcardStudioViewModelFactory(requireActivity().application, deckId)).get(FlashcardStudioViewModel::class.java)
+
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
+
+
         binding.flashcard.setOnClickListener {
             toggleFlashcardVisibility()
         }
         binding.flashcardBack.setOnClickListener {
             toggleFlashcardVisibility()
         }
+        binding.CorrettoImageView.setOnClickListener {
+            CorrectNextCard(deckId)
+        }
+        binding.SbagliatoImageView.setOnClickListener {
+            SbagliatoNextCard()
+        }
+
 
         return binding.root
     }
@@ -61,82 +75,90 @@ class FlashcardStudio : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-        val codiceDeck = "MIYqkjpt4WmSvxBBPpra"
-        // TODO : Modo per passare codice deck
-        viewLifecycleOwner.lifecycleScope.launch() {
-            val flashcardsLiveData : MutableLiveData<MutableList<Card>>
-           withContext(Dispatchers.IO) {flashcardsLiveData = viewModel.getFlashcardsByCodiceDeck(codiceDeck)}
-
-            withContext(Dispatchers.Main) {
-                flashcardsLiveData.observe(viewLifecycleOwner) { flashcards: List<Card> ->
-                    // Pulisci la lista esistente
-                    flashcardDataList.clear()
-
-                    // Popola la lista con i dati delle flashcard ottenute dal database
-                    flashcards.forEach { flashcard ->
-                        flashcardDataList.add(
-                            Card(
-                                flashcard.id,
-                                flashcard.domanda,
-                                flashcard.risposta,
-                                false,
-                                flashcard.deckID
-                            )
-                        )
-                    }
-
-                    // Ora puoi aggiornare la UI con le flashcard caricate
-                    updateFlashcardContent()
-                }
-            }
-
-
-// TODO: Carica la carta con un codice univoco
-            val cardCode = "DVX1UqFxKevoDiMN9Dp3" // Sostituisci con il tuo codice
-// TODO : implementare funzione che definisce codice
-            withContext(Dispatchers.IO){ viewModel.loadCardByCode(cardCode)}
-
-// Osserva il LiveData per i dettagli della carta e aggiorna l'interfaccia utente
-            viewModel.cardLiveData.observe(viewLifecycleOwner, Observer { card: Card ->
-                // Aggiorna l'interfaccia utente con i dati della carta
-                binding.textDomanda.setText(card.domanda)
-                binding.textRisposta.setText(card.risposta)
-                //binding.numbersTextView.setText(card.numero)
-            })
-        }
     }
+
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+            super.onViewCreated(view, savedInstanceState)
+            viewModel.AllCard.observe(viewLifecycleOwner) { cards ->
 
-        val gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-            override fun onFling(
-                p0: MotionEvent,
-                p1: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                val dx = p1.x ?: (0F - p0?.x!!)
-                if (dx > 0 && currentFlashcardPosition < flashcardDataList.size - 1) {
-                    // Swipe verso sinistra
-                    currentFlashcardPosition++
-                    updateFlashcardContent()
+                if (!cards.isNullOrEmpty()) {
+
+
+                    viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
+
                 }
-                return true
             }
-        })
+            viewModel.percentualeDeck.observe(viewLifecycleOwner, {percentuale ->
+                perc=percentuale
+                Log.e("CARTE PERCEN", percentuale.toString())
+                //TODO : NON PASSA IL VALORE DELLA PERCENTUALE PORCA MISERIA
+            })
+            viewModel.cardLiveData.observe(viewLifecycleOwner, { card ->
+                binding.textDomanda.setText(card.domanda)
+                binding.textRisposta.setText(card.risposta)
+            })
 
-        view.setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
-            true
+
+
+
+
+
+            view.setOnTouchListener { _, event ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        initialTranslationX = binding.flashcard.translationX
+                        initialX = event.x
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        val finalX = event.x
+                        val deltaX = finalX - initialX
+                        if (deltaX < -SWIPE_THRESHOLD) {
+                            // Swipe da destra a sinistra
+                            val endTranslationX = initialTranslationX - binding.flashcard.width
+                            binding.flashcard.animate()
+                                .translationX(endTranslationX)
+                                .setDuration(300) // Durata dell'animazione in millisecondi
+                                .withEndAction {
+                                    // Alla fine dell'animazione, chiamare la funzione SbagliatoNextCard
+                                    SbagliatoNextCard()
+                                    // Ripristinare la posizione della carta per la prossima animazione
+                                    binding.flashcard.translationX = initialTranslationX
+                                }
+                                .start()
+                        }
+                    }
+                }
+                true
+            }
         }
+            companion object {
+                private const val SWIPE_THRESHOLD = 50 // Imposta il valore appropriato per il tuo caso
+            }
+
+
+
+
+
+
+
+    private fun CorrectNextCard(deckId : String) {
+        val size = viewModel.getSizeOfDeck()
+        if (!viewModel.cardLiveData.value!!.completata) {
+            if (perc == 0) viewModel.updatePercentualeCompletamento(deckId, ((1.0 / size) * 100).toInt())
+            else {
+                val newPercentage = perc + ((1.0 / size) * 100).toInt()
+                viewModel.updatePercentualeCompletamento(deckId, newPercentage)
+            }
+            viewModel.updateCompletataCard()
+        }
+        index = index+1
+        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
     }
-
-
-    private fun updateFlashcardContent() {
-        val flashcardData = flashcardDataList[currentFlashcardPosition]
-        binding.textDomanda.text = flashcardData.domanda
-        binding.textRisposta.text = flashcardData.risposta
+    private fun SbagliatoNextCard(){
+        index  = index +1
+        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
 
     }
 
