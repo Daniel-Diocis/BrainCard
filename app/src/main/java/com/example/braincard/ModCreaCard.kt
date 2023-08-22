@@ -37,7 +37,7 @@ class ModCreaCard : Fragment() {
     private lateinit var binding: FragmentModCreaCardBinding
     private lateinit var flashcardPagerAdapter: FlashcardPagerAdapter
     private var currentCardId: String = ""
-    var deckProvaID: String = "MIAOMIAO"
+    var deckProvaID: String = "eyBKbZZIDD4TC1Ona2af"
 
     var dom: String = ""
     var risp: String = ""

@@ -7,6 +7,7 @@
             name="viewModel"
             type="com.example.braincard.ModCreaCardViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,16 +18,16 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/flashcard"
             android:layout_width="303dp"
-            android:layout_height="550dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
             android:visibility="visible"
             app:cardBackgroundColor="#D1D1D1"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintBottom_toBottomOf="@+id/viewPager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gira_card">
+            app:layout_constraintTop_toTopOf="@+id/viewPager">
 
             <!-- Add the content for the front side of the flashcard here -->
 
@@ -45,15 +46,15 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/flashcardBack"
             android:layout_width="302dp"
-            android:layout_height="549dp"
+            android:layout_height="0dp"
             android:visibility="invisible"
             app:cardBackgroundColor="#D1D1D1"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
+            app:layout_constraintBottom_toBottomOf="@+id/viewPager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gira_card">
+            app:layout_constraintTop_toTopOf="@+id/viewPager">
 
 
             <EditText
@@ -64,8 +65,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/Hint_mod_crea_risposta"
-                android:inputType="text"
-                 />
+                android:inputType="text" />
 
         </androidx.cardview.widget.CardView>
 
@@ -106,13 +106,12 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="410dp"
-            android:layout_height="570dp"
+            android:layout_height="0dp"
 
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bottone_salva"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@+id/gira_card" />
 
 
         <Button

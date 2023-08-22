@@ -12,6 +12,7 @@ class DeckRepository(private val deckDao: DeckDAO) {
 
     suspend fun insertDeck(deck: Deck) {
         deckDao.insertDeck(deck)
+
     }
 
     suspend fun deleteDeck(deckId: Deck) {
