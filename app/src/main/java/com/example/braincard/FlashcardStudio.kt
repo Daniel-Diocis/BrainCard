@@ -12,10 +12,12 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.braincard.data.model.Card
 import com.example.braincard.database.CardRepository
 import com.example.braincard.database.DeckRepository
@@ -39,7 +41,7 @@ class FlashcardStudio : Fragment() {
     private val flashcardDataList = mutableListOf<Card>()
     var dom = ""
     var risp = ""
-    val deckId = "MIAOMIAO"
+    lateinit var deckId : String
     private var index : Int = 0
     private var perc : Int = 0
 
@@ -48,8 +50,9 @@ class FlashcardStudio : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        deckId = arguments?.getString("deckId").toString()
         viewModel = ViewModelProvider(
-            this, FlashcardStudioViewModelFactory(requireActivity().application, deckId)).get(FlashcardStudioViewModel::class.java)
+            this, FlashcardStudioViewModelFactory(requireActivity().application, deckId.toString())).get(FlashcardStudioViewModel::class.java)
 
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
 
@@ -61,7 +64,7 @@ class FlashcardStudio : Fragment() {
             toggleFlashcardVisibility()
         }
         binding.CorrettoImageView.setOnClickListener {
-            CorrectNextCard(deckId)
+            CorrectNextCard(deckId.toString())
         }
         binding.SbagliatoImageView.setOnClickListener {
             SbagliatoNextCard()
@@ -81,18 +84,18 @@ class FlashcardStudio : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             viewModel.AllCard.observe(viewLifecycleOwner) { cards ->
-
+                Log.e(" CONTROLLO ALL CARD ", viewModel.AllCard.value.toString())
                 if (!cards.isNullOrEmpty()) {
-
-
                     viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
-
+                }
+                else {
+                    onEmptyAllCard()
                 }
             }
             viewModel.percentualeDeck.observe(viewLifecycleOwner, {percentuale ->
                 perc=percentuale
                 Log.e("CARTE PERCEN", percentuale.toString())
-                //TODO : NON PASSA IL VALORE DELLA PERCENTUALE PORCA MISERIA
+
             })
             viewModel.cardLiveData.observe(viewLifecycleOwner, { card ->
                 binding.textDomanda.setText(card.domanda)
@@ -137,12 +140,19 @@ class FlashcardStudio : Fragment() {
                 private const val SWIPE_THRESHOLD = 50 // Imposta il valore appropriato per il tuo caso
             }
 
-
-
-
-
-
-
+    fun onEmptyAllCard(){
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.apply {
+            setTitle("Nessuna Carta")
+            setMessage("Il deck non contiene alcuna carta.")
+            setPositiveButton("OK"){_, _ ->
+                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+            }
+            setCancelable(false)
+            create()
+            show()
+        }
+    }
     private fun CorrectNextCard(deckId : String) {
         val size = viewModel.getSizeOfDeck()
         if (!viewModel.cardLiveData.value!!.completata) {

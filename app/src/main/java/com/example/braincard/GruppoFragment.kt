@@ -8,13 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.braincard.data.model.Gruppo
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 
 class GruppoFragment : Fragment() {
 
+    var count : Int = 0
 
 
     override fun onCreateView(
@@ -40,23 +47,26 @@ class GruppoFragment : Fragment() {
 
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
             deckContainer.removeAllViews()
+            count = 0
             for (deck in decks) {
-                Log.e("controllo","Deck trovato")
-
                 val deckButton = Button(requireContext())
-                deckButton.text = "gino" // O qualsiasi altra proprietà del mazzo che vuoi visualizzare
+                deckButton.text = deck.nome
+                deckButton.id = count
                 deckButton.setOnClickListener {
-                    // Qui gestisci il click sul bottone del mazzo
-                }
+                            val bundle = bundleOf("deckId" to deck.id)
+                            findNavController().navigate(
+                                R.id.action_gruppoFragment_to_flashcardStudio,
+                                bundle
+                            )
+                        }
+                count++
                 deckContainer.addView(deckButton)
-            }
+                }
         })
-
-
-
         // Inflate the layout for this fragment
         return rootView
     }
+
 
 
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
 
-    app:startDestination="@id/modcreacard2">
+    app:startDestination="@id/navigation_home">
 
 
 
@@ -26,7 +26,11 @@
     <fragment
         android:id="@+id/flashcardStudio"
         android:name="com.example.braincard.FlashcardStudio"
-        android:label="FlashcardStudio" />
+        android:label="FlashcardStudio" >
+        <action
+            android:id="@+id/action_flashcardStudio_to_gruppoFragment"
+            app:destination="@id/gruppoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/materiaFragment"
         android:name="com.example.braincard.MateriaFragment"
@@ -55,13 +59,18 @@
         android:label="fragment_gruppo"
         tools:layout="@layout/fragment_gruppo">
 
-
         <argument
             android:name="gruppoid"
+            app:argType="string" />
+        <argument
+            android:name="deckId"
             app:argType="string" />
         <action
             android:id="@+id/action_gruppoFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_gruppoFragment_to_flashcardStudio"
+            app:destination="@id/flashcardStudio" />
     </fragment>
 
 </navigation>
