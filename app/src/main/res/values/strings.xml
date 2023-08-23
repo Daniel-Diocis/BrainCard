@@ -34,4 +34,5 @@
     <string name="Hint_mod_crea_risposta">Risposta base</string>
     <string name="elimina_description">elimina card</string>
     <string name="congratulazioni_hai_completato_il_deck">Congratulazioni! Hai completato il deck</string>
+    <string name="_0">0%</string>
 </resources>

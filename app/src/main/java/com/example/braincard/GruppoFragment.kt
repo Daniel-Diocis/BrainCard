@@ -1,6 +1,7 @@
 package com.example.braincard
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,8 +20,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-
+import org.eazegraph.lib.charts.PieChart
+import org.eazegraph.lib.models.PieModel
 
 
 class GruppoFragment : Fragment() {
@@ -39,14 +40,12 @@ class GruppoFragment : Fragment() {
         val gruppoId = arguments?.getString("gruppoid")
         //torta
 
-
-
-
-
         val gruppoViewModel=ViewModelProvider(this).get(GruppoViewModel::class.java)
         if (gruppoId != null) {
             gruppoViewModel.aggiornaLista(gruppoId)
         }
+        val pieChart = rootView.findViewById<PieChart>(R.id.piechart)
+
         val progressBar = rootView.findViewById<TextView>(R.id.progress)
         val percentComplete ="50%" // Cambia questo valore in base alla percentuale di completamento desiderata
         progressBar.text = percentComplete
@@ -79,15 +78,14 @@ class GruppoFragment : Fragment() {
             perc=perc/count
             var percString = perc.toString() + "%"
             progressBar.text =percString
+            var pieModel : PieModel = PieModel("Progresso", perc.toFloat(), Color.BLUE)
+            pieChart.addPieSlice(pieModel)
+            var complementaryPieModel = PieModel("Mancante", (100-perc).toFloat(), Color.WHITE)
+            pieChart.addPieSlice(complementaryPieModel)
+            pieChart.startAnimation()
 
         })
         // Inflate the layout for this fragment
         return rootView
     }
-
-
-
-
-
-
 }
