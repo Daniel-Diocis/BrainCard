@@ -2,6 +2,7 @@ package com.example.braincard
 
 
 import android.animation.ObjectAnimator
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
@@ -23,6 +24,7 @@ import com.example.braincard.database.CardRepository
 import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
 import com.example.braincard.factories.FlashcardStudioViewModelFactory
+import com.github.jinatonic.confetti.CommonConfetti
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,6 +45,7 @@ class FlashcardStudio : Fragment() {
     var risp = ""
     lateinit var deckId : String
     private var index : Int = 0
+    private var MAX_INDEX : Int = 0
     private var perc : Int = 0
 
 
@@ -84,6 +87,7 @@ class FlashcardStudio : Fragment() {
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             viewModel.AllCard.observe(viewLifecycleOwner) { cards ->
+                MAX_INDEX = cards.size
                 Log.e(" CONTROLLO ALL CARD ", viewModel.AllCard.value.toString())
                 if (!cards.isNullOrEmpty()) {
                     viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
@@ -92,11 +96,9 @@ class FlashcardStudio : Fragment() {
                     onEmptyAllCard()
                 }
             }
-            viewModel.percentualeDeck.observe(viewLifecycleOwner, {percentuale ->
-                perc=percentuale
-                Log.e("CARTE PERCEN", percentuale.toString())
-
-            })
+            viewModel.percentualeDeck.observe(viewLifecycleOwner) { percentuale ->
+                    perc = percentuale
+            }
             viewModel.cardLiveData.observe(viewLifecycleOwner, { card ->
                 binding.textDomanda.setText(card.domanda)
                 binding.textRisposta.setText(card.risposta)
@@ -155,21 +157,44 @@ class FlashcardStudio : Fragment() {
     }
     private fun CorrectNextCard(deckId : String) {
         val size = viewModel.getSizeOfDeck()
+        var bool = false
         if (!viewModel.cardLiveData.value!!.completata) {
             if (perc == 0) viewModel.updatePercentualeCompletamento(deckId, ((1.0 / size) * 100).toInt())
             else {
-                val newPercentage = perc + ((1.0 / size) * 100).toInt()
+                var newPercentage = perc + ((1.0 / size) * 100).toInt()
+                if (newPercentage == 99 || newPercentage>100) newPercentage=100
                 viewModel.updatePercentualeCompletamento(deckId, newPercentage)
+                if(newPercentage==100){
+                    if(binding.CoriandolitextView.visibility == View.GONE) Log.e("VISIBILITA'","GONE")
+                    else Log.e("VISIBILITA'","ORCO DIO")
+                    binding.CoriandolitextView.visibility = View.VISIBLE;
+                    if(binding.CoriandolitextView.visibility == View.GONE) Log.e("VISIBILITA'","GONE2")
+                    else Log.e("VISIBILITA'","ORCO DIO2")
+
+                    CommonConfetti.rainingConfetti(binding.ConstrLayout, intArrayOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.RED))
+                        .infinite();
+                    bool = true
+                    Handler().postDelayed({
+                        findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+                    }, 3000)
+                }
             }
             viewModel.updateCompletataCard()
         }
-        index = index+1
-        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
+        if(index+1<MAX_INDEX)
+        {index = index+1
+        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)}
+        else {
+            if(!bool) findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+        }
     }
     private fun SbagliatoNextCard(){
-        index  = index +1
-        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
-
+        if(index+1<MAX_INDEX)
+        {index = index+1
+            viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)}
+        else {
+             findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+        }
     }
 
     private fun toggleFlashcardVisibility() {
