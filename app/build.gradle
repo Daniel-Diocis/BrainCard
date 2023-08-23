@@ -38,6 +38,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
@@ -58,6 +59,7 @@ dependencies {
     implementation "androidx.room:room-runtime:2.5.2"
     implementation 'com.google.code.gson:gson:2.8.8'
     kapt "androidx.room:room-compiler:2.5.2"
+
 
 
 }

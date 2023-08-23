@@ -1,5 +1,6 @@
 package com.example.braincard
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -19,11 +22,13 @@ import kotlinx.coroutines.launch
 
 
 
+
 class GruppoFragment : Fragment() {
 
     var count : Int = 0
 
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,12 +37,19 @@ class GruppoFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
         val gruppoId = arguments?.getString("gruppoid")
+        //torta
+
+
+
 
 
         val gruppoViewModel=ViewModelProvider(this).get(GruppoViewModel::class.java)
         if (gruppoId != null) {
             gruppoViewModel.aggiornaLista(gruppoId)
         }
+        val progressBar = rootView.findViewById<TextView>(R.id.progress)
+        val percentComplete ="50%" // Cambia questo valore in base alla percentuale di completamento desiderata
+        progressBar.text = percentComplete
 
         val deckContainer=rootView.findViewById<LinearLayout>(R.id.gruppiContainer)
         val btn_gen =rootView.findViewById<Button>(R.id.btn)
@@ -48,6 +60,7 @@ class GruppoFragment : Fragment() {
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
             deckContainer.removeAllViews()
             count = 0
+            var perc=0
             for (deck in decks) {
                 val deckButton = Button(requireContext())
                 deckButton.text = deck.nome
@@ -60,8 +73,13 @@ class GruppoFragment : Fragment() {
                             )
                         }
                 count++
+                perc+=deck.percentualeCompletamento
                 deckContainer.addView(deckButton)
                 }
+            perc=perc/count
+            var percString = perc.toString() + "%"
+            progressBar.text =percString
+
         })
         // Inflate the layout for this fragment
         return rootView
