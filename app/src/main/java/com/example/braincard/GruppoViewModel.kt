@@ -15,12 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GruppoViewModel(application: Application) : AndroidViewModel(application){
+class GruppoViewModel(application: Application,gruppoid:String) : AndroidViewModel(application){
     private val repository: DeckRepository
     private val repository2 : CardRepository
     lateinit var AllDeck: LiveData<List<Deck>>
-    val deckHasCards: MutableLiveData<Boolean> = MutableLiveData()
-    var gruppoid:String=""
+
+
+    var gruppoId:String=gruppoid
 
 
 
@@ -31,21 +32,25 @@ class GruppoViewModel(application: Application) : AndroidViewModel(application){
         val cardDao= BrainCardDatabase.getDatabase(application).cardDao()
         repository= DeckRepository(deckDao)
         repository2 = CardRepository(cardDao)
-        AllDeck=repository.AllDeck
 
-    }
-    fun aggiornaLista(id:String){
-        gruppoid=id
-        viewModelScope.launch(Dispatchers.IO){
-            AllDeck=repository.getDeckByGruppoID(gruppoid)
+        viewModelScope.launch{withContext(Dispatchers.Main) {
+
+          AllDeck = repository.getDeckByGruppoID(gruppoid)
+          Log.e("id", gruppoid)
+
+         }
         }
 
+
     }
+
+
+
 
     fun creaDeck(){
         viewModelScope.launch(Dispatchers.IO) {
             val id=generateRandomString(20)
-            val newDeck = Deck(id,"aldo",0,gruppoid) // Cambia i dettagli del nuovo deck
+            val newDeck = Deck(id,"aldo",0,gruppoId) // Cambia i dettagli del nuovo deck
             repository.insertDeck(newDeck)
 
         }

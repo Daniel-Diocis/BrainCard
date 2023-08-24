@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,9 +48,9 @@ class HomeFragment : Fragment() {
                 deckButton.tag = gruppo.id
                 deckButton.setOnClickListener {
                     val gruppoId= it.tag as String
-                    val bundle = Bundle().apply {
-                        putString("gruppoid", gruppoId)
-                    }
+                    Log.e("gruppo id",gruppoId)
+                    val bundle = bundleOf("gruppoid" to gruppoId)
+
                     val action = R.id.action_navigation_home_to_gruppoFragment
 
                     findNavController().navigate(action,bundle)
@@ -74,6 +75,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding = null
     }
 }

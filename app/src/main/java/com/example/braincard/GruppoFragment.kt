@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.braincard.factories.GruppoViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.eazegraph.lib.charts.PieChart
@@ -29,7 +30,7 @@ class GruppoFragment : Fragment() {
     var count : Int = 0
 
 
-    @SuppressLint("MissingInflatedId")
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,13 +38,15 @@ class GruppoFragment : Fragment() {
     ): View? {
 
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
-        val gruppoId = arguments?.getString("gruppoid")
-        //torta
+        var gruppoId = arguments?.getString("gruppoid")
+        gruppoId=gruppoId.toString()
+        //creo viewmodel
+        val factory = GruppoViewModelFactory(requireActivity().application, gruppoId)
+        val gruppoViewModel = ViewModelProvider(this, factory).get(GruppoViewModel::class.java)
 
-        val gruppoViewModel=ViewModelProvider(this).get(GruppoViewModel::class.java)
-        if (gruppoId != null) {
-            gruppoViewModel.aggiornaLista(gruppoId)
-        }
+
+
+
         val pieChart = rootView.findViewById<PieChart>(R.id.piechart)
 
         val progressBar = rootView.findViewById<TextView>(R.id.progress)
@@ -61,6 +64,7 @@ class GruppoFragment : Fragment() {
             count = 0
             var perc=0
             for (deck in decks) {
+                Log.e(deck.nome,deck.idGruppo)
                 val deckButton = Button(requireContext())
                 deckButton.text = deck.nome
                 deckButton.id = count
@@ -75,7 +79,12 @@ class GruppoFragment : Fragment() {
                 perc+=deck.percentualeCompletamento
                 deckContainer.addView(deckButton)
                 }
-            perc=perc/count
+            if(decks.size > 0){
+                perc=perc/decks.size
+
+            }
+            else perc=0
+
             var percString = perc.toString() + "%"
             progressBar.text =percString
             var pieModel : PieModel = PieModel("Progresso", perc.toFloat(), Color.BLUE)
@@ -88,4 +97,5 @@ class GruppoFragment : Fragment() {
         // Inflate the layout for this fragment
         return rootView
     }
+
 }
