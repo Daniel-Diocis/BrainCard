@@ -36,7 +36,7 @@ class ModCreaCardViewModel(application: Application) : ViewModel() {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                AllDeckCard= repository.getCardByDeckID(deckId)
+                AllDeckCard = repository.getCardByDeckID(deckId)
             }}
 
     }

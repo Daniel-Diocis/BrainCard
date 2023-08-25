@@ -1,5 +1,6 @@
 package com.example.braincard.database
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.braincard.data.model.Card
@@ -26,6 +27,7 @@ class CardRepository(private val cardDao: CardDAO) {
     suspend fun getCardByDeckID(deckId : String): LiveData<MutableList<Card>>{
         return cardDao.getCardsByDeckID(deckId)
     }
+
     suspend fun isCardIdInDatabase(cardId: String): Boolean {
         val bool = cardDao.getCardByID(cardId) != null
         return bool
