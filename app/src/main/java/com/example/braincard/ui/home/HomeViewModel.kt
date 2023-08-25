@@ -27,10 +27,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         AllGruppo=repository.AllGruppo
     }
 
-    fun creaGruppo(){
+    fun creaGruppo(nome:String){
         viewModelScope.launch(Dispatchers.IO) {
             val id=generateRandomString(20)
-            val newGruppo=Gruppo(id,"Geografia",)
+            Log.e("eccoloView",nome)
+            val newGruppo=Gruppo(id,nome)
             repository.insertGruppo(newGruppo)
         }
         Log.e("controllo","fattogruèèpo")

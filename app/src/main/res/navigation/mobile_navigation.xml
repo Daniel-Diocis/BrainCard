@@ -72,5 +72,10 @@
             android:id="@+id/action_gruppoFragment_to_flashcardStudio"
             app:destination="@id/flashcardStudio" />
     </fragment>
+    <fragment
+        android:id="@+id/popUp"
+        android:name="com.example.braincard.PopUp"
+        android:label="fragment_pop_up"
+        tools:layout="@layout/fragment_pop_up" />
 
 </navigation>

@@ -6,31 +6,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.braincard.GruppoFragment
+import com.example.braincard.PopUp
+import com.example.braincard.PopUpMessage
 import com.example.braincard.R
 import com.example.braincard.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
+    private var nomeNuovo="a"
+    private lateinit var homeViewModel: HomeViewModel
+    lateinit var popUpMessage: PopUpMessage
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        popUpMessage = PopUpMessage.getInstance()
+
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
@@ -60,18 +66,23 @@ class HomeFragment : Fragment() {
             }
         })
         btn_genera.setOnClickListener{
-            homeViewModel.creaGruppo()
+            val pop = PopUp()
+
+            pop.show((activity as AppCompatActivity).supportFragmentManager, "showPopUp")
+
         }
+        // Osserva l'attributo message quando si crea un gruppo
 
+        popUpMessage.messageLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
+            // Esegui azioni in risposta ai cambiamenti dell'attributo message
 
+             homeViewModel.creaGruppo(newMessage)
 
-
-
-
-
+        })
 
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
