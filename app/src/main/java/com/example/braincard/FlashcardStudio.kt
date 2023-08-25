@@ -7,29 +7,21 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.GestureDetector
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.core.graphics.component1
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.braincard.data.model.Card
-import com.example.braincard.database.CardRepository
-import com.example.braincard.database.DeckRepository
 import com.example.braincard.databinding.FragmentFlashcardStudioBinding
 import com.example.braincard.factories.FlashcardStudioViewModelFactory
 import com.github.jinatonic.confetti.CommonConfetti
-
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlin.properties.Delegates
+import com.github.jinatonic.confetti.ConfettiManager
 
 
 class FlashcardStudio : Fragment() {
@@ -40,19 +32,22 @@ class FlashcardStudio : Fragment() {
     private lateinit var binding: FragmentFlashcardStudioBinding
     private var initialX = 0F
     private var initialTranslationX = 0F
-    private val flashcardDataList = mutableListOf<Card>()
-    var dom = ""
-    var risp = ""
     lateinit var deckId : String
+    lateinit var shuffledCards : MutableList<Card>
     private var index : Int = 0
     private var MAX_INDEX : Int = 0
     private var perc : Int = 0
+    private var bool = true
+    private var hasBeenCompleted = true
+    private var clickable = true
+
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         deckId = arguments?.getString("deckId").toString()
         viewModel = ViewModelProvider(
             this, FlashcardStudioViewModelFactory(requireActivity().application, deckId.toString())).get(FlashcardStudioViewModel::class.java)
@@ -60,18 +55,19 @@ class FlashcardStudio : Fragment() {
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
 
 
-        binding.flashcard.setOnClickListener {
-            toggleFlashcardVisibility()
-        }
-        binding.flashcardBack.setOnClickListener {
-            toggleFlashcardVisibility()
-        }
-        binding.CorrettoImageView.setOnClickListener {
-            CorrectNextCard(deckId.toString())
-        }
-        binding.SbagliatoImageView.setOnClickListener {
-            SbagliatoNextCard()
-        }
+            binding.flashcard.setOnClickListener {
+                if (clickable) toggleFlashcardVisibility()
+            }
+            binding.flashcardBack.setOnClickListener {
+                if (clickable) toggleFlashcardVisibility()
+            }
+            binding.CorrettoImageView.setOnClickListener {
+                if (clickable) CorrectNextCard(deckId.toString())
+            }
+            binding.SbagliatoImageView.setOnClickListener {
+                if (clickable) SbagliatoNextCard()
+            }
+
 
 
         return binding.root
@@ -84,13 +80,20 @@ class FlashcardStudio : Fragment() {
     }
 
 
+
+
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
+
+
             viewModel.AllCard.observe(viewLifecycleOwner) { cards ->
                 MAX_INDEX = cards.size
-                Log.e(" CONTROLLO ALL CARD ", viewModel.AllCard.value.toString())
+                if(bool) {
+                    Log.e("SHUFFLING","")
+                    shuffledCards=shuffleCards(cards)
+                bool=false}
                 if (!cards.isNullOrEmpty()) {
-                    viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)
+                    viewModel.loadCardByCode(shuffledCards[index].id)
                 }
                 else {
                     onEmptyAllCard()
@@ -99,10 +102,11 @@ class FlashcardStudio : Fragment() {
             viewModel.percentualeDeck.observe(viewLifecycleOwner) { percentuale ->
                     perc = percentuale
             }
-            viewModel.cardLiveData.observe(viewLifecycleOwner, { card ->
+            viewModel.cardLiveData.observe(viewLifecycleOwner) { card ->
                 binding.textDomanda.setText(card.domanda)
                 binding.textRisposta.setText(card.risposta)
-            })
+
+            }
 
 
 
@@ -142,6 +146,14 @@ class FlashcardStudio : Fragment() {
                 private const val SWIPE_THRESHOLD = 50 // Imposta il valore appropriato per il tuo caso
             }
 
+    fun shuffleCards(card : MutableList<Card>): MutableList<Card> {
+        val cards = card
+        val falseCards = cards.filter { !it.completata }.shuffled()
+        val trueCards = cards.filter { it.completata }.shuffled()
+        val shuffledSortedCards = falseCards + trueCards
+        return shuffledSortedCards.toMutableList()
+    }
+
     fun onEmptyAllCard(){
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.apply {
@@ -155,27 +167,60 @@ class FlashcardStudio : Fragment() {
             show()
         }
     }
+    fun onErrorStudio()
+    {
+        val alertDialogBuilder = AlertDialog.Builder(requireActivity().baseContext)
+        alertDialogBuilder.apply {
+            setTitle("Errore")
+            setMessage("C'è stato un errore nello studio di un deck, sei stato" +
+                    "reindirizzato alla home")
+            setPositiveButton("OK"){_, _ ->
+                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+            }
+            setCancelable(false)
+            create()
+            show()
+        }
+    }
+
     private fun CorrectNextCard(deckId : String) {
         val size = viewModel.getSizeOfDeck()
         var bool = false
+        if(perc==100 && index+1==MAX_INDEX && !hasBeenCompleted){
+            binding.CoriandolitextView.visibility = View.VISIBLE;
+            CommonConfetti.rainingConfetti(binding.ConstrLayout, intArrayOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.RED))
+                .infinite();
+
+            clickable=false // dice che non si può cliccare
+            bool = true
+            val navController = findNavController()
+            val action = R.id.action_flashcardStudio_to_gruppoFragment
+            Handler().postDelayed({
+                if(navController.currentDestination?.id != R.id.flashcardStudio)
+                { }
+                else navController.navigate(action)
+            }, 3000)
+        }
         if (!viewModel.cardLiveData.value!!.completata) {
+            if(hasBeenCompleted) hasBeenCompleted=false
             if (perc == 0) viewModel.updatePercentualeCompletamento(deckId, ((1.0 / size) * 100).toInt())
             else {
                 var newPercentage = perc + ((1.0 / size) * 100).toInt()
                 if (newPercentage == 99 || newPercentage>100) newPercentage=100
                 viewModel.updatePercentualeCompletamento(deckId, newPercentage)
-                if(newPercentage==100){
-                    if(binding.CoriandolitextView.visibility == View.GONE) Log.e("VISIBILITA'","GONE")
-                    else Log.e("VISIBILITA'","ORCO DIO")
+                if(newPercentage==100 && index+1==MAX_INDEX){
                     binding.CoriandolitextView.visibility = View.VISIBLE;
-                    if(binding.CoriandolitextView.visibility == View.GONE) Log.e("VISIBILITA'","GONE2")
-                    else Log.e("VISIBILITA'","ORCO DIO2")
-
                     CommonConfetti.rainingConfetti(binding.ConstrLayout, intArrayOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.RED))
-                        .infinite();
+                        .infinite()
+                    
+                    clickable=false
                     bool = true
+                    val navController = findNavController()
+                    val action = R.id.action_flashcardStudio_to_gruppoFragment
                     Handler().postDelayed({
-                        findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+                        if(navController.currentDestination?.id != R.id.flashcardStudio)
+                        { }
+                        else navController.navigate(action)
                     }, 3000)
                 }
             }
@@ -183,15 +228,22 @@ class FlashcardStudio : Fragment() {
         }
         if(index+1<MAX_INDEX)
         {index = index+1
-        viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)}
+        viewModel.loadCardByCode(shuffledCards[index].id)}
         else {
             if(!bool) findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
         }
     }
     private fun SbagliatoNextCard(){
+        if (viewModel.cardLiveData.value!!.completata)
+        {
+        val size = viewModel.getSizeOfDeck()
+        var newPercentage = perc - ((1.0 / size) * 100).toInt()
+        if(newPercentage == 1 || newPercentage == -1) newPercentage=0
+        viewModel.updatePercentualeCompletamento(deckId, newPercentage)
+        viewModel.updateSbagliataCard()}
         if(index+1<MAX_INDEX)
         {index = index+1
-            viewModel.loadCardByCode(viewModel.AllCard.value!![index].id)}
+            viewModel.loadCardByCode(shuffledCards[index].id)}
         else {
              findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
         }
@@ -199,13 +251,12 @@ class FlashcardStudio : Fragment() {
 
     private fun toggleFlashcardVisibility() {
 
-        if (binding.flashcardBack.visibility == View.GONE) dom=binding.textDomanda.text.toString()
-        else risp=binding.textRisposta.text.toString()
+
         val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
-            Log.e("Vis", "true")
+
             0f} else 180f
         val rotation2 = if (binding.flashcardBack.visibility == View.VISIBLE) {
-            Log.e("Vis2", "false")
+
             180f} else 0f
         val anim = ObjectAnimator.ofFloat(binding.flashcard, "rotationY", rotation)
         val anim2 = ObjectAnimator.ofFloat(binding.flashcardBack, "rotationY", rotation2)
@@ -219,14 +270,12 @@ class FlashcardStudio : Fragment() {
             binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
             binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
 
-            if (dom != "") binding.textDomanda.setText(dom)
-            if (risp != "") binding.textRisposta.setText(risp)
+
         }, 320) // Ritardo di 300ms
         binding.textDomanda.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
         binding.textRisposta.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
 
     }
-
 
 
 }

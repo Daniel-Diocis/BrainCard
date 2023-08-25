@@ -22,7 +22,7 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
     private val repository : CardRepository
     private val repository2 : DeckRepository
     val AllDeck : LiveData<List<Deck>>
-    lateinit var AllCard : LiveData<MutableList<Card>>
+    lateinit var AllCard: LiveData<MutableList<Card>>
     val cardLiveData = MutableLiveData<Card>()
     lateinit var percentualeDeck : LiveData<Int>
 
@@ -36,11 +36,11 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
         viewModelScope.launch {
             withContext(Dispatchers.Main){
                 AllCard =  repository.getCardByDeckID(deckId)
-                Log.e("AllCard VIEWMODEL", AllCard.value.toString())
                 percentualeDeck=repository2.getPercentualeDeckByID(deckId)
                 Log.e("Perc VIEWMODEL", percentualeDeck.value.toString())
             }
         }
+
 
     }
 
@@ -53,6 +53,9 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
             loadPercentualeDeck(card.deckID)
         }
     }
+
+
+
     fun loadPercentualeDeck(deckId: String){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
@@ -66,19 +69,7 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
         return AllCard.value?.size ?: 0
     }
 
-    fun creaDeck (deckId: String){
-        val deck = Deck(deckId, "DIO", 0, "09876543211098765432")
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                repository2.insertDeck(deck)
-                val card1= Card("12345678912345678999", "dominguez", "rispiii", false, deckId)
-                val card2 = Card("12345678912345678988", "dom", "risp", false, deckId)
-                repository.insertCard(card1)
-                repository.insertCard(card2)
-            }
-        }
 
-    }
     fun updatePercentualeCompletamento(deckId : String, newPercentage : Int){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
@@ -93,6 +84,16 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
             withContext(Dispatchers.IO){
                 cardLiveData.value?.completata = true
                 cardLiveData.value?.let { repository.updateCard(it) }
+            }
+        }
+    }
+    fun updateSbagliataCard(){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                if(cardLiveData.value?.completata == true){
+                cardLiveData.value?.completata = false
+                cardLiveData.value?.let { repository.updateCard(it)}
+                }
             }
         }
     }
