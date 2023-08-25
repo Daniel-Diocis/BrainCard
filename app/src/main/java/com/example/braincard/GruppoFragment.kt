@@ -1,6 +1,5 @@
 package com.example.braincard
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,17 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.braincard.factories.GruppoViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 
@@ -28,6 +23,7 @@ import org.eazegraph.lib.models.PieModel
 class GruppoFragment : Fragment() {
 
     var count : Int = 0
+    lateinit var popUpMessage: PopUpMessage
 
 
 
@@ -36,7 +32,7 @@ class GruppoFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
-
+        popUpMessage = PopUpMessage.getInstance()
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
         var gruppoId = arguments?.getString("gruppoid")
         gruppoId=gruppoId.toString()
@@ -56,7 +52,7 @@ class GruppoFragment : Fragment() {
         val deckContainer=rootView.findViewById<LinearLayout>(R.id.gruppiContainer)
         val btn_gen =rootView.findViewById<Button>(R.id.btn)
         btn_gen.setOnClickListener{
-            gruppoViewModel.creaDeck()
+
         }
 
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
@@ -95,6 +91,24 @@ class GruppoFragment : Fragment() {
 
         })
         // Inflate the layout for this fragment
+        btn_gen.setOnClickListener{
+            val pop = PopUp()
+            pop.vista="gruppo"
+
+            pop.show((activity as AppCompatActivity).supportFragmentManager, "showPopUp")
+
+        }
+        // Osserva l'attributo message quando si crea un gruppo
+
+        popUpMessage.messageDeckLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
+            // Esegui azioni in risposta ai cambiamenti dell'attributo message
+            if (popUpMessage.invia){
+                gruppoViewModel.creaDeck(newMessage)
+                popUpMessage.invia=false
+            }
+
+
+        })
         return rootView
     }
 

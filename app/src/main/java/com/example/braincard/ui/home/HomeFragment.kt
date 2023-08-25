@@ -75,8 +75,11 @@ class HomeFragment : Fragment() {
 
         popUpMessage.messageLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
             // Esegui azioni in risposta ai cambiamenti dell'attributo message
+            if (popUpMessage.invia){
+                homeViewModel.creaGruppo(newMessage)
+                popUpMessage.invia=false
+            }
 
-             homeViewModel.creaGruppo(newMessage)
 
         })
 

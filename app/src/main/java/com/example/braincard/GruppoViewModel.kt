@@ -4,9 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 import com.example.braincard.database.BrainCardDatabase
 import com.example.braincard.database.CardRepository
@@ -47,10 +45,10 @@ class GruppoViewModel(application: Application,gruppoid:String) : AndroidViewMod
 
 
 
-    fun creaDeck(){
+    fun creaDeck(nome: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val id=generateRandomString(20)
-            val newDeck = Deck(id,"aldo",0,gruppoId) // Cambia i dettagli del nuovo deck
+            val newDeck = Deck(id,nome,0,gruppoId) // Cambia i dettagli del nuovo deck
             repository.insertDeck(newDeck)
 
         }

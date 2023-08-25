@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 
 class PopUpMessage private constructor() {
     var messageLiveData=MutableLiveData<String>()
+    var messageDeckLiveData=MutableLiveData<String>()
+    var invia=false
+
 
 
 
@@ -12,6 +15,7 @@ class PopUpMessage private constructor() {
     companion object {
         @Volatile
         private var instance: PopUpMessage? = null
+
 
         fun getInstance(): PopUpMessage {
             return instance ?: synchronized(this) {

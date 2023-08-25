@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 
 
 class PopUp : DialogFragment() {
+    var vista=""
 
 
 
@@ -30,7 +31,11 @@ class PopUp : DialogFragment() {
         btn.setOnClickListener(){
 
             val message= PopUpMessage.getInstance()
-            message.messageLiveData.value=text.text.toString()
+            message.invia=true
+            if (vista=="gruppo"){
+                message.messageDeckLiveData.value=text.text.toString()
+            }
+            else message.messageLiveData.value=text.text.toString()
 
 
             dismiss()
