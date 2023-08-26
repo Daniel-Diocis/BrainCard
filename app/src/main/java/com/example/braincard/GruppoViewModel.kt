@@ -42,7 +42,12 @@ class GruppoViewModel(application: Application,gruppoid:String) : AndroidViewMod
 
     }
 
+    fun deleteDeck(deck:Deck){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteDeck(deck)
+        }
 
+    }
 
 
     fun creaDeck(nome: String) {

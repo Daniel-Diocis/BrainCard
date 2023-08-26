@@ -20,7 +20,7 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
-        android:id="@+id/modcreacard2"
+        android:id="@+id/modcreacard"
         android:name="com.example.braincard.ModCreaCard"
         android:label="Modcreacard" />
     <fragment
@@ -71,6 +71,11 @@
         <action
             android:id="@+id/action_gruppoFragment_to_flashcardStudio"
             app:destination="@id/flashcardStudio" />
+        <action
+            android:id="@+id/action_gruppoFragment_to_modCreaCard"
+            app:destination="@id/modcreacard">
+
+        </action>
     </fragment>
     <fragment
         android:id="@+id/popUp"

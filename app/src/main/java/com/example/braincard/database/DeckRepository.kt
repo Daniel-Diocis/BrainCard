@@ -18,6 +18,9 @@ class DeckRepository(private val deckDao: DeckDAO) {
     suspend fun deleteDeck(deckId: Deck) {
         deckDao.deleteDeck(deckId)
     }
+    suspend fun deleteDeckByGruppoID(gruppoId: String){
+        deckDao.deleteDecksByGruppoID(gruppoId)
+    }
 
     suspend fun updateDeck(deck: Deck) {
         deckDao.updateDeck(deck)

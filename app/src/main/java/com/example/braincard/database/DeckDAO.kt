@@ -28,6 +28,8 @@ interface DeckDAO {
 
     @Query("SELECT * FROM Deck WHERE idGruppo== :gruppoId")
     fun getDecksByGruppoID(gruppoId : String) : LiveData<List<Deck>>
+    @Query("DELETE  FROM Deck WHERE idGruppo== :gruppoId")
+    fun deleteDecksByGruppoID(gruppoId:String)
 
     @Query("SELECT percentualeCompletamento FROM Deck WHERE id== :deckId ")
     fun getPercentualeDeckByID(deckId: String) : LiveData<Int>

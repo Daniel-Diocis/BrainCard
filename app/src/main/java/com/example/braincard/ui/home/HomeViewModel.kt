@@ -18,12 +18,15 @@ import kotlinx.coroutines.launch
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: GruppoRepository
+    private val repositoryDeck:DeckRepository
      val AllGruppo:LiveData<List<Gruppo>>
 
     init {
 
         val gruppoDao=BrainCardDatabase.getDatabase(application).gruppoDao()
+        val deckDao=BrainCardDatabase.getDatabase(application).deckDao()
         repository=GruppoRepository(gruppoDao )
+        repositoryDeck= DeckRepository(deckDao)
         AllGruppo=repository.AllGruppo
     }
 
@@ -35,6 +38,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             repository.insertGruppo(newGruppo)
         }
         Log.e("controllo","fattogruèèpo")
+    }
+    fun eliminaGruppo(gruppo:Gruppo){
+
+        viewModelScope.launch(Dispatchers.IO){
+            repositoryDeck.deleteDeckByGruppoID(gruppo.id)
+            repository.deleteGruppo(gruppo)
+        }
+
     }
     fun generateRandomString(length: Int): String {
         val charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"

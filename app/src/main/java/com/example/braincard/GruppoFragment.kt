@@ -1,5 +1,6 @@
 package com.example.braincard
 
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +20,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.braincard.factories.GruppoViewModelFactory
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
+import androidx.core.content.ContextCompat
 
 
 class GruppoFragment : Fragment() {
 
     var count : Int = 0
     lateinit var popUpMessage: PopUpMessage
+    val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+    var desiredWidth=0
 
 
 
@@ -32,6 +37,12 @@ class GruppoFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
+        val deleteIcon = ContextCompat.getDrawable(requireContext(),
+            android.R.drawable.ic_delete
+        ) // Sostituisci con l'ID dell'icona
+        val modIcon = ContextCompat.getDrawable(requireContext(),
+            android.R.drawable.ic_menu_edit
+        ) // Sostituisci con l'ID dell'icona
         popUpMessage = PopUpMessage.getInstance()
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
         var gruppoId = arguments?.getString("gruppoid")
@@ -60,8 +71,24 @@ class GruppoFragment : Fragment() {
             count = 0
             var perc=0
             for (deck in decks) {
-                Log.e(deck.nome,deck.idGruppo)
+
+                val layout=LinearLayout(requireContext())
+                layout.orientation = LinearLayout.HORIZONTAL
+                desiredWidth = (screenWidth * 3) / 4
+                val layoutParams = LinearLayout.LayoutParams(
+                    desiredWidth,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
                 val deckButton = Button(requireContext())
+                deckButton.layoutParams = layoutParams // Imposta i parametri del layout
+                val deckElimina=ImageButton (requireContext())
+
+                deckElimina.setImageDrawable(deleteIcon)
+
+                val deckMod=ImageButton (requireContext())
+
+                deckMod.setImageDrawable(modIcon)
+
                 deckButton.text = deck.nome
                 deckButton.id = count
                 deckButton.setOnClickListener {
@@ -71,9 +98,23 @@ class GruppoFragment : Fragment() {
                                 bundle
                             )
                         }
+                deckElimina.setOnClickListener{
+                    gruppoViewModel.deleteDeck(deck)
+                }
+                deckMod.setOnClickListener{
+                    val bundle = bundleOf("deckId" to deck.id)
+                    findNavController().navigate(
+                        R.id.action_gruppoFragment_to_modCreaCard,
+                        bundle
+                    )
+
+                }
                 count++
                 perc+=deck.percentualeCompletamento
-                deckContainer.addView(deckButton)
+                layout.addView(deckButton)
+                layout.addView(deckMod)
+                layout.addView(deckElimina)
+                deckContainer.addView(layout)
                 }
             if(decks.size > 0){
                 perc=perc/decks.size
@@ -98,6 +139,7 @@ class GruppoFragment : Fragment() {
             pop.show((activity as AppCompatActivity).supportFragmentManager, "showPopUp")
 
         }
+
         // Osserva l'attributo message quando si crea un gruppo
 
         popUpMessage.messageDeckLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
