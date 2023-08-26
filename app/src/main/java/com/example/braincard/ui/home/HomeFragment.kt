@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val gruppiContainer=binding.gruppiContainer
-        val btn_genera=binding.btnGenera
+        val btn_genera=binding.floatingActionButton
 
         homeViewModel.AllGruppo.observe(viewLifecycleOwner, Observer { gruppi ->
             gruppiContainer.removeAllViews()

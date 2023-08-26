@@ -1,5 +1,6 @@
 package com.example.braincard
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.example.braincard.factories.GruppoViewModelFactory
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import androidx.core.content.ContextCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class GruppoFragment : Fragment() {
@@ -29,6 +31,7 @@ class GruppoFragment : Fragment() {
     lateinit var popUpMessage: PopUpMessage
     val screenWidth = Resources.getSystem().displayMetrics.widthPixels
     var desiredWidth=0
+
 
 
 
@@ -61,7 +64,7 @@ class GruppoFragment : Fragment() {
         progressBar.text = percentComplete
 
         val deckContainer=rootView.findViewById<LinearLayout>(R.id.gruppiContainer)
-        val btn_gen =rootView.findViewById<Button>(R.id.btn)
+        val btn_gen =rootView.findViewById<FloatingActionButton>(R.id.floatingActionButtonDeck)
         btn_gen.setOnClickListener{
 
         }
