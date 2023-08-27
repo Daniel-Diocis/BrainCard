@@ -8,6 +8,7 @@ class DeckRepository(private val deckDao: DeckDAO) {
 
     // Metodi per interagire con la tabella dei mazzi (Deck)
     val AllDeck: LiveData<List<Deck>> = deckDao.getAllDeck()
+    val HomeDeck: LiveData<List<Deck>> = deckDao.getHomeDeck()
 
 
     suspend fun insertDeck(deck: Deck) {

@@ -50,6 +50,11 @@
             app:destination="@id/gruppoFragment">
 
         </action>
+        <action
+            android:id="@+id/action_HomeFragment_to_flashcardStudio"
+            app:destination="@id/flashcardStudio">
+
+        </action>
 
     </fragment>
 

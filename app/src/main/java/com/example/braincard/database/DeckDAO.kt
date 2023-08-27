@@ -14,7 +14,8 @@ import com.example.braincard.data.model.Deck
 interface DeckDAO {
     @Query("SELECT * FROM DECK")
     fun getAllDeck(): LiveData<List<Deck>>
-
+    @Query("SELECT * FROM Deck WHERE percentualeCompletamento BETWEEN 0 AND 99 ORDER BY percentualeCompletamento DESC LIMIT 4")
+    fun getHomeDeck(): LiveData<List<Deck>>
     @Insert
     fun insertDeck(deck: Deck)
 

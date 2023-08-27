@@ -20,6 +20,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: GruppoRepository
     private val repositoryDeck:DeckRepository
      val AllGruppo:LiveData<List<Gruppo>>
+     val HomeDeck:LiveData<List<Deck>>
 
     init {
 
@@ -28,6 +29,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         repository=GruppoRepository(gruppoDao )
         repositoryDeck= DeckRepository(deckDao)
         AllGruppo=repository.AllGruppo
+        HomeDeck=repositoryDeck.HomeDeck
     }
 
     fun creaGruppo(nome:String){

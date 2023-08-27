@@ -7,6 +7,7 @@ import com.example.braincard.data.model.Gruppo
 class GruppoRepository(private val gruppoDao: GruppoDAO) {
     val AllGruppo: LiveData<List<Gruppo>> = gruppoDao.getAllGruppo()
 
+
     suspend fun insertGruppo(gruppo: Gruppo) {
         gruppoDao.insertGruppo(gruppo)
     }

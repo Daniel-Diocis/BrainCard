@@ -3,15 +3,18 @@ package com.example.braincard.ui.home
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,12 +48,53 @@ class HomeFragment : Fragment() {
         val deleteIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_delete
         ) // Sostituisci con l'ID dell'icona
+        val DeckIcon = ContextCompat.getDrawable(requireContext(),
+            android.R.drawable.ic_input_get
+        )
         popUpMessage = PopUpMessage.getInstance()
 
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        val deckContainer=binding.layoutDecks
+
+        homeViewModel.HomeDeck.observe(viewLifecycleOwner,Observer{decks->
+            deckContainer.removeAllViews()
+            for (deck in decks){
+                val deckButton = ImageButton(requireContext())
+                deckButton.tag =deck.id
+                deckButton.setOnClickListener {
+                    val bundle = bundleOf("deckId" to deck.id)
+                    findNavController().navigate(
+                        R.id.action_HomeFragment_to_flashcardStudio,
+                        bundle
+                    )
+                }
+
+
+                deckButton.setImageDrawable(DeckIcon) // Imposta lo sfondo del pulsante come quadrato
+
+
+                val nomeTextView = TextView(requireContext())
+                nomeTextView.gravity = Gravity.CENTER
+
+
+                nomeTextView.text = deck.nome
+
+                val deckLayout = LinearLayout(requireContext())
+                deckLayout.orientation = LinearLayout.VERTICAL
+                deckLayout.setPadding(60)
+                deckLayout.addView(deckButton)
+                deckLayout.addView(nomeTextView)
+
+                deckContainer.addView(deckLayout)
+            }
+
+        })
+
+
+
         val gruppiContainer=binding.gruppiContainer
         val btn_genera=binding.floatingActionButton
 
