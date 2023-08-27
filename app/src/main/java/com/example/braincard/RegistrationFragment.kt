@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.braincard.database.UtenteDAO
 import com.example.braincard.database.UtenteRepository
 import com.example.braincard.databinding.FragmentModCreaCardBinding
+import androidx.appcompat.app.AppCompatActivity
 import com.example.braincard.databinding.FragmentRegistrationBinding
 import com.example.braincard.factories.FlashcardStudioViewModelFactory
 import com.example.braincard.factories.RegistrationViewModelFactory
@@ -44,33 +45,42 @@ class RegistrationFragment : Fragment() {
         ).get(RegistrationViewModel::class.java)
         binding = FragmentRegistrationBinding.inflate(inflater, container, false)
 
-        return inflater.inflate(R.layout.fragment_registration, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegistrationViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSalvaUtente.setOnClickListener{
-            nomeUtente = binding.nomeUtente.toString()
-            password = binding.passwordd.toString()
-            nome = binding.nome.toString()
-            cognome = binding.cognome.toString()
-            email = binding.email.toString()
-            telefono = binding.telefono.toString()
-            genere = binding.genere.toString()
+        binding.buttonSalvaUtente.setOnClickListener {
+            nomeUtente = binding.textNomeUtente.text.toString()
+            password = binding.editTextPassword.text.toString()
+            nome = binding.textNome.text.toString()
+            cognome = binding.textCognome.text.toString()
+            email = binding.textEmail.text.toString()
+            telefono = binding.textTelefono.text.toString()
+            genere = binding.textGenere.text.toString()
             lifecycleScope.launch(Dispatchers.IO) {
-                viewModel.registraUtente(utenteId, nomeUtente, password, nome, cognome, email, telefono, genere)
+                viewModel.registraUtente(
+                    utenteId,
+                    nomeUtente,
+                    password,
+                    nome,
+                    cognome,
+                    email,
+                    telefono,
+                    genere
+                )
             }
             val bundle = bundleOf("utenteId" to utenteId)
-            findNavController().navigate(R.id.action_registrationFragment_to_navigation_notifications, bundle)
+            findNavController().navigate(
+                R.id.action_registrationFragment_to_navigation_notifications,
+                bundle
+            )
         }
-        // Ora puoi utilizzare il tuo view model
     }
 
     fun generateRandomString(length: Int): String {

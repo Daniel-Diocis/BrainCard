@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.component1
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.example.braincard.data.model.Card
@@ -34,6 +35,7 @@ class FlashcardStudio : Fragment() {
     private var initialTranslationX = 0F
     lateinit var deckId : String
     lateinit var shuffledCards : MutableList<Card>
+    lateinit var gruppoId : String
     private var index : Int = 0
     private var MAX_INDEX : Int = 0
     private var perc : Int = 0
@@ -49,8 +51,7 @@ class FlashcardStudio : Fragment() {
         savedInstanceState: Bundle?
         ): View {
         deckId = arguments?.getString("deckId").toString()
-        viewModel = ViewModelProvider(
-            this, FlashcardStudioViewModelFactory(requireActivity().application, deckId.toString())).get(FlashcardStudioViewModel::class.java)
+        viewModel = ViewModelProvider(this, FlashcardStudioViewModelFactory(requireActivity().application, deckId.toString())).get(FlashcardStudioViewModel::class.java)
 
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
 
@@ -107,6 +108,10 @@ class FlashcardStudio : Fragment() {
                 binding.textRisposta.setText(card.risposta)
 
             }
+            viewModel.gruppoId.observe(viewLifecycleOwner){
+                id-> gruppoId = id
+
+            }
 
 
 
@@ -155,27 +160,13 @@ class FlashcardStudio : Fragment() {
     }
 
     fun onEmptyAllCard(){
+        val bundle = bundleOf("gruppoid" to gruppoId)
         val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.apply {
             setTitle("Nessuna Carta")
             setMessage("Il deck non contiene alcuna carta.")
             setPositiveButton("OK"){_, _ ->
-                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
-            }
-            setCancelable(false)
-            create()
-            show()
-        }
-    }
-    fun onErrorStudio()
-    {
-        val alertDialogBuilder = AlertDialog.Builder(requireActivity().baseContext)
-        alertDialogBuilder.apply {
-            setTitle("Errore")
-            setMessage("C'è stato un errore nello studio di un deck, sei stato" +
-                    "reindirizzato alla home")
-            setPositiveButton("OK"){_, _ ->
-                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment,bundle)
             }
             setCancelable(false)
             create()
@@ -183,10 +174,13 @@ class FlashcardStudio : Fragment() {
         }
     }
 
+
     private fun CorrectNextCard(deckId : String) {
         val size = viewModel.getSizeOfDeck()
         var bool = false
+        val bundle = bundleOf("gruppoid" to gruppoId)
         if(perc==100 && index+1==MAX_INDEX && !hasBeenCompleted){
+            Log.e("1","")
             binding.CoriandolitextView.visibility = View.VISIBLE;
             CommonConfetti.rainingConfetti(binding.ConstrLayout, intArrayOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.RED))
                 .infinite();
@@ -198,14 +192,14 @@ class FlashcardStudio : Fragment() {
             Handler().postDelayed({
                 if(navController.currentDestination?.id != R.id.flashcardStudio)
                 { }
-                else navController.navigate(action)
+                else navController.navigate(action, bundle)
             }, 3000)
         }
         if (!viewModel.cardLiveData.value!!.completata) {
+            Log.e("2","")
+            var newPercentage = 0
             if(hasBeenCompleted) hasBeenCompleted=false
-            if (perc == 0) viewModel.updatePercentualeCompletamento(deckId, ((1.0 / size) * 100).toInt())
-            else {
-                var newPercentage = perc + ((1.0 / size) * 100).toInt()
+                newPercentage = perc + ((1.0 / size) * 100).toInt()
                 if (newPercentage == 99 || newPercentage>100) newPercentage=100
                 viewModel.updatePercentualeCompletamento(deckId, newPercentage)
                 if(newPercentage==100 && index+1==MAX_INDEX){
@@ -220,20 +214,23 @@ class FlashcardStudio : Fragment() {
                     Handler().postDelayed({
                         if(navController.currentDestination?.id != R.id.flashcardStudio)
                         { }
-                        else navController.navigate(action)
+                        else navController.navigate(action,bundle)
                     }, 3000)
                 }
-            }
+
             viewModel.updateCompletataCard()
         }
         if(index+1<MAX_INDEX)
         {index = index+1
         viewModel.loadCardByCode(shuffledCards[index].id)}
         else {
-            if(!bool) findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+            if(!bool) {
+                Log.e("PD", "")
+                findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment, bundle)}
         }
     }
     private fun SbagliatoNextCard(){
+        val bundle = bundleOf("gruppoid" to gruppoId)
         if (viewModel.cardLiveData.value!!.completata)
         {
         val size = viewModel.getSizeOfDeck()
@@ -245,7 +242,7 @@ class FlashcardStudio : Fragment() {
         {index = index+1
             viewModel.loadCardByCode(shuffledCards[index].id)}
         else {
-             findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment)
+             findNavController().navigate(R.id.action_flashcardStudio_to_gruppoFragment, bundle)
         }
     }
 

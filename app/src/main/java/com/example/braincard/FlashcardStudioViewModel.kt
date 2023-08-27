@@ -21,7 +21,7 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
     // LiveData per i dettagli della carta.
     private val repository : CardRepository
     private val repository2 : DeckRepository
-    val AllDeck : LiveData<List<Deck>>
+    lateinit var  gruppoId : MutableLiveData<String>
     lateinit var AllCard: LiveData<MutableList<Card>>
     val cardLiveData = MutableLiveData<Card>()
     lateinit var percentualeDeck : LiveData<Int>
@@ -32,9 +32,10 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
         val cardDao= BrainCardDatabase.getDatabase(application).cardDao()
         repository= CardRepository(cardDao)
         repository2=DeckRepository(deckDao)
-        AllDeck=repository2.AllDeck
+
         viewModelScope.launch {
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.IO){
+                gruppoId = MutableLiveData(repository2.getDeckById(deckId).idGruppo)
                 AllCard =  repository.getCardByDeckID(deckId)
                 percentualeDeck=repository2.getPercentualeDeckByID(deckId)
                 Log.e("Perc VIEWMODEL", percentualeDeck.value.toString())
@@ -51,6 +52,7 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
             val card = withContext(Dispatchers.IO){ repository.getCardById(cardCode)}
             cardLiveData.postValue(card)
             loadPercentualeDeck(card.deckID)
+
         }
     }
 
@@ -87,6 +89,7 @@ class FlashcardStudioViewModel(application : Application, deckId: String) : View
             }
         }
     }
+
     fun updateSbagliataCard(){
         viewModelScope.launch {
             withContext(Dispatchers.IO){

@@ -85,7 +85,8 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.braincard.RegistrationFragment"
-        android:label="RegistrationFragment" >
+        android:label="RegistrationFragment"
+        tools:layout="@layout/fragment_registration">
         <argument
             android:name="utenteId"
             app:argType="string"/>

@@ -37,7 +37,7 @@ class ModCreaCard : Fragment() {
     private lateinit var binding: FragmentModCreaCardBinding
     private lateinit var flashcardPagerAdapter: FlashcardPagerAdapter
     private var currentCardId: String = ""
-    var deckProvaID: String = "eyBKbZZIDD4TC1Ona2af"
+    lateinit var deckProvaID: String
 
     var dom: String = ""
     var risp: String = ""
@@ -52,7 +52,7 @@ class ModCreaCard : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentModCreaCardBinding.inflate(inflater, container, false)
-
+        deckProvaID = arguments?.getString("deckId").toString()
         viewModel =
             ViewModelProvider(this, ModCreaCardViewModelFactory(requireActivity().application))
                 .get(ModCreaCardViewModel::class.java)

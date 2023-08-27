@@ -90,11 +90,13 @@ class ModCreaCardViewModel(application: Application) : ViewModel() {
             Log.e("Viewmodel", newPercentage.toString())
             viewModelScope.launch { withContext(Dispatchers.IO){
                 val deck = repository2.getDeckById(deckId)
+                Log.e("ID", deck.toString() + ":::::::::" + deckId)
                 deck.percentualeCompletamento = newPercentage
                 repository2.updateDeck(deck)
             }
         }
     }
+
     fun deleteCard(card : Card)
     {
         viewModelScope.launch{ withContext(Dispatchers.IO){repository.deleteCard(card)} }
