@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
 
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/registrationFragment">
 
 
 
@@ -31,11 +31,6 @@
             android:id="@+id/action_flashcardStudio_to_gruppoFragment"
             app:destination="@id/gruppoFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/materiaFragment"
-        android:name="com.example.braincard.MateriaFragment"
-        android:label="fragment_materia"
-        tools:layout="@layout/fragment_materia" />
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.braincard.ui.login.LoginFragment"
@@ -87,5 +82,16 @@
         android:name="com.example.braincard.PopUp"
         android:label="fragment_pop_up"
         tools:layout="@layout/fragment_pop_up" />
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.braincard.RegistrationFragment"
+        android:label="RegistrationFragment" >
+        <argument
+            android:name="utenteId"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_registrationFragment_to_navigation_notifications"
+            app:destination="@id/navigation_notifications" />
+    </fragment>
 
 </navigation>

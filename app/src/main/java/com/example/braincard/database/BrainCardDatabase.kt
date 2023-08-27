@@ -9,13 +9,14 @@ import androidx.room.TypeConverters
 import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
+import com.example.braincard.data.model.Utente
 
-
-@Database(entities = [Card::class, Deck::class,Gruppo::class], version = 3, exportSchema = false)
+@Database(entities = [Card::class, Deck::class,Gruppo::class, Utente::class], version = 5, exportSchema = false)
 abstract class BrainCardDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDAO
     abstract fun deckDao(): DeckDAO
     abstract fun gruppoDao(): GruppoDAO
+    abstract fun utenteDao(): UtenteDAO
     companion object {
         @Volatile
         private var INSTANCE: BrainCardDatabase? = null

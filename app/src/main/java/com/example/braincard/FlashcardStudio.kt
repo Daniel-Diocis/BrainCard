@@ -47,7 +47,7 @@ class FlashcardStudio : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+        ): View {
         deckId = arguments?.getString("deckId").toString()
         viewModel = ViewModelProvider(
             this, FlashcardStudioViewModelFactory(requireActivity().application, deckId.toString())).get(FlashcardStudioViewModel::class.java)
