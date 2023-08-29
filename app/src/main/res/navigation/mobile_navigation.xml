@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
 
-    app:startDestination="@id/registrationFragment">
+    app:startDestination="@id/visualizzaFlashcardOnline">
 
 
 
@@ -94,5 +94,10 @@
             android:id="@+id/action_registrationFragment_to_navigation_notifications"
             app:destination="@id/navigation_notifications" />
     </fragment>
+    <fragment
+        android:id="@+id/visualizzaFlashcardOnline"
+        android:name="com.example.braincard.VisualizzaFlashcardOnline"
+        android:label="VisualizzaFlashcardOnline"
+        tools:layout="@layout/fragment_visualizza_flashcard_online"/>
 
 </navigation>

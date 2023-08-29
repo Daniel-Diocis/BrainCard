@@ -56,7 +56,7 @@ class FlashcardStudio : Fragment() {
         binding = FragmentFlashcardStudioBinding.inflate(inflater, container, false)
 
 
-            binding.flashcard.setOnClickListener {
+        binding.flashcard.setOnClickListener {
                 if (clickable) toggleFlashcardVisibility()
             }
             binding.flashcardBack.setOnClickListener {
@@ -199,8 +199,8 @@ class FlashcardStudio : Fragment() {
             Log.e("2","")
             var newPercentage = 0
             if(hasBeenCompleted) hasBeenCompleted=false
-                newPercentage = perc + ((1.0 / size) * 100).toInt()
-                if (newPercentage == 99 || newPercentage>100) newPercentage=100
+            newPercentage = perc + ((1.0 / size) * 100).toInt()
+            if (newPercentage == 99 || newPercentage>100) newPercentage=100
                 viewModel.updatePercentualeCompletamento(deckId, newPercentage)
                 if(newPercentage==100 && index+1==MAX_INDEX){
                     binding.CoriandolitextView.visibility = View.VISIBLE;

@@ -319,10 +319,6 @@ class ModCreaCard : Fragment() {
                 isBackVisible = !isBackVisible
             }
 
-            fun resetState(){
-                if(isBackVisible) toggleCardVisibility()
-            }
-
             fun bind(card: Card) {
                 domandaTextView.setText(card.domanda)
                 rispostaTextView.setText(card.risposta)
