@@ -27,7 +27,7 @@ abstract class BrainCardDatabase : RoomDatabase() {
                     context.applicationContext,
                     BrainCardDatabase::class.java,
                     "BrainCard"
-                ).fallbackToDestructiveMigration()
+                )
                     .build()
 
                 INSTANCE = instance

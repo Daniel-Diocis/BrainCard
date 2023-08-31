@@ -16,10 +16,13 @@ class VisualizzaFlashcardOnlineViewModel(application: Application, deckId: Strin
 
     init{
 
+
         db=FirebaseFirestore.getInstance()
+
         val collection = db.collection("Card")
         val cards = collection.whereEqualTo("deckId", deckId)
         cards.get().addOnSuccessListener { documents->
+            Log.e("carte", "Numero di documenti: ${documents.size()}")
 
             for(document in documents) {
                 list.add(Card(document.id, document.data["domanda"].toString(), document.data["risposta"].toString(), false,  document.data["deckId"].toString()))

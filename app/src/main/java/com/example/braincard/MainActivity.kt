@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_home)
         }
         findViewById<BottomNavigationItemView>(R.id.navigation_dashboard).setOnClickListener{
-            navController.navigate(R.id.navigation_home)
+            navController.navigate(R.id.navigation_dashboard)
         }
         findViewById<BottomNavigationItemView>(R.id.navigation_home).setOnClickListener{
             navController.navigate(R.id.navigation_home)

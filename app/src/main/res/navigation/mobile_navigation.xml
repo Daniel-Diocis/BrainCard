@@ -9,7 +9,7 @@
 
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/ai"
         android:name="com.example.braincard.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
@@ -99,5 +99,10 @@
         android:name="com.example.braincard.VisualizzaFlashcardOnline"
         android:label="VisualizzaFlashcardOnline"
         tools:layout="@layout/fragment_visualizza_flashcard_online"/>
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.braincard.ShopFragment"
+        android:label="fragment_shop"
+        tools:layout="@layout/fragment_shop" />
 
 </navigation>
