@@ -103,6 +103,12 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.braincard.ShopFragment"
         android:label="fragment_shop"
-        tools:layout="@layout/fragment_shop" />
+        tools:layout="@layout/fragment_shop">
+        <action
+        android:id="@+id/action_ShopFragment_to_DeckShop"
+        app:destination="@id/navigation_home"/>
+
+    </fragment>
+
 
 </navigation>

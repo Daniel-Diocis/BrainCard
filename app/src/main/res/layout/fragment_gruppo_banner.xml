@@ -15,12 +15,16 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/Layoutbanner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="#6D77AF"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+            tools:layout_editor_absoluteY="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            >
 
             <TextView
                 android:id="@+id/NomeGruppo"

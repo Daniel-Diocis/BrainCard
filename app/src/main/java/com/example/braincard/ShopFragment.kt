@@ -12,8 +12,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.size
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.braincard.Adattatori.BannerAdapter
 import com.example.braincard.databinding.FragmentShopBinding
 
@@ -97,7 +99,16 @@ class ShopFragment : Fragment() {
             ContenitoreOnline.removeAllViews()
             //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
             val bannerAdp=BannerAdapter(gruppi)
-            bannerAdp.populate(ContenitoreOnline)
+            bannerAdp.populate(ContenitoreOnline) { item ->
+
+                val bundle = bundleOf("gruppoShop" to item.id)
+                Log.e("importo",bundle.toString())
+                findNavController().navigate(
+                    R.id.action_ShopFragment_to_DeckShop
+                )
+
+            }
+
         })
         viewModel.GruppiCercati.observe(viewLifecycleOwner, Observer { gruppi ->
             ContenitoreCercati.removeAllViews()
@@ -106,9 +117,16 @@ class ShopFragment : Fragment() {
 
             val bannerAdp=BannerAdapter(gruppi)
 
-            bannerAdp.populate(ContenitoreCercati)
+            bannerAdp.populate(ContenitoreCercati){item ->
+
+                val bundle = bundleOf("gruppoShop" to item.id)
+                Log.e("importo",bundle.toString())
+                findNavController().navigate(
+                    R.id.action_ShopFragment_to_DeckShop
+                )}
             Log.e("carica",ContenitoreCercati.size.toString())
         })
+
 
 
 
