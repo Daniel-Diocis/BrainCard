@@ -16,7 +16,9 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
     lateinit var db : FirebaseFirestore
     private val repository: GruppoRepository
     var AllGruppi: MutableLiveData<MutableList<GruppoFire>> = MutableLiveData(mutableListOf())
-     var GruppiOnline: MutableList<GruppoFire> =mutableListOf()
+    var GruppiOnline: MutableList<GruppoFire> =mutableListOf()
+    var GruppiCercati:MutableLiveData<MutableList<GruppoFire>> = MutableLiveData(mutableListOf())
+    val GruppiOnlineCercati: MutableList<GruppoFire> =mutableListOf()
 
     lateinit var GruppiLocale:LiveData<List<Gruppo>>
     init {
@@ -37,6 +39,24 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
         val gruppoDao= BrainCardDatabase.getDatabase(application).gruppoDao()
         repository=GruppoRepository(gruppoDao )
         GruppiLocale=repository.AllGruppo
+
+    }
+    fun cercaBar(query:String){
+
+        val gruppiCollectionCerca = db.collection("Gruppo")
+        GruppiOnlineCercati.clear()
+        gruppiCollectionCerca.whereEqualTo("nome", query)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    // Esegui azioni sui documenti trovati qui
+
+                    GruppiOnlineCercati.add(GruppoFire(document.data["nome"].toString(),document.data["infoCreatore"].toString(),document.data["download"].toString(),document.id))
+
+                }
+                Log.e("triavto",GruppiOnlineCercati.size.toString())
+                GruppiCercati.postValue(GruppiOnlineCercati)
+            }
 
     }
     fun creaGruppi(){

@@ -2,6 +2,7 @@ package com.example.braincard
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
+import androidx.core.view.size
 import androidx.lifecycle.Observer
 import com.example.braincard.Adattatori.BannerAdapter
 import com.example.braincard.databinding.FragmentShopBinding
@@ -33,12 +36,52 @@ class ShopFragment : Fragment() {
         val viewSwitcher=binding.viewSwitcher
         val ContenitoreOnline=binding.listaOnline
         val ContenitoreLocale=binding.listaLocale
+        val ContenitoreCercati=binding.ContenitoreCercati
+        val scrollOnline=binding.scrollOnline
+        val scrollRicercaOnline=binding.scrollRicercaOnline
+        val barraRicerca=binding.ricercaOnline
+        var currentIndex = 0
         localBtn.setOnClickListener{
-            viewSwitcher.showNext()
+            currentIndex = viewSwitcher.displayedChild
+            if(currentIndex==0){
+                viewSwitcher.showNext()
+            }
+
         }
         onlineBtn.setOnClickListener{
-            viewSwitcher.showPrevious()
+            currentIndex = viewSwitcher.displayedChild
+            if(currentIndex==1){
+                viewSwitcher.showPrevious()
+            }
+            scrollOnline.visibility=View.VISIBLE
+            scrollRicercaOnline.visibility=View.INVISIBLE
+
         }
+        // Imposta un listener per il pulsante di ricerca
+        barraRicerca.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // L'utente ha premuto il pulsante di ricerca
+                if (!query.isNullOrEmpty()) {
+                    viewModel.cercaBar(query)
+
+                    currentIndex=viewSwitcher.displayedChild
+                    if (currentIndex==1){
+                        viewSwitcher.showNext()
+                    }
+                    scrollOnline.visibility=View.INVISIBLE
+                    scrollRicercaOnline.visibility=View.VISIBLE
+
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Non fare nulla quando il testo cambia
+                return false
+            }
+
+
+        })
         viewModel.GruppiLocale.observe(viewLifecycleOwner, Observer { gruppi ->
             ContenitoreLocale.removeAllViews()
             for(gruppo in gruppi){
@@ -55,6 +98,16 @@ class ShopFragment : Fragment() {
             //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
             val bannerAdp=BannerAdapter(gruppi)
             bannerAdp.populate(ContenitoreOnline)
+        })
+        viewModel.GruppiCercati.observe(viewLifecycleOwner, Observer { gruppi ->
+            ContenitoreCercati.removeAllViews()
+            //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
+
+
+            val bannerAdp=BannerAdapter(gruppi)
+
+            bannerAdp.populate(ContenitoreCercati)
+            Log.e("carica",ContenitoreCercati.size.toString())
         })
 
 

@@ -5,14 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <SearchView
+        android:id="@+id/ricercaOnline"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:orientation="horizontal"
+        android:layout_height="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ricercaOnline"
+        >
 
         <Button
             android:id="@+id/onlineBtn"
@@ -38,19 +48,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/listaOnline"
+            <ScrollView
+                android:id="@+id/scrollRicercaOnline"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-        </ScrollView>
+                android:layout_height="match_parent"
+                android:background="#9C27B0"
+                android:visibility="invisible">
+
+                <LinearLayout
+                    android:id="@+id/ContenitoreCercati"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FF0000"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ScrollView
+                android:id="@+id/scrollOnline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#2196F3">
+
+                <LinearLayout
+                    android:id="@+id/listaOnline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -60,7 +95,10 @@
                 android:id="@+id/listaLocale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+
+            </LinearLayout>
         </ScrollView>
     </ViewSwitcher>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
