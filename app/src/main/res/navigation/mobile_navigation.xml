@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
 
-    app:startDestination="@id/visualizzaFlashcardOnline">
+    app:startDestination="@id/gruppo_DownloadFragment2">
 
 
 
@@ -103,6 +103,7 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.braincard.ShopFragment"
         android:label="fragment_shop"
+<<<<<<< Updated upstream
         tools:layout="@layout/fragment_shop">
         <action
         android:id="@+id/action_ShopFragment_to_DeckShop"
@@ -110,5 +111,18 @@
 
     </fragment>
 
+=======
+        tools:layout="@layout/fragment_shop" />
+    <fragment
+        android:id="@+id/gruppo_DownloadFragment2"
+        android:name="com.example.braincard.Gruppo_DownloadFragment"
+        android:label="fragment_gruppo__download"
+        tools:layout="@layout/fragment_gruppo__download" />
+    <fragment
+        android:id="@+id/gruppoUploadFragment"
+        android:name="com.example.braincard.GruppoUploadFragment"
+        android:label="fragment_gruppo_upload"
+        tools:layout="@layout/fragment_gruppo_upload" />
+>>>>>>> Stashed changes
 
 </navigation>

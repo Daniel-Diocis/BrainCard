@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Gruppo_DownloadFragment">
+
+    <LinearLayout
+        android:id="@+id/contenitore_totale"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/info_creator_box"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/creator_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/creator_name"
+                android:textSize="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"/>
+
+            <TextView
+                android:id="@+id/short_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/short_text"
+                android:textSize="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"/>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/gruppoDownload"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </ScrollView>
+
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="bottom"
+            android:src="@drawable/baseline_downloading_24" />
+
+    </LinearLayout>
+
+</FrameLayout>
