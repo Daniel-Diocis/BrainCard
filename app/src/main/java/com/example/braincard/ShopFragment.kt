@@ -54,7 +54,7 @@ class ShopFragment : Fragment() {
                 viewSwitcher.showPrevious()
             }
             scrollOnline.visibility=View.VISIBLE
-            scrollRicercaOnline.visibility=View.INVISIBLE
+            scrollRicercaOnline.visibility=View.GONE
 
         }
         // Imposta un listener per il pulsante di ricerca
@@ -68,7 +68,7 @@ class ShopFragment : Fragment() {
                     if (currentIndex==1){
                         viewSwitcher.showNext()
                     }
-                    scrollOnline.visibility=View.INVISIBLE
+                    scrollOnline.visibility=View.GONE
                     scrollRicercaOnline.visibility=View.VISIBLE
 
                 }
