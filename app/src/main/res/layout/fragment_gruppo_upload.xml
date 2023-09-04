@@ -6,7 +6,7 @@
     tools:context=".GruppoUploadFragment">
 
     <LinearLayout
-        android:id="@+id/contenitoreUpload_totale"
+        android:id="@+id/contenitore_totale_upload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,18 +22,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/creator_name"
-                android:textSize="40dp"
+                android:textSize="40sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp" />
 
             <EditText
-                android:id="@+id/short_message"
+                android:id="@+id/short_edit_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Messaggio creatore"
-                android:textSize="20dp"
+                android:hint="@string/editCreatoreText"
+                android:textSize="20sp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp" />
 
         </LinearLayout>
 
@@ -42,43 +44,20 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/gruppoUpload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/uploadCheckOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/baseline_check_box_outline_blank_24"/>
-                <ImageButton
-                    android:id="@+id/uploadCheckOn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/baseline_check_box_24"
-                    android:visibility="gone"/>
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    android:id="@+id/deckUpload"/>
-
-            </LinearLayout>
-
+                android:orientation="vertical"/>
         </ScrollView>
 
-        <ImageView
-            android:id="@+id/upload"
+        <ImageButton
+            android:id="@+id/uploadButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:gravity="bottom"
-            android:src="@drawable/baseline_file_upload_24"/>
+            android:src="@drawable/baseline_file_upload_24" />
 
     </LinearLayout>
 

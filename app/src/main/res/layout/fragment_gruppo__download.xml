@@ -24,7 +24,8 @@
                 android:text="@string/creator_name"
                 android:textSize="40dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp" />
 
             <TextView
                 android:id="@+id/short_message"
@@ -33,7 +34,8 @@
                 android:text="@string/short_text"
                 android:textSize="20dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp" />
 
         </LinearLayout>
 
@@ -48,8 +50,8 @@
                 android:orientation="vertical"/>
         </ScrollView>
 
-        <ImageView
-            android:id="@+id/download"
+        <ImageButton
+            android:id="@+id/downloadButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"

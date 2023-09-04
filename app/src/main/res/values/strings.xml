@@ -38,4 +38,5 @@
     <string name="invalid_telefono">Telefono must contain only 10 numbers</string>
     <string name="invalid_genere">Genere can be only \"maschio\", \"femmina\" or \"altro\"</string>
     <string name="invalid_email">Please use a correct email format</string>
+    <string name="editCreatoreText">Scrivi il tuo messaggio del creatore</string>
 </resources>
