@@ -1,8 +1,8 @@
 package com.example.braincard.ui.login
 
+import LoginDataSource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.braincard.data.LoginDataSource
 import com.example.braincard.data.LoginRepository
 
 /**

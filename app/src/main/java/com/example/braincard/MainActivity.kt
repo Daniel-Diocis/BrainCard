@@ -3,6 +3,7 @@ package com.example.braincard
 import android.content.ClipData
 import com.example.braincard.database.BrainCardDatabase
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -17,10 +18,12 @@ import com.example.braincard.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val auth = FirebaseAuth.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +53,19 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_home)
         }
         findViewById<BottomNavigationItemView>(R.id.navigation_dashboard).setOnClickListener{
-            navController.navigate(R.id.navigation_dashboard)
+            if(auth.currentUser!=null) {
+                navController.navigate(R.id.navigation_dashboard)}
+            else {
+                navController.navigate(R.id.loginFragment)
+            }
         }
-        findViewById<BottomNavigationItemView>(R.id.navigation_home).setOnClickListener{
-            navController.navigate(R.id.navigation_home)
+        findViewById<BottomNavigationItemView>(R.id.navigation_notifications).setOnClickListener{
+            if(auth.currentUser!=null) {
+                navController.navigate(R.id.navigation_notifications)}
+            else {
+                navController.navigate(R.id.loginFragment)
+            }
         }
     }
+
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
 
-    app:startDestination="@id/gruppo_DownloadFragment2">
+    app:startDestination="@id/navigation_home">
 
 
 
@@ -35,7 +35,11 @@
         android:id="@+id/loginFragment"
         android:name="com.example.braincard.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.braincard.ui.home.HomeFragment"
@@ -93,6 +97,9 @@
         <action
             android:id="@+id/action_registrationFragment_to_navigation_notifications"
             app:destination="@id/navigation_notifications" />
+        <action
+            android:id="@+id/action_registrationFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/visualizzaFlashcardOnline"
@@ -103,7 +110,6 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.example.braincard.ShopFragment"
         android:label="fragment_shop"
-<<<<<<< Updated upstream
         tools:layout="@layout/fragment_shop">
         <action
         android:id="@+id/action_ShopFragment_to_DeckShop"
@@ -111,8 +117,6 @@
 
     </fragment>
 
-=======
-        tools:layout="@layout/fragment_shop" />
     <fragment
         android:id="@+id/gruppo_DownloadFragment2"
         android:name="com.example.braincard.Gruppo_DownloadFragment"
@@ -123,6 +127,5 @@
         android:name="com.example.braincard.GruppoUploadFragment"
         android:label="fragment_gruppo_upload"
         tools:layout="@layout/fragment_gruppo_upload" />
->>>>>>> Stashed changes
 
 </navigation>

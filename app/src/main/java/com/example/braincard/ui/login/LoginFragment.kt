@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.braincard.databinding.FragmentLoginBinding
 
 import com.example.braincard.R
@@ -68,10 +70,13 @@ class LoginFragment : Fragment() {
                 loginResult ?: return@Observer
                 loadingProgressBar.visibility = View.GONE
                 loginResult.error?.let {
+                    Log.e("LOGIN", "no")
                     showLoginFailed(it)
                 }
                 loginResult.success?.let {
+                    Log.e("LOGIN", "ok")
                     updateUiWithUser(it)
+
                 }
             })
 
@@ -110,13 +115,17 @@ class LoginFragment : Fragment() {
                 passwordEditText.text.toString()
             )
         }
+        binding.registerLink.setOnClickListener{
+            findNavController().navigate(R.id.action_loginFragment_to_registrationFragment)
+        }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome) + model.displayName
+        val welcome = getString(R.string.welcome) + " " +model.displayName
         // TODO : initiate successful logged in experience
         val appContext = context?.applicationContext ?: return
         Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
+        findNavController().navigate(R.id.navigation_notifications)
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

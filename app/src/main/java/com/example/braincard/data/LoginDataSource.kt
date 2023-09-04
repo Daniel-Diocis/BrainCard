@@ -1,24 +1,45 @@
-package com.example.braincard.data
-
+import android.util.Log
 import com.example.braincard.data.model.LoggedInUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import kotlin.Result
 import java.io.IOException
 
-/**
- * Class that handles authentication w/ login credentials and retrieves user information.
- */
 class LoginDataSource {
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+    private val auth = FirebaseAuth.getInstance()
+
+
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.e("FINALMENTE","")
+                val authResult = auth.signInWithEmailAndPassword(username, password).await()
+
+                if (authResult.user != null) {
+
+                    val user = LoggedInUser(authResult.user!!.uid.toString(), authResult.user!!.displayName.toString())
+                    Log.e("PROVAAA", user.toString())
+                    if (user != null) {
+                        Result.success(user)
+                    } else {
+                        kotlin.Result.failure(IOException("Errore nel recupero dei dati dell'utente"))
+                    }
+                } else {
+                    Result.failure(IOException("L'utente non è stato autenticato correttamente"))
+                }
+            } catch (e: Exception) {
+                Result.failure(IOException("Errore nell'autenticazione", e))
+            }
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
+    suspend fun logout() {
+        withContext(Dispatchers.IO) {
+            auth.signOut()
+        }
     }
 }

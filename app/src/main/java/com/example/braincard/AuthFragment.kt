@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.firestore.FirebaseFirestore
 import java.security.Provider
 
 // TODO: Rename parameter arguments, choose names that match
@@ -62,6 +63,7 @@ class AuthFragment : Fragment() {
     }
 
     private fun setup() {
+        val db :FirebaseFirestore = FirebaseFirestore.getInstance()
         registratiButton.setOnClickListener() {
             if (emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty() ) {
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailEditText.text.toString(),
@@ -69,7 +71,8 @@ class AuthFragment : Fragment() {
 
                         if (it.isSuccessful) {
                             showLog(it.result?.user?.email ?:"", ProviderType.BASIC)
-                        } else {
+                             }
+                        else {
                             showAlert()
                         }
                 }

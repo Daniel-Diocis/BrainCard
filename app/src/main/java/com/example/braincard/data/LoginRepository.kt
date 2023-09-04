@@ -1,6 +1,8 @@
 package com.example.braincard.data
 
+import LoginDataSource
 import com.example.braincard.data.model.LoggedInUser
+import kotlin.Result
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -22,17 +24,17 @@ class LoginRepository(val dataSource: LoginDataSource) {
         user = null
     }
 
-    fun logout() {
+    suspend fun logout() {
         user = null
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    suspend fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
         val result = dataSource.login(username, password)
 
-        if (result is Result.Success) {
-            setLoggedInUser(result.data)
+        if (result.isSuccess ) {
+            setLoggedInUser(result.getOrNull()!!)
         }
 
         return result
