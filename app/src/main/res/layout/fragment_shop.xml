@@ -29,14 +29,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Online" />
+            android:text="Online"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
 
         <Button
             android:id="@+id/localBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Locale" />
+            android:text="Locale"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"/>
 
     </LinearLayout>
 
@@ -59,15 +63,17 @@
                 android:id="@+id/scrollRicercaOnline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#9C27B0"
+
                 android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/ContenitoreCercati"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#FF0000"
-                    android:orientation="vertical">
+
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
 
                 </LinearLayout>
             </ScrollView>
@@ -76,13 +82,17 @@
                 android:id="@+id/scrollOnline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#2196F3">
+                >
 
                 <LinearLayout
                     android:id="@+id/listaOnline"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"/>
             </ScrollView>
 
         </LinearLayout>
