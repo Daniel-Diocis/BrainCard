@@ -2,6 +2,7 @@ package com.example.braincard
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,9 @@ class GruppoUploadFragment : Fragment() {
         _binding = FragmentGruppoUploadBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(GruppoUploadViewModel::class.java)
         val ContenitoreDecks = binding.gruppoUpload
-        val gruppoIdSpecifico = "CyX594EhY3BVZc9GWsrQ"
+        val gruppoIdSpecifico = arguments?.getString("gruppoShopLocale")
+        Log.e("verifica",gruppoIdSpecifico.toString())
+
 
         val uploadButton = binding.uploadButton
         uploadButton.setOnClickListener {

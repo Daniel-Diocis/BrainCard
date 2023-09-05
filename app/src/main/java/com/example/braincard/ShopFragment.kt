@@ -89,6 +89,14 @@ class ShopFragment : Fragment() {
             for(gruppo in gruppi){
                 val deckButton = Button(requireContext())
                 deckButton.text=gruppo.nome
+                deckButton.setOnClickListener{
+                    val bundle = bundleOf("gruppoShopLocale" to gruppo.id)
+                    Log.e("importoLocale",bundle.toString())
+                    findNavController().navigate(
+                        R.id.action_ShopFragment_to_Gruppo_Upload,
+                        bundle
+                    )
+                }
 
             ContenitoreLocale.addView(deckButton)
 
@@ -101,10 +109,11 @@ class ShopFragment : Fragment() {
             val bannerAdp=BannerAdapter(gruppi)
             bannerAdp.populate(ContenitoreOnline) { item ->
 
-                val bundle = bundleOf("gruppoShop" to item.id)
+                val bundle = bundleOf("gruppoShopOnline" to item.id)
                 Log.e("importo",bundle.toString())
                 findNavController().navigate(
-                    R.id.action_ShopFragment_to_DeckShop
+                    R.id.action_ShopFragment_to_Gruppo_Download,
+                    bundle
                 )
 
             }
@@ -119,10 +128,12 @@ class ShopFragment : Fragment() {
 
             bannerAdp.populate(ContenitoreCercati){item ->
 
-                val bundle = bundleOf("gruppoShop" to item.id)
+                val bundle = bundleOf("gruppoShopOnline" to item.id)
                 Log.e("importo",bundle.toString())
                 findNavController().navigate(
-                    R.id.action_ShopFragment_to_DeckShop
+                    R.id.action_ShopFragment_to_Gruppo_Download,
+                    bundle
+
                 )}
             Log.e("carica",ContenitoreCercati.size.toString())
         })

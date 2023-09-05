@@ -31,12 +31,17 @@ class Gruppo_DownloadFragment : Fragment() {
     private var _binding: FragmentGruppoDownloadBinding?=null
 
     private lateinit var viewModel: GruppoDownloadViewModel
-    private var gruppoIdSpecifico: String = "5NKoqNeN7Pis9Vrh2SCe"
+
+
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+         var gruppoIdSpecifico = arguments?.getString("gruppoShopOnline")
+        gruppoIdSpecifico=gruppoIdSpecifico.toString()
+        Log.e("gruppoDownl",gruppoIdSpecifico)
+
         _binding = FragmentGruppoDownloadBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this, GruppoDownloadViewModelFactory(requireActivity().application, gruppoIdSpecifico)).get(GruppoDownloadViewModel::class.java)
         val ContenitoreDecks = binding.gruppoDownload

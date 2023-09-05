@@ -22,11 +22,11 @@
     <fragment
         android:id="@+id/modcreacard"
         android:name="com.example.braincard.ModCreaCard"
-        android:label="Modcreacard" />
+        android:label="Setup Deck" />
     <fragment
         android:id="@+id/flashcardStudio"
         android:name="com.example.braincard.FlashcardStudio"
-        android:label="FlashcardStudio" >
+        android:label="Studio" >
         <action
             android:id="@+id/action_flashcardStudio_to_gruppoFragment"
             app:destination="@id/gruppoFragment" />
@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.braincard.ui.login.LoginFragment"
-        android:label="fragment_login"
+        android:label="Login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registrationFragment"
@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.braincard.ui.home.HomeFragment"
-        android:label="HomeFragment">
+        android:label="Home">
         <action
             android:id="@+id/action_navigation_home_to_gruppoFragment"
             app:destination="@id/gruppoFragment">
@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/gruppoFragment"
         android:name="com.example.braincard.GruppoFragment"
-        android:label="fragment_gruppo"
+        android:label="Decks"
         tools:layout="@layout/fragment_gruppo">
 
         <argument
@@ -84,12 +84,12 @@
     <fragment
         android:id="@+id/popUp"
         android:name="com.example.braincard.PopUp"
-        android:label="fragment_pop_up"
+
         tools:layout="@layout/fragment_pop_up" />
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.braincard.RegistrationFragment"
-        android:label="RegistrationFragment"
+        android:label="Sign-in"
         tools:layout="@layout/fragment_registration">
         <argument
             android:name="utenteId"
@@ -104,28 +104,39 @@
     <fragment
         android:id="@+id/visualizzaFlashcardOnline"
         android:name="com.example.braincard.VisualizzaFlashcardOnline"
-        android:label="VisualizzaFlashcardOnline"
+        android:label="Flashcards"
         tools:layout="@layout/fragment_visualizza_flashcard_online"/>
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.braincard.ShopFragment"
-        android:label="fragment_shop"
+        android:label="Shop"
         tools:layout="@layout/fragment_shop">
         <action
-        android:id="@+id/action_ShopFragment_to_DeckShop"
-        app:destination="@id/navigation_home"/>
+        android:id="@+id/action_ShopFragment_to_Gruppo_Download"
+        app:destination="@id/gruppo_DownloadFragment2"/>
+        <action
+            android:id="@+id/action_ShopFragment_to_Gruppo_Upload"
+            app:destination="@id/gruppoUploadFragment"/>
 
     </fragment>
 
     <fragment
         android:id="@+id/gruppo_DownloadFragment2"
         android:name="com.example.braincard.Gruppo_DownloadFragment"
-        android:label="fragment_gruppo__download"
-        tools:layout="@layout/fragment_gruppo__download" />
+        android:label="Download"
+        tools:layout="@layout/fragment_gruppo__download">
+        <argument
+            android:name="gruppoShopOnline"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/gruppoUploadFragment"
         android:name="com.example.braincard.GruppoUploadFragment"
-        android:label="fragment_gruppo_upload"
-        tools:layout="@layout/fragment_gruppo_upload" />
+        android:label="Upload"
+        tools:layout="@layout/fragment_gruppo_upload" >
+        <argument
+            android:name="gruppoShopLocale"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
