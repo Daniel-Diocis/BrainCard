@@ -38,9 +38,12 @@
                 android:layout_gravity="start|top"
                 android:background="@null"
                 android:ems="10"
-                android:gravity="start|top"
                 android:hint="@string/Hint_mod_crea"
-                android:inputType="text" />
+
+                android:gravity="center_horizontal"
+                android:inputType="textMultiLine"
+                android:maxLength="420"
+                android:scrollbars="vertical"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -63,9 +66,12 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:ems="10"
-                android:gravity="start|top"
+
                 android:hint="@string/Hint_mod_crea_risposta"
-                android:inputType="text" />
+                android:gravity="center_horizontal"
+                android:inputType="textMultiLine"
+                android:maxLength="420"
+                android:scrollbars="vertical"/>
 
         </androidx.cardview.widget.CardView>
 

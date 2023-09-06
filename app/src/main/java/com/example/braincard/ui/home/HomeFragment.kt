@@ -64,6 +64,8 @@ class HomeFragment : Fragment() {
             for (deck in decks){
                 val deckButton = ImageButton(requireContext())
                 deckButton.tag =deck.id
+                deckButton.maxWidth=80
+                deckButton.minimumWidth=80
                 deckButton.setOnClickListener {
                     val bundle = bundleOf("deckId" to deck.id)
                     findNavController().navigate(
@@ -78,15 +80,21 @@ class HomeFragment : Fragment() {
 
                 val nomeTextView = TextView(requireContext())
                 nomeTextView.gravity = Gravity.CENTER
+                nomeTextView.width=80
 
 
                 nomeTextView.text = deck.nome
 
                 val deckLayout = LinearLayout(requireContext())
                 deckLayout.orientation = LinearLayout.VERTICAL
-                deckLayout.setPadding(60)
+                val paddingInDp = 20 // La dimensione in dp che desideri impostare
+                val density = resources.displayMetrics.density
+                val paddingInPx = (paddingInDp * density).toInt() // Converte dp in px
+
+                deckLayout.setPadding(paddingInPx, 0, paddingInPx, 0)
                 deckLayout.addView(deckButton)
                 deckLayout.addView(nomeTextView)
+
 
                 deckContainer.addView(deckLayout)
             }
