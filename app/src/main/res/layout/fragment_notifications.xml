@@ -30,15 +30,16 @@
 
     <TextView
         android:id="@+id/text_nome_utente"
-        android:text="text_nome_utente"
-        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="8dp"
+        android:editable="false"
+        android:text=""
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/nome"
@@ -52,7 +53,7 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/text_nome"
-        android:text="text_nome"
+        android:text=""
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,7 +75,7 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/text_cognome"
-        android:text="text_cognome"
+        android:text=""
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,7 +97,7 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/text_email"
-        android:text="text_e-mail"
+        android:text=""
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,7 +119,7 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/text_telefono"
-        android:text="text_telefono"
+        android:text=""
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -140,7 +141,7 @@
         android:textSize="20sp" />
     <TextView
         android:id="@+id/text_genere"
-        android:text="text_genere"
+        android:text=""
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -149,6 +150,7 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -166,9 +168,10 @@
                 android:layout_centerHorizontal="true"
                 android:text="Salva"
                 android:visibility="gone" />
+
             <Button
                 android:id="@+id/button_modifica_profilo"
-                android:layout_width="wrap_content"
+                android:layout_width="151dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Mofidica Profilo"
@@ -176,9 +179,19 @@
 
             <Button
                 android:id="@+id/button_logout"
-                android:layout_width="wrap_content"
+                android:layout_width="128dp"
                 android:layout_height="wrap_content"
                 android:text="Logout" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|center_vertical"
+                android:layout_toStartOf="@+id/button_modifica_profilo"
+                android:layout_toEndOf="@+id/button_logout"
+                android:visibility="visible" />
+
         </RelativeLayout>
     </LinearLayout>
 

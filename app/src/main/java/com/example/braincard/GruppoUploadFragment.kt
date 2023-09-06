@@ -1,97 +1,135 @@
 package com.example.braincard
 
-import androidx.lifecycle.ViewModelProvider
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.braincard.data.model.Deck
-import com.example.braincard.data.model.Gruppo
-import com.example.braincard.database.DeckRepository
-import com.example.braincard.databinding.FragmentGruppoDownloadBinding
 import com.example.braincard.databinding.FragmentGruppoUploadBinding
+import com.example.braincard.factories.GruppoUploadViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+
 
 class GruppoUploadFragment : Fragment() {
     private var _binding: FragmentGruppoUploadBinding?=null
-
+    private var progressDialog: ProgressDialog? = null
     private lateinit var viewModel: GruppoUploadViewModel
     private val binding get() = _binding!!
+    var selectedDecks: MutableList<Deck> = mutableListOf()
+    var deleteDecks: MutableList<Deck> = mutableListOf()
+    var gruppoIdSpecifico : String = ""
+    val db= FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.e("AndroidRuntime", gruppoIdSpecifico+":::::: "+arguments?.getString("gruppoId").toString())
+        gruppoIdSpecifico = arguments?.getString("gruppoId").toString()
         _binding = FragmentGruppoUploadBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(GruppoUploadViewModel::class.java)
-        val ContenitoreDecks = binding.gruppoUpload
-        val gruppoIdSpecifico = arguments?.getString("gruppoShopLocale")
-        Log.e("verifica",gruppoIdSpecifico.toString())
+
+        viewModel = ViewModelProvider(this, GruppoUploadViewModelFactory(requireActivity().application, gruppoIdSpecifico)).get(GruppoUploadViewModel::class.java)
+        val auth = FirebaseAuth.getInstance()
 
 
         val uploadButton = binding.uploadButton
-        uploadButton.setOnClickListener {
-            val selectedDecks = viewModel.getSelectedDecks()
-            val currentGruppo = viewModel.getCurrentGruppo()
+        binding.creatorName.text = auth.currentUser?.displayName
 
-            // Ora puoi passare selectedDecks e currentGruppo al tuo database locale
-            // Esegui le operazioni necessarie qui per salvare i dati nel tuo database
-            if (currentGruppo != null) {
-                uploadSelectedDecks(selectedDecks, currentGruppo)
-            }
+
+        uploadButton.setOnClickListener { if (selectedDecks.isNotEmpty())
+            viewModel.uploadSelectedDecks(selectedDecks,binding.shortEditMessage.text.toString())
+            Log.e("DELETING",deleteDecks.isNotEmpty().toString())
+            if(deleteDecks.isNotEmpty()) viewModel.deleteSelectedDecks(deleteDecks)
+            findNavController().navigate(R.id.action_gruppoUploadFragment_to_navigation_dashboard)
         }
-
-        viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
-            // Pulisci la vista dei deck esistente, se necessario
-            ContenitoreDecks.removeAllViews()
-
-            // Ciclo attraverso i deck e crea le viste o elementi dell'interfaccia utente
-            for (deck in deckList) {
-
-                val checkBox = CheckBox(requireContext())
-                checkBox.text = deck.nome
-
-                // Aggiungi il button alla vista dei deck
-                ContenitoreDecks.addView(checkBox)
-            }
-        })
-
         return binding.root
     }
-    private fun uploadSelectedDecks(selectedDecks: List<Deck>, currentGruppo: Gruppo) {
-        val db = FirebaseFirestore.getInstance()
 
-        // Cicla sui deck selezionati
-        for (deck in selectedDecks) {
-            // Crea un riferimento al documento del deck su Firebase Firestore (ad esempio, utilizzando l'ID del deck)
-            val deckRef = db.collection("Deck").document(deck.id)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val ContenitoreDecks = binding.gruppoUpload
+        viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
 
-            // Converti il deck in un oggetto mappa (Map) per caricarlo su Firestore
-            val deckMap = mapOf(
-                "nome" to deck.nome,
-                "percentualeCompletamento" to deck.percentualeCompletamento,
-                "gruppoId" to deck.idGruppo
-                // Aggiungi altre proprietà se necessario
-            )
+                if(deckList!=null) {
+                    Log.e("INSIDE",deckList.toString())
+                    ContenitoreDecks.removeAllViews()
+                    var count = 0
+                    showLoadingScreen()
+                    for (deck in deckList) {
 
-            // Carica il deck su Firebase Firestore
-            deckRef.set(deckMap)
-                .addOnSuccessListener { _ ->
-                    // Il deck è stato caricato con successo
-                    // Puoi gestire la risposta qui se necessario
+                        val checkBox = CheckBox(requireContext())
+                        checkDeckOnline(deck.id) { exists ->
+                            if (exists) checkBox.isChecked = true
+                        }
+                        checkBox.text = deck.nome
+                        // Aggiungi il button alla vista dei deck
+                        ContenitoreDecks.addView(checkBox)
+                        checkBox.setOnClickListener {
+                            if (checkBox.isChecked) {
+                                selectedDecks.add(deck)
+                                for (item in deleteDecks) {
+                                    if (item.id == deck.id) {
+                                        deleteDecks.remove(deck)
+                                        break
+                                    }
+                                }
+                            } else {
+                                deleteDecks.add(deck)
+                                for (item in selectedDecks) {
+                                    if (item.id == deck.id) {
+                                        selectedDecks.remove(deck)
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        count++
+                        if (count == deckList.size) hideLoadingScreen()
+                    }
                 }
-                .addOnFailureListener { e ->
-                    // Si è verificato un errore durante il caricamento del deck su Firestore
-                    // Puoi gestire l'errore qui se necessario
+            })
+
+
+    }
+        fun checkDeckOnline(deckId: String, callback: (Boolean) -> Unit) {
+            db.collection("Deck").document(deckId).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document = task.result
+                        val exists = document.exists()
+                        callback(exists)
+                    } else {
+                        callback(false) // Segnala che il documento non esiste a causa di un errore
+                    }
                 }
+
+    }
+    // Funzione per mostrare la schermata di caricamento
+    fun showLoadingScreen() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(requireContext())
+            progressDialog?.setMessage("Caricamento in corso...") // Imposta un messaggio di caricamento
+            progressDialog?.setCancelable(false)
+            progressDialog?.show()
         }
     }
+
+    // Funzione per nascondere la schermata di caricamento
+    fun hideLoadingScreen() {
+        progressDialog?.dismiss()
+        progressDialog = null
+    }
+
 
 }

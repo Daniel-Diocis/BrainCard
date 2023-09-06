@@ -93,12 +93,17 @@ class ShopFragment : Fragment() {
                     val bundle = bundleOf("gruppoShopLocale" to gruppo.id)
                     Log.e("importoLocale",bundle.toString())
                     findNavController().navigate(
-                        R.id.action_ShopFragment_to_Gruppo_Upload,
+                        R.id.action_navigation_dashboard_to_gruppoUploadFragment,
                         bundle
                     )
                 }
 
             ContenitoreLocale.addView(deckButton)
+                deckButton.setOnClickListener{
+                    val bundle = bundleOf("gruppoId" to gruppo.id)
+                    Log.e("AndroidRuntime", gruppo.id)
+                    findNavController().navigate(R.id.action_navigation_dashboard_to_gruppoUploadFragment, bundle)
+                }
 
             }
 
@@ -109,11 +114,11 @@ class ShopFragment : Fragment() {
             val bannerAdp=BannerAdapter(gruppi)
             bannerAdp.populate(ContenitoreOnline) { item ->
 
-                val bundle = bundleOf("gruppoShopOnline" to item.id)
-                Log.e("importo",bundle.toString())
+
+                val bundle = bundleOf("gruppoId" to item.id)
                 findNavController().navigate(
-                    R.id.action_ShopFragment_to_Gruppo_Download,
-                    bundle
+                    R.id.action_navigation_dashboard_to_gruppo_DownloadFragment2,bundle
+
                 )
 
             }
@@ -128,11 +133,10 @@ class ShopFragment : Fragment() {
 
             bannerAdp.populate(ContenitoreCercati){item ->
 
-                val bundle = bundleOf("gruppoShopOnline" to item.id)
+                val bundle = bundleOf("gruppoId" to item.id)
                 Log.e("importo",bundle.toString())
                 findNavController().navigate(
-                    R.id.action_ShopFragment_to_Gruppo_Download,
-                    bundle
+                    R.id.action_navigation_dashboard_to_gruppo_DownloadFragment2,bundle
 
                 )}
             Log.e("carica",ContenitoreCercati.size.toString())
