@@ -22,4 +22,7 @@ interface GruppoDAO {
 
     @Update
     fun updateGruppo(gruppo: Gruppo)
+
+    @Query("SELECT * FROM Gruppo WHERE id = :gruppoId")
+    fun getGruppoById(gruppoId : String) : Gruppo
 }

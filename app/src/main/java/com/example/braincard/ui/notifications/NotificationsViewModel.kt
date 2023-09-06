@@ -28,4 +28,12 @@ class NotificationsViewModel(
         this.telefono.value = telefono
         this.genere.value = genere
     }
+    fun updateData(data: List<String>) {
+        displayName.value=data[0]
+        nome.value=data[1]
+        cognome.value=data[2]
+        email.value=data[3]
+        telefono.value=data[4]
+        genere.value=data[5]
+    }
 }

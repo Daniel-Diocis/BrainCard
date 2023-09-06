@@ -19,5 +19,8 @@ class GruppoRepository(private val gruppoDao: GruppoDAO) {
     suspend fun updateGruppo(gruppo: Gruppo) {
         gruppoDao.updateGruppo(gruppo )
     }
+    suspend fun getGruppoById(gruppoId: String) : Gruppo{
+        return gruppoDao.getGruppoById(gruppoId)
+    }
 
 }

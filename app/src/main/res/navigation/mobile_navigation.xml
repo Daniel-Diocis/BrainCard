@@ -18,7 +18,11 @@
         android:id="@+id/navigation_notifications"
         android:name="com.example.braincard.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_modProfilo"
+            app:destination="@id/modProfilo" />
+    </fragment>
     <fragment
         android:id="@+id/modcreacard"
         android:name="com.example.braincard.ModCreaCard"
@@ -114,6 +118,12 @@
         <action
         android:id="@+id/action_ShopFragment_to_DeckShop"
         app:destination="@id/navigation_home"/>
+        <action
+            android:id="@+id/action_navigation_dashboard_to_gruppoUploadFragment"
+            app:destination="@id/gruppoUploadFragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_gruppo_DownloadFragment2"
+            app:destination="@id/gruppo_DownloadFragment2" />
 
     </fragment>
 
@@ -121,11 +131,34 @@
         android:id="@+id/gruppo_DownloadFragment2"
         android:name="com.example.braincard.Gruppo_DownloadFragment"
         android:label="fragment_gruppo__download"
-        tools:layout="@layout/fragment_gruppo__download" />
+        tools:layout="@layout/fragment_gruppo__download" >
+        <action
+            android:id="@+id/action_gruppo_DownloadFragment2_to_visualizzaFlashcardOnline"
+            app:destination="@id/visualizzaFlashcardOnline" />
+    </fragment>
     <fragment
         android:id="@+id/gruppoUploadFragment"
         android:name="com.example.braincard.GruppoUploadFragment"
         android:label="fragment_gruppo_upload"
-        tools:layout="@layout/fragment_gruppo_upload" />
+        tools:layout="@layout/fragment_gruppo_upload" >
+        <action
+            android:id="@+id/action_gruppoUploadFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
+    <fragment
+        android:id="@+id/modProfilo"
+        android:name="com.example.braincard.ModProfilo"
+        android:label="ModProfilo" >
+        <action
+            android:id="@+id/action_modProfilo_to_changePassword"
+            app:destination="@id/changePassword" />
+        <action
+            android:id="@+id/action_modProfilo_to_navigation_notifications"
+            app:destination="@id/navigation_notifications" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePassword"
+        android:name="com.example.braincard.ui.login.ChangePassword"
+        android:label="ChangePassword" />
 
 </navigation>

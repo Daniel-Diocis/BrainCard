@@ -1,6 +1,7 @@
 package com.example.braincard.database
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 
@@ -36,7 +37,9 @@ class DeckRepository(private val deckDao: DeckDAO) {
     suspend fun getDeckByGruppoID(gruppoId : String): LiveData<List<Deck>>{
         return deckDao.getDecksByGruppoID(gruppoId)
     }
+
     }
+
 
 
 

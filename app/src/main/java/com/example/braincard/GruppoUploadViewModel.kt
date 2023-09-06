@@ -1,61 +1,91 @@
 package com.example.braincard
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
 import com.example.braincard.data.model.GruppoFire
 import com.example.braincard.database.BrainCardDatabase
+import com.example.braincard.database.CardRepository
+import com.example.braincard.database.DeckRepository
 import com.example.braincard.database.GruppoDAO
 import com.example.braincard.database.GruppoRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class GruppoUploadViewModel(application: Application) : AndroidViewModel(application) {
+class GruppoUploadViewModel(application: Application, gruppoId : String) : AndroidViewModel(application) {
     lateinit var db : BrainCardDatabase
-    var deckGruppo: MutableLiveData<List<Deck>> = MutableLiveData()
-    var AllGruppi: MutableLiveData<MutableList<Gruppo>> = MutableLiveData(mutableListOf())
-    var GruppiLocali: MutableList<Gruppo> =mutableListOf()
-    val gruppoId = "CyX594EhY3BVZc9GWsrQ"
-    private val selectedDecks: MutableList<Deck> = mutableListOf()
-    private var currentGruppo: Gruppo? = null
+    lateinit var auth : FirebaseAuth
+    private val _deckGruppo = MutableLiveData<List<Deck>>(null)
+    var deckGruppo: LiveData<List<Deck>> = MutableLiveData()
+    private var currentGruppoId = gruppoId
+    lateinit var gruppoCorrente : Gruppo
+    lateinit var repository: GruppoRepository
+    lateinit var repository2: DeckRepository
+    lateinit var deckGruppoList : List<Deck>
 
-    lateinit var GruppiOnline: LiveData<List<GruppoFire>>
 
     init {
+        auth= FirebaseAuth.getInstance()
         db = BrainCardDatabase.getDatabase(application)
+        repository = GruppoRepository(db.gruppoDao())
+        repository2= DeckRepository(db.deckDao())
+        viewModelScope.launch(Dispatchers.IO) {
+            // Esegui la query sospesa direttamente in Dispatchers.IO
+            val decks = repository2.getDeckByGruppoID(currentGruppoId)
+            gruppoCorrente=repository.getGruppoById(currentGruppoId)
+            // Ora puoi impostare i dati nel LiveData una volta che la query è completata
+            deckGruppo = decks
+        }
 
     }
-    fun creaGruppi() {
-        AllGruppi.postValue(GruppiLocali)
+
+    fun uploadSelectedDecks(selectedDecks: MutableList<Deck>, info : String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("Gruppo").document(currentGruppoId).set(
+            mapOf(
+                "download" to 0,
+                "infoCreatore" to info,
+                "nome" to gruppoCorrente.nome,
+                "utenteId" to auth.currentUser?.uid.toString()
+            )
+        )
+
+        // Cicla sui deck selezionati
+        Log.e("DECK SEL", selectedDecks.toString())
+        for (deck in selectedDecks) {
+            // Crea un riferimento al documento del deck su Firebase Firestore (ad esempio, utilizzando l'ID del deck)
+            val deckRef = db.collection("Deck").document(deck.id)
+
+            // Converti il deck in un oggetto mappa (Map) per caricarlo su Firestore
+            val deckMap = mapOf(
+                "nome" to deck.nome,
+                "percentualeCompletamento" to deck.percentualeCompletamento,
+                "gruppoId" to deck.idGruppo
+            )
+            // Carica il deck su Firebase Firestore
+            deckRef.set(deckMap)
+        }
+    }
+    fun deleteSelectedDecks(deleteDecks : MutableList<Deck>){
+        val db= FirebaseFirestore.getInstance()
+        for(deck in deleteDecks){
+            db.collection("Deck").document(deck.id).delete()
+
+        }
+        db.collection("Deck").whereEqualTo("gruppoId" ,deleteDecks[0].idGruppo).get().addOnSuccessListener { documents->
+            if (documents.isEmpty) db.collection("Gruppo").document(deleteDecks[0].idGruppo).delete()
+        }
     }
 
-    // Metodo per ottenere i deck selezionati
-    fun getSelectedDecks(): List<Deck> {
-        return selectedDecks
-    }
 
-    // Metodo per aggiungere un deck selezionato
-    fun addSelectedDeck(deck: Deck) {
-        selectedDecks.add(deck)
-    }
-
-    // Metodo per rimuovere un deck selezionato
-    fun removeSelectedDeck(deck: Deck) {
-        selectedDecks.remove(deck)
-    }
-
-    // Metodo per impostare il gruppo corrente
-    fun setCurrentGruppo(gruppo: Gruppo) {
-        currentGruppo = gruppo
-    }
-
-    // Metodo per ottenere il gruppo corrente
-    fun getCurrentGruppo(): Gruppo? {
-        return currentGruppo
-    }
-
-    // ...
 }

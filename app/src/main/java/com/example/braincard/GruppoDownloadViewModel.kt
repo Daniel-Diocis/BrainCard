@@ -18,10 +18,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class GruppoDownloadViewModel(application: Application, gruppoid: String) : AndroidViewModel(application) {
 
     lateinit var db : FirebaseFirestore
+    val idgruppo=gruppoid
     // Aggiungi un nuovo LiveData per i deck di un gruppo specifico
     private val repository: CardRepository
     private val repository2 : DeckRepository
@@ -31,6 +33,7 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
     var GruppiOnline: MutableList<GruppoFire> =mutableListOf()
     private val selectedDecks: MutableList<Deck> = mutableListOf()
     lateinit var gruppo: Gruppo
+    lateinit var deckInRoom : LiveData<List<Deck>>
 
     lateinit var GruppiLocale: LiveData<List<Gruppo>>
     init {
@@ -44,6 +47,9 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
         repository3= GruppoRepository(gruppoDao)
         repository2= DeckRepository(deckDao)
         repository= CardRepository(cardDao)
+        viewModelScope.launch(Dispatchers.IO) {
+             deckInRoom = repository2.getDeckByGruppoID(idgruppo)
+        }
 
         val gruppo1 = db.collection("Gruppo").document(gruppoid)
 
@@ -61,6 +67,7 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
                     percentualeCompletamento = document.data["percentualeCompletamento"].toString().toInt(),
                     idGruppo = document.data["gruppoId"].toString()
                 )
+
                 deckList.add(deck)
             }
             deckGruppo.postValue(deckList)
@@ -68,28 +75,30 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
 
     }
 
-    fun creaGruppi() {
-        AllGruppi.postValue(GruppiOnline)
-    }
 
     // Metodo per ottenere i deck selezionati
     fun getSelectedDecks(): List<Deck> {
         return selectedDecks
     }
     fun downloadSelectedDecks(selectedDecks: List<Deck>, currentGruppo: String) {
-        // Qui dovresti implementare la logica per scaricare i deck selezionati.
-        // Puoi utilizzare il tuo repository DeckRepository per inserire i deck nel database locale.
-        Log.e("unMinimo", "")
 
-            Log.e("dentroDownloadDecks", "")
-            // Avvia una nuova coroutine
-            viewModelScope.launch(Dispatchers.IO) {
-                repository3.insertGruppo(gruppo)
-                for (deck in selectedDecks) {
-                    // Imposta l'ID del gruppo sul deck prima di salvarlo, se necessario
-                    deck.idGruppo = currentGruppo
-                    // Salva il deck nel database locale
-                    repository2.insertDeck(deck)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository3.insertGruppo(gruppo)
+            for (deck in selectedDecks) {
+                // Imposta l'ID del gruppo sul deck prima di salvarlo, se necessario
+                deck.idGruppo = currentGruppo
+                // Salva il deck nel database locale
+                repository2.insertDeck(deck)
+            }
+            db.collection("Gruppo").document(currentGruppo).get().addOnSuccessListener { task ->
+                val currentDownload = task.data?.get("download") as Long
+                val newDownload = currentDownload + 1
+
+                val updateData = hashMapOf(
+                    "download" to newDownload
+                )
+
+                db.collection("Gruppo").document(currentGruppo).update(updateData as Map<String, Any>)
             }
         }
     }
