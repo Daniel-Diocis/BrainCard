@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'ModCreaFlashcard.dart';
 import 'flashcard_database.dart';
 import 'model/deck.dart';
 import 'DeckStudioView.dart';
@@ -14,12 +18,16 @@ class GruppoView extends StatefulWidget {
 
 class _GruppoViewState extends State<GruppoView> {
   late FlashcardDatabase _database;
+  final TextEditingController _newDeckNameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _database = FlashcardDatabase(); // Inizializza il database
-    _database.open(); // Apre il database
+    _database = FlashcardDatabase();
+    _database.open().then((_) {
+      print("Database aperto con successo");
+      setState(() {});
+    });
   }
 
   @override
@@ -27,7 +35,7 @@ class _GruppoViewState extends State<GruppoView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Deck', // Titolo "Deck" nella app bar
+          'Deck',
           style: TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
@@ -62,29 +70,37 @@ class _GruppoViewState extends State<GruppoView> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => DeckStudioView(
-                                deckId: deck
-                                    .id), // Passa l'id del gruppo alla nuova schermata
+                              deckId: deck.id,
+                            ),
                           ),
                         );
                       },
-                      child: Text(deck.nome),
+                      child: Text(
+                        deck.nome,
+                        style: TextStyle(color: Colors.white),
+                      ),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
                         textStyle: TextStyle(fontSize: 18.0),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.edit), // Icona di matita
+                      icon: Icon(Icons.edit),
                       onPressed: () {
-                        // Gestisci l'azione di modifica qui
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ModCreaFlashcardView(deckId: deck.id),
+                          ),
+                        );
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.delete), // Icona del cestino
+                      icon: Icon(Icons.delete),
                       onPressed: () async {
                         await _database.deleteDeck(deck.id);
 
-                        // Aggiorna l'interfaccia utente dopo l'eliminazione
                         setState(() {});
                       },
                     ),
@@ -95,12 +111,63 @@ class _GruppoViewState extends State<GruppoView> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddDeckDialog,
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _showAddDeckDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Aggiungi un nuovo deck'),
+          content: TextField(
+            controller: _newDeckNameController,
+            decoration: InputDecoration(hintText: 'Nome del deck'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annulla'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Salva'),
+              onPressed: () {
+                String randomId = _generateRandomId();
+                String deckName = _newDeckNameController.text;
+                Deck newDeck = Deck(
+                  id: randomId,
+                  nome: deckName,
+                  percentualeCompletamento: 0,
+                  idGruppo: widget.gruppoId,
+                );
+
+                _database.insertDeck(newDeck).then((_) {
+                  setState(() {});
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String _generateRandomId() {
+    final Random _random = Random.secure();
+    var values = List<int>.generate(20, (i) => _random.nextInt(256));
+    return base64UrlEncode(values);
   }
 
   @override
   void dispose() {
-    _database.close(); // Chiudi il database quando la schermata viene distrutta
+    _database.close();
     super.dispose();
   }
 }

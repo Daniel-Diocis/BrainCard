@@ -16,10 +16,13 @@ class _DeckStudioViewState extends State<DeckStudioView> {
   late List<CardX.Card> cards;
   int currentIndex = 0;
   late Deck deck;
+  late FlashcardDatabase _database;
 
   @override
   void initState() {
     super.initState();
+    _database = FlashcardDatabase(); // Inizializza il database
+    _database.open(); // Apre il database
     _getDeckAndCards(widget.deckId);
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -9,8 +10,11 @@ class FlashcardDatabase {
   late Database _db;
 
   Future<void> open() async {
+    WidgetsFlutterBinding.ensureInitialized();
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, 'flashcard.db');
+    print('Il percorso della directory dei database è: $databasesPath');
+    print('Il percorso completo del database è: $path');
 
     _db = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
