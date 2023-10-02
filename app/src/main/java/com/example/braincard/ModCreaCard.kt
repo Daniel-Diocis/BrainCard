@@ -60,9 +60,9 @@ class ModCreaCard : Fragment() {
 
         viewModel.getAllDeckCard(deckProvaID)
         binding.giraCard.setOnClickListener {
-            if (flashcardPagerAdapter.itemCount == 0) {
-                toggleFlashcardVisibility()}
-            else{
+            //if (flashcardPagerAdapter.itemCount == 0) {
+                //toggleFlashcardVisibility()}
+            //else{
                 lastClickedPosition?.let { position ->
                     // Trova il RecyclerView
                     val recyclerView = binding.viewPager.getChildAt(0) as? RecyclerView
@@ -71,7 +71,7 @@ class ModCreaCard : Fragment() {
                         val viewHolder = it.findViewHolderForAdapterPosition(position) as? FlashcardViewHolder
                         viewHolder?.toggleCardVisibility()
 
-                }
+                //}
                 }
             }
             }
@@ -96,30 +96,30 @@ class ModCreaCard : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.AllDeckCard.observe(viewLifecycleOwner, Observer { cardList ->
                 Log.e("OBSERVER", "DENTRO " + cardList.toString())
+                if (cardList.size==0){flashcardPagerAdapter = FlashcardPagerAdapter(cardList)
+                binding.viewPager.adapter = flashcardPagerAdapter}
 
-                if (cardList.size!=0) {
-                    binding.flashcard.visibility = View.GONE
-                    binding.flashcardBack.visibility = View.GONE
-                    Log.e("IF", "DENTRO N.0 : " + flashcardPagerAdapter.getItemCount())
-                    // Aggiorna la lista delle carte nell'adapter esistente
-                    flashcardPagerAdapter.updateCardList(cardList)
-                    // Aggiorna la vista del ViewPager
-                    flashcardPagerAdapter.notifyDataSetChanged()
-                    flashcardPagerAdapter.addFlashcard(Card(cardCode,"","",false,deckProvaID))
-                    binding.viewPager.setCurrentItem(flashcardPagerAdapter.getItemCount() - 1, true)
+                //binding.flashcard.visibility = View.GONE
+                //binding.flashcardBack.visibility = View.GONE
+                Log.e("IF", "DENTRO N.0 : " + flashcardPagerAdapter.getItemCount())
+                // Aggiorna la lista delle carte nell'adapter esistente
+                flashcardPagerAdapter.updateCardList(cardList)
+                // Aggiorna la vista del ViewPager
+                flashcardPagerAdapter.notifyDataSetChanged()
+                flashcardPagerAdapter.addFlashcard(Card(cardCode,"","",false,deckProvaID))
+                binding.viewPager.setCurrentItem(flashcardPagerAdapter.getItemCount() - 1, true)
 
                     Log.e(
                         "IF",
                         "DENTRO: " + flashcardPagerAdapter.getItemCount() + " :::: " + cardList.toString()
                     )
-                } else {
-                    // Crea un nuovo adapter e imposta il ViewPager
-                    flashcardPagerAdapter = FlashcardPagerAdapter(cardList)
-                    binding.viewPager.adapter = flashcardPagerAdapter
-                    currentCardId=cardCode
-                    binding.numbersTextView.setText("1")
-
-                }
+               // } else {
+               //     // Crea un nuovo adapter e imposta il ViewPager
+               //     flashcardPagerAdapter = FlashcardPagerAdapter(cardList)
+               //     binding.viewPager.adapter = flashcardPagerAdapter
+               //     currentCardId=cardCode
+               //     binding.numbersTextView.setText("1")
+                //} FUNZIONA MA NON TOLGO PER SICUREZZA
                 viewModel.changePercentualeByDeckID(deckProvaID, cardList)
             })
         }
@@ -142,14 +142,14 @@ class ModCreaCard : Fragment() {
                     risp = currentFlashcard.risposta
                 } else {
                     currentCardId = cardCode}
-                binding.numbersTextView.setText( (position+1).toString())
+                binding.numbersTextView.text = (position+1).toString()
 
             }
         })
     }
 
 
-    private fun toggleFlashcardVisibility() {
+    /*private fun toggleFlashcardVisibility() {
         val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
             Log.e("Vis", "true")
             0f
@@ -175,7 +175,7 @@ class ModCreaCard : Fragment() {
         }, 320) // Ritardo di 300ms
         binding.editDomanda.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
         binding.editRisposta.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
-    }
+    }*/
 
     public fun onSalvaButtonClick() {
         lateinit var createdFlashcard: Card
@@ -183,15 +183,15 @@ class ModCreaCard : Fragment() {
         val currentCard: Card
         val domanda: String
         val risposta: String
-        if (index != 0 || flashcardPagerAdapter.itemCount != 0) {
+        //if (index != 0 || flashcardPagerAdapter.itemCount != 0) {
             currentCard = flashcardPagerAdapter.getFlashcardAtPosition(index)
             domanda = currentCard.domanda
             risposta = currentCard.risposta
-        } else {
-            domanda = binding.editDomanda.text.toString()
-            Log.e("DOMANDA", domanda)
-            risposta = binding.editRisposta.text.toString()
-        }
+        //} else {
+          //  domanda = binding.editDomanda.text.toString()
+           // Log.e("DOMANDA", domanda)
+            //risposta = binding.editRisposta.text.toString()
+        //}
 
         createdFlashcard = Card(currentCardId, domanda, risposta, false, deckProvaID)
 
@@ -208,12 +208,11 @@ class ModCreaCard : Fragment() {
                     viewModel.updateCard(existingFlashcard)
 
                 } else {
-                    //withContext(Dispatchers.Main){flashcardPagerAdapter.addFlashcard(createdFlashcard)}
                     viewModel.insertCard(createdFlashcard)
-                    Log.e("MIAO","")
                 }
             }
             // Aggiorna la posizione del ViewPager2 per mostrare la nuova flashcard in cima
+            //viene aggiornato tramite l'observer
 
             cardCode = generateRandomString(20)
             viewModel.getAllDeckCard(deckProvaID)

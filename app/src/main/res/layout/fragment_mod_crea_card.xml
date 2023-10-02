@@ -15,65 +15,7 @@
         <!-- Status bar -->
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/flashcard"
-            android:layout_width="303dp"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            app:cardBackgroundColor="#D1D1D1"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewPager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/viewPager">
 
-            <!-- Add the content for the front side of the flashcard here -->
-
-            <EditText
-                android:id="@+id/editDomanda"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start|top"
-                android:background="@null"
-                android:ems="10"
-                android:hint="@string/Hint_mod_crea"
-
-                android:gravity="center_horizontal"
-                android:inputType="textMultiLine"
-                android:maxLength="420"
-                android:scrollbars="vertical"/>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/flashcardBack"
-            android:layout_width="302dp"
-            android:layout_height="0dp"
-            android:visibility="invisible"
-            app:cardBackgroundColor="#D1D1D1"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewPager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/viewPager">
-
-
-            <EditText
-                android:id="@+id/editRisposta"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:ems="10"
-
-                android:hint="@string/Hint_mod_crea_risposta"
-                android:gravity="center_horizontal"
-                android:inputType="textMultiLine"
-                android:maxLength="420"
-                android:scrollbars="vertical"/>
-
-        </androidx.cardview.widget.CardView>
 
 
         <Button

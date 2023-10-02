@@ -83,7 +83,7 @@
             android:background="@null"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="@string/Hint_mod_crea"
+            android:hint="@string/Hint_mod_crea_risposta"
             android:text="@string/risposta" />
 
     </androidx.cardview.widget.CardView>

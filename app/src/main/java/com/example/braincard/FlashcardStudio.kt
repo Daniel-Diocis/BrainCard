@@ -3,6 +3,7 @@ package com.example.braincard
 
 import android.animation.ObjectAnimator
 import android.graphics.Color
+import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.os.Handler
@@ -74,15 +75,6 @@ class FlashcardStudio : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-    }
-
-
-
-
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
 
@@ -106,6 +98,8 @@ class FlashcardStudio : Fragment() {
             viewModel.cardLiveData.observe(viewLifecycleOwner) { card ->
                 binding.textDomanda.setText(card.domanda)
                 binding.textRisposta.setText(card.risposta)
+                if(binding.flashcardBack.visibility==View.VISIBLE) toggleFlashcardVisibility()
+
 
             }
             viewModel.gruppoId.observe(viewLifecycleOwner){
@@ -121,7 +115,8 @@ class FlashcardStudio : Fragment() {
             view.setOnTouchListener { _, event ->
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
-                        initialTranslationX = binding.flashcard.translationX
+                        if(binding.flashcard.visibility==View.VISIBLE) initialTranslationX = binding.flashcard.translationX
+                        else initialTranslationX = binding.flashcardBack.translationX
                         initialX = event.x
                     }
 
@@ -131,7 +126,7 @@ class FlashcardStudio : Fragment() {
                         if (deltaX < -SWIPE_THRESHOLD) {
                             // Swipe da destra a sinistra
                             val endTranslationX = initialTranslationX - binding.flashcard.width
-                            binding.flashcard.animate()
+                            if(binding.flashcard.visibility== View.VISIBLE){binding.flashcard.animate()
                                 .translationX(endTranslationX)
                                 .setDuration(300) // Durata dell'animazione in millisecondi
                                 .withEndAction {
@@ -140,7 +135,19 @@ class FlashcardStudio : Fragment() {
                                     // Ripristinare la posizione della carta per la prossima animazione
                                     binding.flashcard.translationX = initialTranslationX
                                 }
-                                .start()
+                                .start()}
+                            else {binding.flashcardBack.animate()
+                                .translationX(endTranslationX)
+                                .setDuration(300) // Durata dell'animazione in millisecondi
+                                .withEndAction {
+                                    // Alla fine dell'animazione, chiamare la funzione SbagliatoNextCard
+                                    SbagliatoNextCard()
+                                    // Ripristinare la posizione della carta per la prossima animazione
+                                    binding.flashcardBack.translationX = initialTranslationX
+
+
+                                }
+                                .start()}
                         }
                     }
                 }
@@ -148,7 +155,7 @@ class FlashcardStudio : Fragment() {
             }
         }
             companion object {
-                private const val SWIPE_THRESHOLD = 50 // Imposta il valore appropriato per il tuo caso
+                private const val SWIPE_THRESHOLD = 50
             }
 
     fun shuffleCards(card : MutableList<Card>): MutableList<Card> {
@@ -201,8 +208,8 @@ class FlashcardStudio : Fragment() {
             if(hasBeenCompleted) hasBeenCompleted=false
             newPercentage = perc + ((1.0 / size) * 100).toInt()
             if (newPercentage == 99 || newPercentage>100) newPercentage=100
-                viewModel.updatePercentualeCompletamento(deckId, newPercentage)
-                if(newPercentage==100 && index+1==MAX_INDEX){
+            viewModel.updatePercentualeCompletamento(deckId, newPercentage)
+            if(newPercentage==100 && index+1==MAX_INDEX){
                     binding.CoriandolitextView.visibility = View.VISIBLE;
                     CommonConfetti.rainingConfetti(binding.ConstrLayout, intArrayOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.RED))
                         .infinite()
@@ -247,8 +254,6 @@ class FlashcardStudio : Fragment() {
     }
 
     private fun toggleFlashcardVisibility() {
-
-
         val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
 
             0f} else 180f

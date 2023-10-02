@@ -55,8 +55,6 @@ class GruppoFragment : Fragment() {
         val gruppoViewModel = ViewModelProvider(this, factory).get(GruppoViewModel::class.java)
 
 
-
-
         val pieChart = rootView.findViewById<PieChart>(R.id.piechart)
 
         val progressBar = rootView.findViewById<TextView>(R.id.progress)
@@ -85,11 +83,8 @@ class GruppoFragment : Fragment() {
                 val deckButton = Button(requireContext())
                 deckButton.layoutParams = layoutParams // Imposta i parametri del layout
                 val deckElimina=ImageButton (requireContext())
-
                 deckElimina.setImageDrawable(deleteIcon)
-
                 val deckMod=ImageButton (requireContext())
-
                 deckMod.setImageDrawable(modIcon)
 
                 deckButton.text = deck.nome
@@ -119,17 +114,18 @@ class GruppoFragment : Fragment() {
                 layout.addView(deckElimina)
                 deckContainer.addView(layout)
                 }
+            //SETUP DEL DIAGRAMMA A TORTA
             if(decks.size > 0){
                 perc=perc/decks.size
 
             }
             else perc=0
 
-            var percString = perc.toString() + "%"
+            val percString = perc.toString() + "%"
             progressBar.text =percString
-            var pieModel : PieModel = PieModel("Progresso", perc.toFloat(), Color.BLUE)
+            val pieModel : PieModel = PieModel("Progresso", perc.toFloat(), Color.BLUE)
             pieChart.addPieSlice(pieModel)
-            var complementaryPieModel = PieModel("Mancante", (100-perc).toFloat(), Color.WHITE)
+            val complementaryPieModel = PieModel("Mancante", (100-perc).toFloat(), Color.WHITE)
             pieChart.addPieSlice(complementaryPieModel)
             pieChart.startAnimation()
 
@@ -138,13 +134,10 @@ class GruppoFragment : Fragment() {
         btn_gen.setOnClickListener{
             val pop = PopUp()
             pop.vista="gruppo"
-
             pop.show((activity as AppCompatActivity).supportFragmentManager, "showPopUp")
-
         }
 
         // Osserva l'attributo message quando si crea un gruppo
-
         popUpMessage.messageDeckLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
             // Esegui azioni in risposta ai cambiamenti dell'attributo message
             if (popUpMessage.invia){
