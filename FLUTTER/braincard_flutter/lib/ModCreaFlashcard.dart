@@ -24,40 +24,83 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
   @override
   void initState() {
     super.initState();
-    _database = FlashcardDatabase();
-    _database.open().then((_) {
-      print("Database aperto con successo");
-      setState(() {});
-    });
     _domandaController = TextEditingController();
     _rispostaController = TextEditingController();
 
     flashcards = [];
-    _addNewFlashcard(); // Aggiungi una flashcard iniziale
 
     _pageController = PageController();
+
+    _database = FlashcardDatabase();
+    _database.open().then((_) {
+      print("Database aperto con successo");
+
+      // Ora carica le flashcard dal database
+      _database.getCardsWithDeckId(widget.deckId).then((cards) {
+        setState(() {
+          for (var card in cards) {
+            var newFlashcard = Flashcard(
+              id: card.id,
+              domanda: card.domanda,
+              risposta: card.risposta,
+              isFront: true,
+            );
+            newFlashcard.domandaController =
+                TextEditingController(text: card.domanda);
+            newFlashcard.rispostaController =
+                TextEditingController(text: card.risposta);
+            flashcards.add(newFlashcard);
+            print(card.toString());
+            print(card.domanda);
+            print(card.risposta);
+          }
+        });
+      });
+    });
   }
 
   void _addNewFlashcard() {
     setState(() {
-      flashcards.add(Flashcard(
+      var newFlashcard = Flashcard(
         id: _generateRandomId(),
         domanda: '',
         risposta: '',
         isFront: true,
-      ));
+      );
+      flashcards.add(newFlashcard);
+      // Crea nuovi controller per la nuova flashcard
+      newFlashcard.domandaController = TextEditingController();
+      newFlashcard.rispostaController = TextEditingController();
     });
   }
 
   void _salvaFlashcard() async {
     for (var flashcard in flashcards) {
-      await _database.insertCard(CardX.Card(
-        id: flashcard.id,
-        domanda: flashcard.domanda,
-        risposta: flashcard.risposta,
-        completata: false,
-        deckID: widget.deckId,
-      ));
+      flashcard.domanda = flashcard.domandaController.text;
+      flashcard.risposta = flashcard.rispostaController.text;
+
+      // Verifica se la carta con questo ID esiste già nel database
+      var existingCard = await _database.getCardById(flashcard.id);
+
+      if (existingCard != null) {
+        // La carta esiste già, quindi esegui un aggiornamento invece di un'aggiunta
+        await _database.updateCard(CardX.Card(
+          id: flashcard.id,
+          domanda: flashcard.domanda,
+          risposta: flashcard.risposta,
+          completata: false,
+          deckID: widget.deckId,
+        ));
+      } else {
+        // La carta non esiste, esegui un'aggiunta normale
+        await _database.insertCard(CardX.Card(
+          id: flashcard.id,
+          domanda: flashcard.domanda,
+          risposta: flashcard.risposta,
+          completata: false,
+          deckID: widget.deckId,
+        ));
+      }
     }
 
     // Torna alla schermata precedente
@@ -122,31 +165,18 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   padding: EdgeInsets.all(16.0),
                   color: Colors.grey[200],
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          flashcard.isFront
-                              ? flashcard.domanda
-                              : flashcard.risposta,
-                          style: TextStyle(fontSize: 24.0),
-                        ),
-                        SizedBox(height: 16),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          child: TextField(
-                            controller: flashcard.isFront
-                                ? _domandaController
-                                : _rispostaController,
-                            decoration: InputDecoration(
-                              labelText:
-                                  flashcard.isFront ? 'Domanda' : 'Risposta',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: TextField(
+                      controller: flashcard.isFront
+                          ? flashcard.domandaController
+                          : flashcard.rispostaController,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        hintText: (flashcard.isFront
+                            ? 'Domanda'
+                            : 'Risposta'), // Testo suggerito
+                      ),
                     ),
                   ),
                 ),
@@ -191,6 +221,10 @@ class Flashcard {
   String domanda;
   String risposta;
   bool isFront;
+  late TextEditingController
+      domandaController; // Nuovo controller per la domanda
+  late TextEditingController
+      rispostaController; // Nuovo controller per la risposta
 
   Flashcard({
     required this.id,

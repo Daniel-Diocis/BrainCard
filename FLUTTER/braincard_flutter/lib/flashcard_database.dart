@@ -56,6 +56,23 @@ class FlashcardDatabase {
     await _db.insert('Deck', deck.toMap());
   }
 
+  Future<Card?> getCardById(String cardId) async {
+    List<Map<String, dynamic>> result =
+        await _db.query('Card', where: 'id = ?', whereArgs: [cardId]);
+
+    if (result.isNotEmpty) {
+      return Card(
+        id: result.first['id'],
+        domanda: result.first['domanda'],
+        risposta: result.first['risposta'],
+        completata: result.first['completata'] == 1,
+        deckID: result.first['deckID'],
+      );
+    } else {
+      return null;
+    }
+  }
+
   Future<void> insertCard(Card card) async {
     await _db.insert('Card', card.toMap());
   }
