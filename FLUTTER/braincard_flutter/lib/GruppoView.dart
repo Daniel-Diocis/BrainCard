@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:braincard_flutter/Fstudio.dart';
 import 'package:flutter/material.dart';
 import 'ModCreaFlashcard.dart';
 import 'flashcard_database.dart';
 import 'model/deck.dart';
-import 'DeckStudioView.dart';
+
 
 class GruppoView extends StatefulWidget {
   final String gruppoId;
@@ -69,9 +70,9 @@ class _GruppoViewState extends State<GruppoView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DeckStudioView(
-                              deckId: deck.id,
-                            ),
+                            builder: (context) => Fstudio(deckId: deck.id,) //DeckStudioView(deckId: deck.id, ),
+                              
+                           
                           ),
                         );
                       },
@@ -80,7 +81,7 @@ class _GruppoViewState extends State<GruppoView> {
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
+                        primary: Color.fromARGB(255, 93, 70, 70),
                         textStyle: TextStyle(fontSize: 18.0),
                       ),
                     ),

@@ -1,6 +1,7 @@
 import 'package:braincard_flutter/home.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
+// ignore: unused_import
+ import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 
 void main() {
   //sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
