@@ -25,6 +25,8 @@ class FstudioState extends State<Fstudio>{
   bool visibile=false;
   GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
   late bool bottoni;
+  double _posBottoni=-100;
+  double _opacity=0;
 
   @override
   void initState() {
@@ -77,16 +79,15 @@ class FstudioState extends State<Fstudio>{
     
     setState(() {
       nCarta=randomNumber;
-      visibile=false;
+      _opacity=0;
+      _posBottoni=-100;
       
     });
     
     print(nCarta);
 
   }
-   void gira() async{
-    
-   }
+   
 
   
 
@@ -105,6 +106,8 @@ class FstudioState extends State<Fstudio>{
               setState(() {
                 cardKey.currentState?.toggleCard();
                 visibile=true;
+                _posBottoni=20;
+                _opacity=1;
               });
               print("gira Carta");
       
@@ -124,48 +127,70 @@ class FstudioState extends State<Fstudio>{
         ),
         back: Container(
           child: Text(flashcards[nCarta].risposta),
+              ),
+            ),
+          ),
         ),
       ),
-    ),
-  ),
-)
-,
-           Visibility(
+           AnimatedPositioned(
+            width: MediaQuery.of(context).size.width,
             
-            visible: visibile, // Imposta questa opzione su true se desideri che sia inizialmente visibile
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 16.0), // Spazio inferiore
-                child: Row(
+            duration:Duration(milliseconds: 200),
+            bottom: _posBottoni,
+            child:Align(
+              alignment: Alignment.center,
+            
+            
+            
+            
+             // Imposta questa opzione su true se desideri che sia inizialmente visibile
+            child:AnimatedOpacity(
+              duration: Duration(milliseconds: 500),
+              opacity: _opacity,
+            
+              child: 
+                 // Spazio inferiore
+                
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    ElevatedButton(
+                    Container(
+                      width: 80,
+                      height: 60,
+                    child: ElevatedButton(
                       onPressed: () {
                         caricaCarta();
                       },
                       child: Icon(Icons.check, color: Colors.white),
                       style: ElevatedButton.styleFrom(primary: Colors.green),
+                      
                     ),
-                    ElevatedButton(
+                    ),
+                    Container(
+                      width: 80,
+                      height: 60,
+                      child: ElevatedButton(
                       onPressed: () {
                         caricaCarta();
                       },
                       child: Icon(Icons.close, color: Colors.white),
                       style: ElevatedButton.styleFrom(primary: Colors.red),
                     ),
+                    ),
                   ],
                 ),
               ),
             ),
-            )
 
+            
+           ), 
         ],
       ),
     ),
   );
   }
 }
+
 class Flashcard {
   final String id;
   String domanda;
