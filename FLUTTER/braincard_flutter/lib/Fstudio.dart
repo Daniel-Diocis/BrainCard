@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'flashcard_database.dart';
 import 'model/card.dart' as CardX;
 import 'model/deck.dart';
-import 'dart:math';
+
 
 
 class Fstudio extends StatefulWidget{
@@ -48,6 +48,7 @@ class FstudioState extends State<Fstudio>{
               domanda: card.domanda,
               risposta: card.risposta,
               isFront: true,
+              completata: card.completata,
             );
             newFlashcard.domandaController =
                 TextEditingController(text: card.domanda);
@@ -59,6 +60,7 @@ class FstudioState extends State<Fstudio>{
             print(card.risposta);
           }
           nCarte=flashcards.length;
+          flashcards.sort((a,b)=>a.completata.compareTo(b.completata));//ordina da quelle che so meno a quello che so di più
           print("object 1");
           print(nCarte);
         });
@@ -69,8 +71,17 @@ class FstudioState extends State<Fstudio>{
   
 
   void caricaCarta()async{
-    Random random = Random();
-    int randomNumber = random.nextInt(nCarte);
+    if(nCarta<nCarte-1)
+    {
+      nCarta++;
+    }
+    else{
+      nCarta=0;
+      flashcards.sort((a,b)=>a.completata.compareTo(b.completata));
+      for (var card in flashcards){
+        print(card.domanda+" : "+card.completata.toString());
+      }
+    }
     if(cardKey.currentState?.isFront==false){
      await  cardKey.currentState?.toggleCard();
      await Future.delayed(const Duration(milliseconds: 200)); // Attendere 500 millisecondi (puoi regolare il valore)
@@ -78,7 +89,8 @@ class FstudioState extends State<Fstudio>{
     
     
     setState(() {
-      nCarta=randomNumber;
+      nCarta=nCarta;
+      
       _opacity=0;
       _posBottoni=-100;
       
@@ -87,15 +99,25 @@ class FstudioState extends State<Fstudio>{
     print(nCarta);
 
   }
+  void modCompletata()async{
+    await _database.updateCard(CardX.Card(
+          id: flashcards[nCarta].id,
+          domanda: flashcards[nCarta].domanda,
+          risposta: flashcards[nCarta].risposta,
+          completata: flashcards[nCarta].completata,
+          deckID: widget.deckId,
+        ));
+    
+  }
    
 
   
 
   Widget build(BuildContext context){
-   return MaterialApp(
-    home: Scaffold(
+   return Scaffold(
+    
       appBar: AppBar(
-        title: Text('Il tuo titolo'),
+        title: Text("Studio"),
       ),
       body: Stack(
         children: <Widget>[
@@ -113,10 +135,12 @@ class FstudioState extends State<Fstudio>{
       
       
     },
-    child: SizedBox(
+    child: Container(
+      
       height: 500,
       width: 300,
       child: FlipCard(
+        
         key: cardKey,
         fill: Fill.fillBack,
         direction: FlipDirection.HORIZONTAL,
@@ -159,6 +183,11 @@ class FstudioState extends State<Fstudio>{
                       height: 60,
                     child: ElevatedButton(
                       onPressed: () {
+                        if (flashcards[nCarta].completata<3)
+                        {flashcards[nCarta].completata+=1;
+                        modCompletata();}
+                        print("completamento: "+flashcards[nCarta].completata.toString());
+                        
                         caricaCarta();
                       },
                       child: Icon(Icons.check, color: Colors.white),
@@ -171,6 +200,10 @@ class FstudioState extends State<Fstudio>{
                       height: 60,
                       child: ElevatedButton(
                       onPressed: () {
+                        if (flashcards[nCarta].completata>0)
+                        {flashcards[nCarta].completata-=1;
+                        modCompletata();}
+                        print("completamento: "+flashcards[nCarta].completata.toString());
                         caricaCarta();
                       },
                       child: Icon(Icons.close, color: Colors.white),
@@ -186,15 +219,17 @@ class FstudioState extends State<Fstudio>{
            ), 
         ],
       ),
-    ),
-  );
+    );
+  
   }
+  
 }
 
 class Flashcard {
   final String id;
   String domanda;
   String risposta;
+  int completata;
   bool isFront;
   late TextEditingController
       domandaController; // Nuovo controller per la domanda
@@ -206,6 +241,7 @@ class Flashcard {
     required this.domanda,
     required this.risposta,
     required this.isFront,
+    required this.completata,
   });
 
   void toggleSide() {

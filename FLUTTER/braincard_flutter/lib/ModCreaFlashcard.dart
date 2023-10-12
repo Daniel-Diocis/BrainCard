@@ -88,7 +88,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
           id: flashcard.id,
           domanda: flashcard.domanda,
           risposta: flashcard.risposta,
-          completata: false,
+          completata: 0,
           deckID: widget.deckId,
         ));
       } else {
@@ -97,7 +97,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
           id: flashcard.id,
           domanda: flashcard.domanda,
           risposta: flashcard.risposta,
-          completata: false,
+          completata:0,
           deckID: widget.deckId,
         ));
       }
@@ -221,6 +221,7 @@ class Flashcard {
   String domanda;
   String risposta;
   bool isFront;
+  int completata;
   late TextEditingController
       domandaController; // Nuovo controller per la domanda
   late TextEditingController
@@ -231,6 +232,7 @@ class Flashcard {
     required this.domanda,
     required this.risposta,
     required this.isFront,
+    this.completata=0,
   });
 
   void toggleSide() {

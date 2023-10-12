@@ -65,7 +65,7 @@ class FlashcardDatabase {
         id: result.first['id'],
         domanda: result.first['domanda'],
         risposta: result.first['risposta'],
-        completata: result.first['completata'] == 1,
+        completata: result.first['completata'],
         deckID: result.first['deckID'],
       );
     } else {
@@ -131,8 +131,7 @@ class FlashcardDatabase {
         id: maps[i]['id'],
         domanda: maps[i]['domanda'],
         risposta: maps[i]['risposta'],
-        completata: maps[i]['completata'] ==
-            1, // Assume che completata sia un valore 1 o 0 nel database
+        completata: maps[i]['completata'], 
         deckID: maps[i]['deckID'],
       );
     });

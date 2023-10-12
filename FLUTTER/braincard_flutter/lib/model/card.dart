@@ -2,7 +2,7 @@ class Card {
   final String id;
   final String domanda;
   final String risposta;
-  bool completata;
+  int completata;
   final String deckID;
 
   Card({
@@ -18,7 +18,7 @@ class Card {
       'id': id,
       'domanda': domanda,
       'risposta': risposta,
-      'completata': completata ? 1 : 0, // Converte bool in int
+      'completata': completata, 
       'deckID': deckID,
     };
   }
@@ -28,7 +28,7 @@ class Card {
       id: map['id'],
       domanda: map['domanda'],
       risposta: map['risposta'],
-      completata: map['completata'] == 1, // Converte int in bool
+      completata: map['completata'], 
       deckID: map['deckID'],
     );
   }
