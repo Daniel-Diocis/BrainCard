@@ -10,6 +10,7 @@ import 'model/deck.dart';
 
 class GruppoView extends StatefulWidget {
   final String gruppoId;
+  
 
   GruppoView({required this.gruppoId});
 
@@ -20,6 +21,8 @@ class GruppoView extends StatefulWidget {
 class _GruppoViewState extends State<GruppoView> {
   late FlashcardDatabase _database;
   final TextEditingController _newDeckNameController = TextEditingController();
+  
+  
 
   @override
   void initState() {
@@ -33,6 +36,7 @@ class _GruppoViewState extends State<GruppoView> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;//larghezza schermo
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -63,8 +67,16 @@ class _GruppoViewState extends State<GruppoView> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final deck = snapshot.data![index];
-                return Row(
+                return 
+                
+                Row(
+                  //mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+
                   children: [
+                    Container(
+                      width: 0.7 * screenWidth,
+                      child:
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -81,9 +93,10 @@ class _GruppoViewState extends State<GruppoView> {
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(255, 93, 70, 70),
+                        primary: Color.fromARGB(60, 93, 70, 70),
                         textStyle: TextStyle(fontSize: 18.0),
                       ),
+                    ),
                     ),
                     IconButton(
                       icon: Icon(Icons.edit),

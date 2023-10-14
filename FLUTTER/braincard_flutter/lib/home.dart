@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -63,7 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final gruppo = snapshot.data![index];
                 return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  
                   children: [
+                    Container(
+                      width: 0.7 * screenWidth,
+                      child:
                     ElevatedButton(
                       child: Text(
                         gruppo.nome,
@@ -88,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
+                    ),
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete), // Icona del cestino
