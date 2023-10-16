@@ -131,7 +131,7 @@ class FlashcardDatabase {
         id: maps[i]['id'],
         domanda: maps[i]['domanda'],
         risposta: maps[i]['risposta'],
-        completata: maps[i]['completata'], 
+        completata: maps[i]['completata'],
         deckID: maps[i]['deckID'],
       );
     });
@@ -152,6 +152,16 @@ class FlashcardDatabase {
       deck.toMap(),
       where: 'id = ?',
       whereArgs: [deck.id],
+    );
+  }
+
+  Future<void> updateGroupName(Gruppo gruppo) async {
+    print(gruppo.nome);
+    await _db.update(
+      'Gruppo',
+      gruppo.toMap(),
+      where: 'id = ?',
+      whereArgs: [gruppo.id],
     );
   }
 

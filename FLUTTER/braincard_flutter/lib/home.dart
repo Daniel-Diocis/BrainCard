@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'GruppoView.dart';
 import 'flashcard_database.dart';
-import 'model/gruppo.dart';
+import 'model/gruppo.dart' as GruppoX;
 import 'dart:math';
 
 class HomeScreen extends StatefulWidget {
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.blue,
         centerTitle: false,
       ),
-      body: FutureBuilder<List<Gruppo>>(
+      body: FutureBuilder<List<GruppoX.Gruppo>>(
         future: _database.getGruppi(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -65,36 +65,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 final gruppo = snapshot.data![index];
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  
                   children: [
                     Container(
                       width: 0.7 * screenWidth,
-                      child:
-                    ElevatedButton(
-                      child: Text(
-                        gruppo.nome,
-                        style: TextStyle(color: Colors.white),
+                      child: ElevatedButton(
+                        child: Text(
+                          gruppo.nome,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        key: Key(gruppo.id),
+                        style: ElevatedButton.styleFrom(
+                          primary:
+                              Colors.purple, // Cambia il colore del pulsante
+                          textStyle: const TextStyle(fontSize: 18.0),
+                          //minimumSize:
+                          //Size(MediaQuery.of(context).size.width - 36, 50),
+                          //COME SONO I BOTTONI??
+                        ),
+                        onPressed: () {
+                          // Utilizza Navigator.push per navigare a una nuova schermata chiamata "GruppoView"
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GruppoView(
+                                  gruppoId: gruppo
+                                      .id), // Passa l'id del gruppo alla nuova schermata
+                            ),
+                          );
+                        },
                       ),
-                      key: Key(gruppo.id),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.purple, // Cambia il colore del pulsante
-                        textStyle: const TextStyle(fontSize: 18.0),
-                        //minimumSize:
-                        //Size(MediaQuery.of(context).size.width - 36, 50),
-                        //COME SONO I BOTTONI??
-                      ),
-                      onPressed: () {
-                        // Utilizza Navigator.push per navigare a una nuova schermata chiamata "GruppoView"
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GruppoView(
-                                gruppoId: gruppo
-                                    .id), // Passa l'id del gruppo alla nuova schermata
-                          ),
-                        );
-                      },
                     ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () async {
+                        _editGroupName(gruppo);
+
+                        // Aggiorna l'interfaccia utente dopo l'eliminazione
+                        setState(() {});
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete), // Icona del cestino
@@ -142,12 +150,51 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 String randomId = _generateRandomId();
                 String groupName = _newGroupNameController.text;
-                Gruppo newGroup = Gruppo(id: randomId, nome: groupName);
+                GruppoX.Gruppo newGroup =
+                    GruppoX.Gruppo(id: randomId, nome: groupName);
 
                 _database.insertGruppo(newGroup).then((_) {
                   setState(() {});
                   Navigator.of(context).pop();
                 });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editGroupName(gruppo) {
+    TextEditingController editingController =
+        TextEditingController(text: gruppo.nome);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Modifica Nome Gruppo'),
+          content: TextField(
+            controller: editingController,
+            decoration: InputDecoration(hintText: 'Nuovo nome del gruppo'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annulla'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Salva'),
+              onPressed: () async {
+                String newName = editingController.text;
+                // Aggiorna il nome del gruppo nel database
+                await _database.updateGroupName(GruppoX.Gruppo(
+                  id: gruppo.id,
+                  nome: newName,
+                ));
+                Navigator.of(context).pop();
               },
             ),
           ],
