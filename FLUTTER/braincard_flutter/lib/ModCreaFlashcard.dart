@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'GruppoView.dart';
 import 'flashcard_database.dart';
 import 'model/card.dart' as CardX;
 
@@ -20,6 +21,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
   late TextEditingController _domandaController;
   late TextEditingController _rispostaController;
   late FlashcardDatabase _database;
+  late String gruppoId;
 
   @override
   void initState() {
@@ -56,6 +58,11 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
           }
         });
       });
+      _database.getDeckById(widget.deckId).then((deck) {
+        setState(() {
+          gruppoId = deck.idGruppo;
+        });
+      });
     });
   }
 
@@ -71,6 +78,11 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
       // Crea nuovi controller per la nuova flashcard
       newFlashcard.domandaController = TextEditingController();
       newFlashcard.rispostaController = TextEditingController();
+      _pageController.animateToPage(
+        flashcards.length - 1, // Indice della nuova flashcard
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
     });
   }
 
@@ -97,14 +109,33 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
           id: flashcard.id,
           domanda: flashcard.domanda,
           risposta: flashcard.risposta,
-          completata:0,
+          completata: 0,
           deckID: widget.deckId,
         ));
       }
     }
-
     // Torna alla schermata precedente
-    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GruppoView(gruppoId: gruppoId),
+      ),
+    ).then((_) {
+      setState(() {});
+    });
+  }
+
+  void _deleteFlashcard() async {
+    var cardId = flashcards[_pageController.page!.round()].id;
+    _database.deleteCard(cardId);
+    for (var flashcard in flashcards) {
+      if (flashcard.id == cardId) {
+        // se la carta era nuova e non salvata viene solo tolta dalla visualizzazione
+        setState(() {
+          flashcards.remove(flashcard);
+        });
+      }
+    }
   }
 
   String _generateRandomId() {
@@ -171,7 +202,8 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
                       controller: flashcard.isFront
                           ? flashcard.domandaController
                           : flashcard.rispostaController,
-                      maxLines: null,
+                      maxLines: 30,
+                      maxLength: 840,
                       decoration: InputDecoration(
                         hintText: (flashcard.isFront
                             ? 'Domanda'
@@ -187,6 +219,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
+        verticalDirection: VerticalDirection.down,
         children: [
           FloatingActionButton(
             onPressed: () {
@@ -196,20 +229,28 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
             },
             child: Icon(Icons.refresh),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           FloatingActionButton(
             onPressed: () {
               _addNewFlashcard();
             },
             child: Icon(Icons.add),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           FloatingActionButton(
             onPressed: () {
               _salvaFlashcard();
             },
             child: Icon(Icons.save),
           ),
+          SizedBox(height: 12),
+          FloatingActionButton(
+            onPressed: () {
+              _deleteFlashcard();
+            },
+            child: Icon(Icons.delete),
+          ),
+          SizedBox(height: 22),
         ],
       ),
     );
@@ -232,7 +273,7 @@ class Flashcard {
     required this.domanda,
     required this.risposta,
     required this.isFront,
-    this.completata=0,
+    this.completata = 0,
   });
 
   void toggleSide() {

@@ -102,6 +102,14 @@ class FlashcardDatabase {
     );
   }
 
+  Future<void> deleteCard(String cardId) async {
+    await _db.delete(
+      'Card',
+      where: 'id=?',
+      whereArgs: [cardId],
+    );
+  }
+
   Future<List<Deck>> getDecksWithGruppoId(String gruppoId) async {
     final List<Map<String, dynamic>> maps = await _db.query(
       'deck',
