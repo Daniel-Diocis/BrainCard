@@ -173,6 +173,16 @@ class FlashcardDatabase {
     );
   }
 
+  Future<void> updateDeckName(Deck deck) async {
+    print(deck.nome);
+    await _db.update(
+      'Deck',
+      deck.toMap(),
+      where: 'id = ?',
+      whereArgs: [deck.id],
+    );
+  }
+
   Future<Deck> getDeckById(String deckId) async {
     List<Map<String, dynamic>> result =
         await _db.query('Deck', where: 'id = ?', whereArgs: [deckId]);

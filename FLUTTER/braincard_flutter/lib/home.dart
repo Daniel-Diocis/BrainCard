@@ -39,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue,
         centerTitle: false,
       ),
       body: FutureBuilder<List<GruppoX.Gruppo>>(
@@ -75,8 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         key: Key(gruppo.id),
                         style: ElevatedButton.styleFrom(
-                          primary:
-                              Colors.purple, // Cambia il colore del pulsante
                           textStyle: const TextStyle(fontSize: 18.0),
                           //minimumSize:
                           //Size(MediaQuery.of(context).size.width - 36, 50),

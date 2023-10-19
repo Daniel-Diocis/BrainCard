@@ -1,7 +1,7 @@
 import 'package:braincard_flutter/home.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
- import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart' as sqflite_ffi;
 
 void main() {
   //sqflite_ffi.databaseFactory = sqflite_ffi.databaseFactoryFfi;
@@ -9,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   // This widget is the root of your application.
   @override
@@ -32,7 +32,19 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          primary: Colors.blue, // Colore primario
+          secondary: Colors.indigoAccent.shade400, // Colore secondario
+          background: Colors.white, // Colore di sfondo
+          surface: Colors.lightBlue.shade900, // Colore di superficie
+          error: Colors.red, // Colore di errore
+          onPrimary: Colors.white, // Testo sul colore primario
+          onSecondary: Colors.black, // Testo sul colore secondario
+          onBackground: Colors.indigo.shade900, // Testo sul colore di sfondo
+          onSurface: Colors.blue.shade400, // Testo sul colore di superficie
+          onError: Colors.white, // Testo sull'errore
+        ),
         useMaterial3: true,
       ),
       home: HomeScreen(),

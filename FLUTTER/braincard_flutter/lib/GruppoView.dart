@@ -5,12 +5,11 @@ import 'package:braincard_flutter/Fstudio.dart';
 import 'package:flutter/material.dart';
 import 'ModCreaFlashcard.dart';
 import 'flashcard_database.dart';
+import 'model/deck.dart' as DeckX;
 import 'model/deck.dart';
-
 
 class GruppoView extends StatefulWidget {
   final String gruppoId;
-  
 
   GruppoView({required this.gruppoId});
 
@@ -21,8 +20,6 @@ class GruppoView extends StatefulWidget {
 class _GruppoViewState extends State<GruppoView> {
   late FlashcardDatabase _database;
   final TextEditingController _newDeckNameController = TextEditingController();
-  
-  
 
   @override
   void initState() {
@@ -36,7 +33,7 @@ class _GruppoViewState extends State<GruppoView> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;//larghezza schermo
+    double screenWidth = MediaQuery.of(context).size.width; //larghezza schermo
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -67,36 +64,39 @@ class _GruppoViewState extends State<GruppoView> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final deck = snapshot.data![index];
-                return 
-                
-                Row(
+                return Row(
                   //mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: [
                     Container(
                       width: 0.7 * screenWidth,
-                      child:
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Fstudio(deckId: deck.id,) //DeckStudioView(deckId: deck.id, ),
-                              
-                           
-                          ),
-                        );
-                      },
-                      child: Text(
-                        deck.nome,
-                        style: TextStyle(color: Colors.white),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Fstudio(
+                                      deckId: deck.id,
+                                    ) //DeckStudioView(deckId: deck.id, ),
+
+                                ),
+                          );
+                        },
+                        onLongPress: () async {
+                          _editDeckName(deck);
+
+                          // Aggiorna l'interfaccia utente dopo l'eliminazione
+                          setState(() {});
+                        },
+                        child: Text(
+                          deck.nome,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(fontSize: 18.0),
+                        ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Color.fromARGB(60, 93, 70, 70),
-                        textStyle: TextStyle(fontSize: 18.0),
-                      ),
-                    ),
                     ),
                     IconButton(
                       icon: Icon(Icons.edit),
@@ -165,6 +165,46 @@ class _GruppoViewState extends State<GruppoView> {
                   setState(() {});
                   Navigator.of(context).pop();
                 });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editDeckName(deck) {
+    TextEditingController editingController =
+        TextEditingController(text: deck.nome);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Modifica Nome Deck'),
+          content: TextField(
+            controller: editingController,
+            decoration: InputDecoration(hintText: 'Nuovo nome del deck'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annulla'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Salva'),
+              onPressed: () async {
+                String newName = editingController.text;
+                // Aggiorna il nome del gruppo nel database
+                await _database.updateDeckName(DeckX.Deck(
+                  id: deck.id,
+                  nome: newName,
+                  percentualeCompletamento: deck.percentualeCompletamento,
+                  idGruppo: deck.idGruppo,
+                ));
+                Navigator.of(context).pop();
               },
             ),
           ],
