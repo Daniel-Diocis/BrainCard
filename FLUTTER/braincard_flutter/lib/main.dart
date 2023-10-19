@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           secondary: Colors.indigoAccent.shade400, // Colore secondario
           background: Colors.white, // Colore di sfondo
           surface: Colors.lightBlue.shade900, // Colore di superficie
-          error: Colors.red, // Colore di errore
+          error: Colors.white, // Colore di errore
           onPrimary: Colors.white, // Testo sul colore primario
           onSecondary: Colors.black, // Testo sul colore secondario
           onBackground: Colors.indigo.shade900, // Testo sul colore di sfondo
