@@ -70,7 +70,19 @@ class _GruppoViewState extends State<GruppoView> {
 
                   children: [
                     Container(
-                      width: 0.7 * screenWidth,
+                      child:
+                      Text(deck.percentualeCompletamento.toString()+" ",
+                      style: TextStyle(
+                          fontSize: 20, // Imposta la dimensione del carattere desiderata
+                        ),
+                      
+                      )
+                      
+                    
+                    ),
+                    
+                    Container(
+                      width: 0.6 * screenWidth,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
