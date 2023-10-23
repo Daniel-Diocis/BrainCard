@@ -71,7 +71,7 @@ class _GruppoViewState extends State<GruppoView> {
                   children: [
                     Container(
                       child:
-                      Text(deck.percentualeCompletamento.toString()+" ",
+                      Text(deck.percentualeCompletamento.toString()+"% ",
                       style: TextStyle(
                           fontSize: 20, // Imposta la dimensione del carattere desiderata
                         ),

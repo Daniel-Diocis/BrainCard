@@ -66,6 +66,23 @@ class FstudioState extends State<Fstudio> {
     }); // Apre il database
   }
 
+  void salvaProgressi() async{
+    
+    double progresso=0;
+    int max=flashcards.length;
+    for (var card in flashcards){
+        if (card.completata==3){
+          progresso+=1;
+        }
+    }
+    progresso=(progresso*100);
+    progresso=(progresso/max);
+    int progressoInt=progresso.toInt();
+    //await _database.getDeckById(widget.deckId);
+    //await _database.updateDeck(Deck(id: widget.deckId, nome: nome, percentualeCompletamento: progressoInt, idGruppo: idGruppo))
+    print(progressoInt.toString()+"%");
+  }
+
   void caricaCarta() async {
     if (nCarta < nCarte - 1) {
       nCarta++;
@@ -104,7 +121,13 @@ class FstudioState extends State<Fstudio> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        salvaProgressi();
+        return true; // o false, a seconda dei tuoi requisiti
+      }, 
+    
+    child:Scaffold(
       appBar: AppBar(
         title: Text("Studio"),
       ),
@@ -200,6 +223,7 @@ class FstudioState extends State<Fstudio> {
           ),
         ],
       ),
+    ),
     );
   }
 }
