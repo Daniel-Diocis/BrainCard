@@ -11,7 +11,6 @@ class VisualizzaFlashcardOnlineViewModel(application: Application, deckId: Strin
 
     lateinit var db : FirebaseFirestore
     var AllCards : MutableLiveData<MutableList<Card>> = MutableLiveData(mutableListOf())
-    var cardLiveData = MutableLiveData<Card>()
     var list : MutableList<Card> = mutableListOf()
 
     init{

@@ -12,7 +12,7 @@ import com.example.braincard.data.model.Gruppo
 @Dao
 interface GruppoDAO {
     @Query("SELECT * FROM GRUPPO")
-    fun getAllGruppo(): LiveData<List<Gruppo>>
+    fun getAllGruppi(): LiveData<List<Gruppo>>
 
     @Insert
     fun insertGruppo(gruppo: Gruppo)

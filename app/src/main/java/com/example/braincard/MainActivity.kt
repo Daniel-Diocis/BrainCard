@@ -71,10 +71,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-               findNavController(R.id.nav_host_fragment_activity_main).popBackStack()
+               when (findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id){
+                   R.id.gruppoFragment->{
+                       findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.action_gruppoFragment_to_navigation_home)
+                   }
+                   else -> {
+                       // Se nessuna corrispondenza, esegue il comportamento predefinito (naviga all'indietro)
+                       findNavController(R.id.nav_host_fragment_activity_main).popBackStack()
+                   }
+               }
                 return true
             }
-            // Altre opzioni del menu qui
             else -> return super.onOptionsItemSelected(item)
         }
     }

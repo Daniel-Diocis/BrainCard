@@ -7,7 +7,9 @@ import com.example.braincard.data.model.Card
 
 class CardRepository(private val cardDao: CardDAO) {
 
-
+    suspend fun getAllCards() : LiveData<MutableList<Card>> {
+        return cardDao.getAllCards()
+    }
 
     suspend fun insertCard(card: Card) {
         cardDao.insertCard(card)
@@ -27,6 +29,7 @@ class CardRepository(private val cardDao: CardDAO) {
     suspend fun getCardByDeckID(deckId : String): LiveData<MutableList<Card>>{
         return cardDao.getCardsByDeckID(deckId)
     }
+
 
     suspend fun isCardIdInDatabase(cardId: String): Boolean {
         val bool = cardDao.getCardByID(cardId) != null

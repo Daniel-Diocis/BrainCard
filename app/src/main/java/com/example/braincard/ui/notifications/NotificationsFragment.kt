@@ -104,11 +104,16 @@ class NotificationsFragment : Fragment() {
     fun showLoadingScreen() {
         Log.e("Progress","")
         binding.progressBar.visibility=View.VISIBLE
+        binding.buttonLogout.visibility=View.INVISIBLE
+        binding.buttonModificaProfilo.visibility=View.INVISIBLE
     }
 
     // Funzione per nascondere la schermata di caricamento
     fun hideLoadingScreen() {
         Log.e("Progresso","")
         binding.progressBar.visibility=View.GONE
+        binding.buttonLogout.visibility=View.VISIBLE
+        binding.buttonModificaProfilo.visibility=View.VISIBLE
+
     }
 }

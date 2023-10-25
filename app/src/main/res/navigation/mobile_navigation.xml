@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-
     app:startDestination="@id/navigation_home">
 
 
@@ -26,7 +25,11 @@
     <fragment
         android:id="@+id/modcreacard"
         android:name="com.example.braincard.ModCreaCard"
-        android:label="Setup Deck" />
+        android:label="Setup Deck" >
+        <action
+            android:id="@+id/action_modcreacard_to_gruppoFragment"
+            app:destination="@id/gruppoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/flashcardStudio"
         android:name="com.example.braincard.FlashcardStudio"
@@ -75,7 +78,8 @@
             app:argType="string" />
         <action
             android:id="@+id/action_gruppoFragment_to_navigation_home"
-            app:destination="@id/navigation_home" />
+            app:destination="@id/navigation_home"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_gruppoFragment_to_flashcardStudio"
             app:destination="@id/flashcardStudio" />
@@ -131,7 +135,7 @@
         android:id="@+id/gruppo_DownloadFragment2"
         android:name="com.example.braincard.Gruppo_DownloadFragment"
 
-        android:label="fragment_gruppo__download"
+        android:label="Download decks"
         tools:layout="@layout/fragment_gruppo__download" >
         <action
             android:id="@+id/action_gruppo_DownloadFragment2_to_visualizzaFlashcardOnline"
@@ -143,7 +147,7 @@
         android:name="com.example.braincard.GruppoUploadFragment"
 
 
-        android:label="fragment_gruppo_upload"
+        android:label="Upload decks"
         tools:layout="@layout/fragment_gruppo_upload" >
         <action
             android:id="@+id/action_gruppoUploadFragment_to_navigation_dashboard"
@@ -164,6 +168,5 @@
         android:id="@+id/changePassword"
         android:name="com.example.braincard.ui.login.ChangePassword"
         android:label="ChangePassword" />
-
 
 </navigation>

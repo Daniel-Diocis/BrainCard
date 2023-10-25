@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
 import com.example.braincard.data.model.GruppoFire
@@ -28,8 +29,9 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
     private val repository: CardRepository
     private val repository2 : DeckRepository
     private val repository3 : GruppoRepository
+    lateinit var AllCards : LiveData<MutableList<Card>>
     var deckGruppo: MutableLiveData<List<Deck>> = MutableLiveData()
-    var AllGruppi: MutableLiveData<MutableList<GruppoFire>> = MutableLiveData(mutableListOf())
+    var AllGruppi: LiveData<List<Gruppo>> = MutableLiveData(mutableListOf())
     var GruppiOnline: MutableList<GruppoFire> =mutableListOf()
     private val selectedDecks: MutableList<Deck> = mutableListOf()
     lateinit var gruppo: Gruppo
@@ -49,6 +51,7 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
         repository= CardRepository(cardDao)
         viewModelScope.launch(Dispatchers.IO) {
              deckInRoom = repository2.getDeckByGruppoID(idgruppo)
+            AllGruppi= repository3.getAllGruppi()
         }
 
         val gruppo1 = db.collection("Gruppo").document(gruppoid)
@@ -81,14 +84,36 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
         return selectedDecks
     }
     fun downloadSelectedDecks(selectedDecks: List<Deck>, currentGruppo: String) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            repository3.insertGruppo(gruppo)
+        var trovato = false
+        for (gruppo in AllGruppi.value!!){
+            if (gruppo.id == currentGruppo) {
+                trovato = true
+                break
+            }}
+        if (!trovato) viewModelScope.launch(Dispatchers.IO) { repository3.insertGruppo(gruppo)}
             for (deck in selectedDecks) {
                 // Imposta l'ID del gruppo sul deck prima di salvarlo, se necessario
                 deck.idGruppo = currentGruppo
+                deck.percentualeCompletamento = 0
                 // Salva il deck nel database locale
-                repository2.insertDeck(deck)
+                viewModelScope.launch(Dispatchers.IO){ repository2.insertDeck(deck) }
+                val cards = db.collection("Card").whereEqualTo("deckId", deck.id)
+                cards.get().addOnSuccessListener { Cards->
+                    for (card in Cards) {
+                        if (card.data["deckId"].toString()==deck.id) {
+                            val cardDaIns= Card(
+                                id = card.id,
+                                deckID = card.data["deckId"].toString(),
+                                domanda = card.data["domanda"].toString(),
+                                risposta = card.data["risposta"].toString(),
+                                completata = false
+                            )
+                            viewModelScope.launch(Dispatchers.IO) {
+                                repository.insertCard(cardDaIns)
+                            }
+                        }
+                }
+                }
             }
             db.collection("Gruppo").document(currentGruppo).get().addOnSuccessListener { task ->
                 val currentDownload = task.data?.get("download") as Long
@@ -101,7 +126,7 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
                 db.collection("Gruppo").document(currentGruppo).update(updateData as Map<String, Any>)
             }
         }
-    }
+
 
     // Metodo per aggiungere un deck selezionato
     fun addSelectedDeck(deck: Deck) {

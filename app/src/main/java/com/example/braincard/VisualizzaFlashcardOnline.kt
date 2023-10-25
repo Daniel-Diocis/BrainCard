@@ -30,19 +30,15 @@ class VisualizzaFlashcardOnline : Fragment() {
     lateinit var viewModel : VisualizzaFlashcardOnlineViewModel
     lateinit var binding : FragmentVisualizzaFlashcardOnlineBinding
     lateinit var flashcardPagerAdapter: FlashcardPagerAdapter2
-    var lastClickedPosition = 0
      var size : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        deckId = "pippo"
-        viewModel = ViewModelProvider(this, VisualizzaFlashcardOnlineViewModelFactory(requireActivity().application, deckId.toString())).get(
+        deckId = arguments?.getString("deckId").toString()
+        viewModel = ViewModelProvider(this, VisualizzaFlashcardOnlineViewModelFactory(requireActivity().application, deckId)).get(
             VisualizzaFlashcardOnlineViewModel::class.java)
-
-
-
         binding = FragmentVisualizzaFlashcardOnlineBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -114,7 +110,6 @@ class FlashcardViewHolder2(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private var isBackVisible = false
 
     fun toggleCardVisibility() {
-        Log.e("DENTRO TOGGLE", isBackVisible.toString())
 
         val rotation = if (isBackVisible) 0f else 180f
         val rotation2 = if (isBackVisible) 180f else 0f

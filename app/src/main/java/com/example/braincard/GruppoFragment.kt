@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -54,6 +55,9 @@ class GruppoFragment : Fragment() {
         val factory = GruppoViewModelFactory(requireActivity().application, gruppoId)
         val gruppoViewModel = ViewModelProvider(this, factory).get(GruppoViewModel::class.java)
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            findNavController().navigate(R.id.action_gruppoFragment_to_navigation_home)
+        }
 
         val pieChart = rootView.findViewById<PieChart>(R.id.piechart)
 
@@ -149,5 +153,8 @@ class GruppoFragment : Fragment() {
         })
         return rootView
     }
+
+
+
 
 }

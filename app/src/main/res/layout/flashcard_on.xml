@@ -39,7 +39,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/Hint_mod_crea"
-                />
+                android:padding="8dp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -64,7 +64,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:hint="@string/Hint_mod_crea_risposta"
-                />
+                android:padding="8dp" />
 
         </androidx.cardview.widget.CardView>
 

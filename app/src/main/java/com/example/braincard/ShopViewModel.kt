@@ -22,6 +22,7 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 
     lateinit var GruppiLocale:LiveData<List<Gruppo>>
     init {
+        Log.e("FATTO","FATTO")
         db=FirebaseFirestore.getInstance()
 
         val gruppiCollection = db.collection("Gruppo")
@@ -39,8 +40,6 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 
                 }
                 }
-
-
         }
         val gruppoDao= BrainCardDatabase.getDatabase(application).gruppoDao()
         repository=GruppoRepository(gruppoDao )
@@ -55,9 +54,13 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
+                    var utente = ""
                     // Esegui azioni sui documenti trovati qui
-
-                    GruppiOnlineCercati.add(GruppoFire(document.data["nome"].toString(),document.data["infoCreatore"].toString(),document.data["download"].toString(),document.id))
+                    db.collection("Utente").document(document.data["utenteId"].toString()).get().addOnSuccessListener{
+                        ok-> utente = ok.data?.get("displayName").toString()
+                        if(utente=="" || utente==null) utente="no name"
+                    }
+                    GruppiOnlineCercati.add(GruppoFire(document.data["nome"].toString(),utente, document.data["infoCreatore"].toString(), document.data["download"].toString(), document.id))
 
                 }
                 Log.e("triavto",GruppiOnlineCercati.size.toString())
@@ -68,5 +71,30 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
     fun creaGruppi(){
         AllGruppi.postValue(GruppiOnline)
 
+    }
+    fun refreshData() {
+        GruppiOnline.clear() // Cancella la lista corrente
+        AllGruppi.postValue(mutableListOf()) // Notifica agli observer che la lista è vuota
+        val gruppiCollection = db.collection("Gruppo")
+        gruppiCollection.get().addOnSuccessListener { documents ->
+            for (document in documents) {
+                var utente = ""
+                db.collection("Utente").document(document.data["utenteId"].toString()).get()
+                    .addOnSuccessListener { ok ->
+                        Log.e("ok3", ok.data?.get("displayName").toString())
+                        utente = ok.data?.get("displayName").toString()
+                        if (utente == "" || utente == null) utente = "no name"
+                        var grp = GruppoFire(
+                            document.data["nome"].toString(),
+                            utente,
+                            document.data["infoCreatore"].toString(),
+                            document.data["download"].toString(),
+                            document.id
+                        )
+                        GruppiOnline.add(grp)
+                        AllGruppi.postValue(GruppiOnline)
+                    }
+            }
+        }
     }
 }

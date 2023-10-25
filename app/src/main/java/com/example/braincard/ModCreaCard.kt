@@ -113,13 +113,7 @@ class ModCreaCard : Fragment() {
                         "IF",
                         "DENTRO: " + flashcardPagerAdapter.getItemCount() + " :::: " + cardList.toString()
                     )
-               // } else {
-               //     // Crea un nuovo adapter e imposta il ViewPager
-               //     flashcardPagerAdapter = FlashcardPagerAdapter(cardList)
-               //     binding.viewPager.adapter = flashcardPagerAdapter
-               //     currentCardId=cardCode
-               //     binding.numbersTextView.setText("1")
-                //} FUNZIONA MA NON TOLGO PER SICUREZZA
+
                 viewModel.changePercentualeByDeckID(deckProvaID, cardList)
             })
         }
@@ -149,49 +143,16 @@ class ModCreaCard : Fragment() {
     }
 
 
-    /*private fun toggleFlashcardVisibility() {
-        val rotation = if (binding.flashcardBack.visibility == View.VISIBLE) {
-            Log.e("Vis", "true")
-            0f
-        } else 180f
-        val rotation2 = if (binding.flashcardBack.visibility == View.VISIBLE) {
-            Log.e("Vis2", "false")
-            180f
-        } else 0f
-        val anim = ObjectAnimator.ofFloat(binding.flashcard, "rotationY", rotation)
-        val anim2 = ObjectAnimator.ofFloat(binding.flashcardBack, "rotationY", rotation2)
-        anim.duration = 300
-        anim2.duration = 300
-        anim.start()
-        anim2.start()
 
-        val handler = Handler()
-        handler.postDelayed({
-            binding.flashcard.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
-            binding.flashcardBack.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
-
-            if (dom != "") binding.editDomanda.setText(dom)
-            if (risp != "") binding.editRisposta.setText(risp)
-        }, 320) // Ritardo di 300ms
-        binding.editDomanda.visibility = if (rotation == 0f) View.VISIBLE else View.GONE
-        binding.editRisposta.visibility = if (rotation == 180f) View.VISIBLE else View.GONE
-    }*/
-
-    public fun onSalvaButtonClick() {
+    fun onSalvaButtonClick() {
         lateinit var createdFlashcard: Card
         val index = binding.viewPager.currentItem
         val currentCard: Card
         val domanda: String
         val risposta: String
-        //if (index != 0 || flashcardPagerAdapter.itemCount != 0) {
             currentCard = flashcardPagerAdapter.getFlashcardAtPosition(index)
             domanda = currentCard.domanda
             risposta = currentCard.risposta
-        //} else {
-          //  domanda = binding.editDomanda.text.toString()
-           // Log.e("DOMANDA", domanda)
-            //risposta = binding.editRisposta.text.toString()
-        //}
 
         createdFlashcard = Card(currentCardId, domanda, risposta, false, deckProvaID)
 

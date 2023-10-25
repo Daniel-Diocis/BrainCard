@@ -34,7 +34,7 @@ class Gruppo_DownloadFragment : Fragment() {
     private var _binding: FragmentGruppoDownloadBinding?=null
 
     private lateinit var viewModel: GruppoDownloadViewModel
-
+    private var fatto = false
     private var gruppoIdSpecifico= ""
 
     private val binding get() = _binding!!
@@ -64,8 +64,12 @@ class Gruppo_DownloadFragment : Fragment() {
         val downloadButton = binding.downloadButton
         downloadButton.setOnClickListener {
             val selectedDecks = viewModel.getSelectedDecks()
-            viewModel.downloadSelectedDecks(selectedDecks, gruppoIdSpecifico)
+            if (fatto && selectedDecks.isNotEmpty()) viewModel.downloadSelectedDecks(selectedDecks, gruppoIdSpecifico)
         }
+        viewModel.AllGruppi.observe(viewLifecycleOwner, Observer { gruppi->
+            if (gruppi!=null) fatto =true
+        })
+
         viewModel.deckInRoom.observe(viewLifecycleOwner, Observer { decks->
             if (decks!=null) {
                 viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
@@ -73,6 +77,8 @@ class Gruppo_DownloadFragment : Fragment() {
                     ContenitoreDecks.removeAllViews()
                     // Ciclo attraverso i deck e crea le viste o elementi dell'interfaccia utente
                     for (deck in deckList) {
+                        binding.creatorName.setText(arguments?.getString("creatore") ?: "Anonimo")
+                        binding.shortMessage.setText(arguments?.getString("infoCreatore") ?: "")
                         val listItemView = layoutInflater.inflate(R.layout.list_item_with_icon,null)
                         val checkBox = listItemView.findViewById<CheckBox>(R.id.checkBox)
                         val searchIcon = listItemView.findViewById<ImageButton>(R.id.searchIcon)

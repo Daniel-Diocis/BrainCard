@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.get
 import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -22,9 +23,8 @@ import com.example.braincard.databinding.FragmentShopBinding
 
 class ShopFragment : Fragment() {
     private var _binding: FragmentShopBinding?=null
-
-
-
+    lateinit var ContenitoreOnline : LinearLayout
+    private var isFirstLoad = true
     private lateinit var viewModel: ShopViewModel
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -36,7 +36,7 @@ class ShopFragment : Fragment() {
         val onlineBtn=binding.onlineBtn
         val localBtn=binding.localBtn
         val viewSwitcher=binding.viewSwitcher
-        val ContenitoreOnline=binding.listaOnline
+        ContenitoreOnline=binding.listaOnline
         val ContenitoreLocale=binding.listaLocale
         val ContenitoreCercati=binding.ContenitoreCercati
         val scrollOnline=binding.scrollOnline
@@ -84,6 +84,9 @@ class ShopFragment : Fragment() {
 
 
         })
+
+
+
         viewModel.GruppiLocale.observe(viewLifecycleOwner, Observer { gruppi ->
             ContenitoreLocale.removeAllViews()
             for(gruppo in gruppi){
@@ -109,13 +112,16 @@ class ShopFragment : Fragment() {
 
         })
         viewModel.AllGruppi.observe(viewLifecycleOwner, Observer { gruppi ->
+            Log.e("oo", gruppi.toString())
             ContenitoreOnline.removeAllViews()
             //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
             val bannerAdp=BannerAdapter(gruppi)
             bannerAdp.populate(ContenitoreOnline) { item ->
 
 
-                val bundle = bundleOf("gruppoId" to item.id)
+                val bundle = bundleOf("gruppoId" to item.id,
+                    "infoCreatore" to item.Info,
+                    "creatore" to item.Autore)
                 findNavController().navigate(
                     R.id.action_navigation_dashboard_to_gruppo_DownloadFragment2,bundle
 
@@ -126,14 +132,14 @@ class ShopFragment : Fragment() {
         })
         viewModel.GruppiCercati.observe(viewLifecycleOwner, Observer { gruppi ->
             ContenitoreCercati.removeAllViews()
-            //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
-
 
             val bannerAdp=BannerAdapter(gruppi)
-
+            if(ContenitoreCercati.size>0) Log.e("CONTENITORE", ContenitoreCercati.get(0).toString())
             bannerAdp.populate(ContenitoreCercati){item ->
-
-                val bundle = bundleOf("gruppoId" to item.id)
+                Log.e("ID", item.Download+"_"+item.id+"_"+item.Autore+"_"+item.Info+"_"+item.Nome)
+                val bundle = bundleOf("gruppoId" to item.id,
+                    "infoCreatore" to item.Info,
+                    "creatore" to item.Autore)
                 Log.e("importo",bundle.toString())
                 findNavController().navigate(
                     R.id.action_navigation_dashboard_to_gruppo_DownloadFragment2,bundle
@@ -142,14 +148,19 @@ class ShopFragment : Fragment() {
             Log.e("carica",ContenitoreCercati.size.toString())
         })
 
-
-
-
         return binding.root
 
     }
 
+    override fun onResume() {
+        super.onResume()
 
+        if (!isFirstLoad) {
+            viewModel.refreshData()
+            Log.e("MEOW","")
+        }
 
+        isFirstLoad = false
+    }
 
 }

@@ -39,4 +39,6 @@
     <string name="invalid_genere">Genere can be only \"maschio\", \"femmina\" or \"altro\"</string>
     <string name="invalid_email">Please use a correct email format</string>
     <string name="editCreatoreText">Scrivi il tuo messaggio del creatore</string>
+    <string name="profilo">Profilo</string>
+    <string name="download_deck">Download deck</string>
 </resources>

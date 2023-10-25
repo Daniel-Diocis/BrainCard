@@ -2,6 +2,7 @@ package com.example.braincard
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 
 
@@ -30,6 +31,7 @@ class GruppoUploadFragment : Fragment() {
     var deleteDecks: MutableList<Deck> = mutableListOf()
     var gruppoIdSpecifico : String = ""
     val db= FirebaseFirestore.getInstance()
+    var pronto= false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,20 +49,28 @@ class GruppoUploadFragment : Fragment() {
         binding.creatorName.text = auth.currentUser?.displayName
 
 
-        uploadButton.setOnClickListener { if (selectedDecks.isNotEmpty())
+        uploadButton.setOnClickListener { if (selectedDecks.isNotEmpty() && pronto)
             viewModel.uploadSelectedDecks(selectedDecks,binding.shortEditMessage.text.toString())
-            Log.e("DELETING",deleteDecks.isNotEmpty().toString())
-            if(deleteDecks.isNotEmpty()) viewModel.deleteSelectedDecks(deleteDecks)
-            findNavController().navigate(R.id.action_gruppoUploadFragment_to_navigation_dashboard)
+            if(deleteDecks.isNotEmpty() && pronto) viewModel.deleteSelectedDecks(deleteDecks)
+            //Fatto per permettere, eventualmente, di rimuovere i gruppi dal db
+            Handler().postDelayed({
+                findNavController().navigate(R.id.action_gruppoUploadFragment_to_navigation_dashboard)},500)
+
         }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val ContenitoreDecks = binding.gruppoUpload
-        viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
 
+        viewModel.AllCards.observe(viewLifecycleOwner, Observer { cards->
+            if(cards!=null) pronto = true
+        })
+
+
+        viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
                 if(deckList!=null) {
                     Log.e("INSIDE",deckList.toString())
                     ContenitoreDecks.removeAllViews()
@@ -95,7 +105,10 @@ class GruppoUploadFragment : Fragment() {
                             }
                         }
                         count++
-                        if (count == deckList.size) hideLoadingScreen()
+                        if (count == deckList.size) {
+
+                            hideLoadingScreen()
+                        }
                     }
                 }
             })

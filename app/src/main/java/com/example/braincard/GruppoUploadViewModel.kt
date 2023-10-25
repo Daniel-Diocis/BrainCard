@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
 import com.example.braincard.data.model.GruppoFire
@@ -25,13 +27,16 @@ import kotlinx.coroutines.withContext
 class GruppoUploadViewModel(application: Application, gruppoId : String) : AndroidViewModel(application) {
     lateinit var db : BrainCardDatabase
     lateinit var auth : FirebaseAuth
-    private val _deckGruppo = MutableLiveData<List<Deck>>(null)
     var deckGruppo: LiveData<List<Deck>> = MutableLiveData()
     private var currentGruppoId = gruppoId
     lateinit var gruppoCorrente : Gruppo
+    lateinit var AllCards : LiveData<MutableList<Card>>
+    lateinit var cardCorrenti : MutableLiveData<MutableList<Card>>
     lateinit var repository: GruppoRepository
     lateinit var repository2: DeckRepository
-    lateinit var deckGruppoList : List<Deck>
+    lateinit var repository3 : CardRepository
+    var count = 0
+
 
 
     init {
@@ -39,15 +44,20 @@ class GruppoUploadViewModel(application: Application, gruppoId : String) : Andro
         db = BrainCardDatabase.getDatabase(application)
         repository = GruppoRepository(db.gruppoDao())
         repository2= DeckRepository(db.deckDao())
+        repository3 = CardRepository(db.cardDao())
         viewModelScope.launch(Dispatchers.IO) {
             // Esegui la query sospesa direttamente in Dispatchers.IO
             val decks = repository2.getDeckByGruppoID(currentGruppoId)
             gruppoCorrente=repository.getGruppoById(currentGruppoId)
             // Ora puoi impostare i dati nel LiveData una volta che la query è completata
             deckGruppo = decks
+            AllCards= repository3.getAllCards()
+
         }
+        cardCorrenti=MutableLiveData(mutableListOf())
 
     }
+
 
     fun uploadSelectedDecks(selectedDecks: MutableList<Deck>, info : String) {
         val db = FirebaseFirestore.getInstance()
@@ -74,6 +84,23 @@ class GruppoUploadViewModel(application: Application, gruppoId : String) : Andro
             )
             // Carica il deck su Firebase Firestore
             deckRef.set(deckMap)
+            viewModelScope.launch(Dispatchers.IO) {
+                Log.e("prova", deck.id)
+                Log.e("prova", cardCorrenti.value.toString())
+                for (card in AllCards.value!!) {
+                    if (card.deckID == deck.id) {
+                        db.collection("Card").document(card.id).set(
+                            mapOf(
+                                "deckId" to deck.id,
+                                "domanda" to card.domanda,
+                                "risposta" to card.risposta,
+                                "completata" to card.completata
+                            )
+                        )
+                    }
+            }
+
+            }
         }
     }
     fun deleteSelectedDecks(deleteDecks : MutableList<Deck>){
@@ -83,6 +110,7 @@ class GruppoUploadViewModel(application: Application, gruppoId : String) : Andro
 
         }
         db.collection("Deck").whereEqualTo("gruppoId" ,deleteDecks[0].idGruppo).get().addOnSuccessListener { documents->
+            Log.e("DOCUMENTO", documents.isEmpty.toString()+"----"+documents.toString())
             if (documents.isEmpty) db.collection("Gruppo").document(deleteDecks[0].idGruppo).delete()
         }
     }

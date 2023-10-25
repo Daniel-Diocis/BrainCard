@@ -5,8 +5,11 @@ import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
 
 class GruppoRepository(private val gruppoDao: GruppoDAO) {
-    val AllGruppo: LiveData<List<Gruppo>> = gruppoDao.getAllGruppo()
+    val AllGruppo: LiveData<List<Gruppo>> = gruppoDao.getAllGruppi()
 
+    suspend fun getAllGruppi() : LiveData<List<Gruppo>>{
+        return gruppoDao.getAllGruppi()
+    }
 
     suspend fun insertGruppo(gruppo: Gruppo) {
         gruppoDao.insertGruppo(gruppo)
