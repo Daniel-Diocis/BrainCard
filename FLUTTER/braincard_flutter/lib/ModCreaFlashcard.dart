@@ -203,7 +203,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
                           ? flashcard.domandaController
                           : flashcard.rispostaController,
                       maxLines: 30,
-                      maxLength: 840,
+                      maxLength: 600,
                       decoration: InputDecoration(
                         hintText: (flashcard.isFront
                             ? 'Domanda'

@@ -158,10 +158,45 @@ class FstudioState extends State<Fstudio> {
                   flipOnTouch: false,
                   side: frontCard,
                   front: Container(
-                    child: Text(flashcards[nCarta].domanda),
+                    color: Color.fromARGB(255, 235, 240, 242),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child:Transform.scale
+
+                      (
+                        scale: 1, // Imposta la scala desiderata
+
+                        child: Text(flashcards[nCarta].domanda,
+                        style: TextStyle(
+                          fontSize: 20,// Imposta la dimensione del carattere desiderata
+                          fontWeight: FontWeight.bold, // Imposta il testo in grassetto
+                          color: Colors.black,
+                          
+                           
+                        ),
+                        ),
+                  ),
+                  ),
                   ),
                   back: Container(
-                    child: Text(flashcards[nCarta].risposta),
+                    color: Color.fromARGB(255, 235, 240, 242),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child:Transform.scale
+
+                      (
+                        scale: 1, // Imposta la scala desiderata
+
+                        child: Text(flashcards[nCarta].risposta,
+                        style: TextStyle(
+                          fontSize: 20,// Imposta la dimensione del carattere desiderata
+                          fontWeight: FontWeight.bold, // Imposta il testo in grassetto
+                          color: Colors.black,
+                          
+                           
+                        ),),
+                  ),
+                  ),
                   ),
                 ),
               ),
