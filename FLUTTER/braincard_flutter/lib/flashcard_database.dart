@@ -193,6 +193,14 @@ class FlashcardDatabase {
       throw Exception("Deck non trovato");
     }
   }
+  Future<void> updateDeckCompletion(String deckId, int newCompletionPercentage) async {
+  await _db.update(
+    'Deck',
+    {'percentualeCompletamento': newCompletionPercentage},
+    where: 'id = ?',
+    whereArgs: [deckId],
+  );
+}
 
   Future<void> close() async {
     await _db.close();

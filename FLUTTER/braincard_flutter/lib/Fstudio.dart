@@ -81,6 +81,9 @@ class FstudioState extends State<Fstudio> {
     //await _database.getDeckById(widget.deckId);
     //await _database.updateDeck(Deck(id: widget.deckId, nome: nome, percentualeCompletamento: progressoInt, idGruppo: idGruppo))
     print(progressoInt.toString()+"%");
+    await _database.updateDeckCompletion(widget.deckId, progressoInt);
+    _database.close();
+  
   }
 
   void caricaCarta() async {
@@ -192,7 +195,7 @@ class FstudioState extends State<Fstudio> {
                           }
                           print("completamento: " +
                               flashcards[nCarta].completata.toString());
-
+                          salvaProgressi();
                           caricaCarta();
                         },
                         child: Icon(Icons.check, color: Colors.white),
@@ -210,6 +213,7 @@ class FstudioState extends State<Fstudio> {
                           }
                           print("completamento: " +
                               flashcards[nCarta].completata.toString());
+                          salvaProgressi();
                           caricaCarta();
                         },
                         child: Icon(Icons.close, color: Colors.white),

@@ -70,15 +70,24 @@ class _GruppoViewState extends State<GruppoView> {
 
                   children: [
                     Container(
-                      child:
-                      Text(deck.percentualeCompletamento.toString()+"% ",
+                      width: 0.13 * screenWidth,
+                      child:Center(
+                        child:Text(deck.percentualeCompletamento.toString()+"% ",
                       style: TextStyle(
-                          fontSize: 20, // Imposta la dimensione del carattere desiderata
+                          fontSize: 20,// Imposta la dimensione del carattere desiderata
+                          fontWeight: FontWeight.bold, // Imposta il testo in grassetto
+                          color: (deck.percentualeCompletamento == 0)
+                                ? Colors.red
+                                : (deck.percentualeCompletamento == 100)
+                                    ? Colors.green
+                                    : Colors.black, // Colore predefinito in caso di altre percentuali
+                          
+                           
                         ),
                       
                       )
-                      
-                    
+                      )
+
                     ),
                     
                     Container(
