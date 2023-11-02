@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'flashcard_database.dart';
 import 'model/card.dart' as CardX;
 import 'model/deck.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Fstudio extends StatefulWidget {
   final String deckId;
@@ -39,6 +40,12 @@ class FstudioState extends State<Fstudio> {
       _database.getCardsWithDeckId(widget.deckId).then((cards) {
         setState(() {
           print("okokok");
+          if(cards.length==0){
+            showCenterToast("il deck non presenta flashcard.");
+            Navigator.pop(context);
+
+          }
+          
           for (var card in cards) {
             var newFlashcard = Flashcard(
               id: card.id,
@@ -65,6 +72,17 @@ class FstudioState extends State<Fstudio> {
       });
     }); // Apre il database
   }
+    //popUp
+  void showCenterToast(String message) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT, // Durata di 3 secondi
+    gravity: ToastGravity.CENTER,
+    timeInSecForIosWeb: 4,
+    backgroundColor: Color.fromARGB(255, 55, 71, 78),
+    textColor: Colors.white,
+  );
+}
 
   void salvaProgressi() async{
     

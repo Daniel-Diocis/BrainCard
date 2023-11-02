@@ -8,9 +8,11 @@ import 'flashcard_database.dart';
 import 'model/deck.dart' as DeckX;
 import 'model/deck.dart';
 
+
+
 class GruppoView extends StatefulWidget {
   final String gruppoId;
-
+  
   GruppoView({required this.gruppoId});
 
   @override
@@ -20,6 +22,8 @@ class GruppoView extends StatefulWidget {
 class _GruppoViewState extends State<GruppoView> {
   late FlashcardDatabase _database;
   final TextEditingController _newDeckNameController = TextEditingController();
+  String message = ""; // Inizializza
+
 
   @override
   void initState() {
@@ -93,16 +97,20 @@ class _GruppoViewState extends State<GruppoView> {
                     Container(
                       width: 0.6 * screenWidth,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Fstudio(
-                                      deckId: deck.id,
-                                    ) //DeckStudioView(deckId: deck.id, ),
+                        onPressed:() {
+                          
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Fstudio(
+                                              deckId: deck.id,
+                                            ) //DeckStudioView(deckId: deck.id, ),
 
-                                ),
-                          );
+                                        ),
+                                  );
+
+                              
+                          
                         },
                         onLongPress: () async {
                           _editDeckName(deck);
@@ -152,6 +160,9 @@ class _GruppoViewState extends State<GruppoView> {
       ),
     );
   }
+
+  
+
 
   void _showAddDeckDialog() {
     showDialog(
