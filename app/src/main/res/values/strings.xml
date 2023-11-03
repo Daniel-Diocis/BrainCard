@@ -43,4 +43,9 @@
     <string name="download_deck">Download deck</string>
     <string name="mostra_psw">Mostra password</string>
     <string name="pswdim">Password dimenticata?</string>
+    <string-array name="gender_options">
+        <item>Maschio</item>
+        <item>Femmina</item>
+        <item>Altro</item>
+    </string-array>
 </resources>

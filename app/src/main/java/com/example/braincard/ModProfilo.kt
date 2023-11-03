@@ -71,9 +71,7 @@ class ModProfilo : Fragment() {
                 registrationFormState.telefonoError?.let {
                     binding.textTelefono.error = getString(it)
                 }
-                registrationFormState.genereError?.let {
-                    binding.textGenere.error = getString(it)
-                }
+
             })
 
         binding.buttonSalvaUtente.setOnClickListener {
@@ -81,7 +79,7 @@ class ModProfilo : Fragment() {
             nome = binding.textNome.text.toString()
             cognome = binding.textCognome.text.toString()
             telefono = binding.textTelefono.text.toString()
-            genere = binding.textGenere.text.toString()
+            genere = binding.textGenere.selectedItem.toString()
             viewModel.updateUtente(nomeUtente,nome,cognome,telefono,genere)
             findNavController().navigate(R.id.action_modProfilo_to_navigation_notifications)
         }
@@ -103,14 +101,14 @@ class ModProfilo : Fragment() {
                 viewModel.registrationDataChanged2(
                     binding.textNomeUtente.text.toString(),
                     binding.textTelefono.text.toString(),
-                    binding.textGenere.text.toString(),
+                    binding.textGenere.selectedItem.toString(),
 
                 )
             }
         }
         binding.textNomeUtente.addTextChangedListener(afterTextChangedListener)
         binding.textTelefono.addTextChangedListener(afterTextChangedListener)
-        binding.textGenere.addTextChangedListener(afterTextChangedListener)
+
 
     }
 
@@ -126,7 +124,7 @@ class ModProfilo : Fragment() {
         binding.textNome.setText(arguments?.getString("nome").toString())
         binding.textCognome.setText(arguments?.getString("cognome").toString())
         binding.textTelefono.setText(arguments?.getString("telefono").toString())
-        binding.textGenere.setText(arguments?.getString("genere").toString())
+        
     }
 
 }

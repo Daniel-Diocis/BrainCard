@@ -14,6 +14,7 @@ interface GruppoDAO {
     @Query("SELECT * FROM GRUPPO")
     fun getAllGruppi(): LiveData<List<Gruppo>>
 
+
     @Insert
     fun insertGruppo(gruppo: Gruppo)
 

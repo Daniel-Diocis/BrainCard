@@ -50,8 +50,6 @@ class RegistrationViewModel(application: Application) : ViewModel() {
             registrationFormState.value = RegistrationFormState(emailError = R.string.invalid_email)}
         else if(!isTelefonoValid(telefono)){
             registrationFormState.value = RegistrationFormState(telefonoError = R.string.invalid_telefono)
-        }else if(!isGenereValid(genere)){
-            registrationFormState.value = RegistrationFormState(genereError  = R.string.invalid_genere)
         }
         else {
             registrationFormState.value = RegistrationFormState(isDataValid = true)
@@ -74,9 +72,7 @@ class RegistrationViewModel(application: Application) : ViewModel() {
         val pattern = Regex("[0-9]+")
         return (pattern.matches(telefono) && telefono.length == 10)
     }
-    private fun isGenereValid(genere: String) : Boolean{
-        return genere.equals("maschio") || genere.equals("femmina") || genere.equals("altro")
-    }
+
     private fun isEmailValid(email: String) : Boolean {
         val pattern = Regex("^\\S+@\\S+\\.\\S+\$")  // Un'espressione regolare per il formato dell'email
         return pattern.matches(email)

@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -63,6 +64,7 @@ class RegistrationFragment : Fragment() {
             mostraPassword()
         }
 
+
         viewModel.registrationFormState.observe(viewLifecycleOwner,
             Observer { registrationFormState ->
                 if (registrationFormState == null) {
@@ -81,9 +83,7 @@ class RegistrationFragment : Fragment() {
                 registrationFormState.telefonoError?.let {
                     binding.textTelefono.error = getString(it)
                 }
-                registrationFormState.genereError?.let {
-                    binding.textGenere.error = getString(it)
-                }
+
             })
 
         binding.buttonSalvaUtente.setOnClickListener {
@@ -93,7 +93,8 @@ class RegistrationFragment : Fragment() {
             cognome = binding.textCognome.text.toString()
             email = binding.textEmail.text.toString()
             telefono = binding.textTelefono.text.toString()
-            genere = binding.textGenere.text.toString()
+            genere = binding.textGenere.selectedItem.toString()
+
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,
                 password).addOnCompleteListener {
@@ -143,7 +144,7 @@ class RegistrationFragment : Fragment() {
                     binding.textNomeUtente.text.toString(),
                     binding.editTextPassword.text.toString(),
                     binding.textTelefono.text.toString(),
-                    binding.textGenere.text.toString(),
+                    binding.textGenere.selectedItem.toString(),
                     binding.textEmail.text.toString()
                 )
             }
@@ -151,7 +152,7 @@ class RegistrationFragment : Fragment() {
         binding.textNomeUtente.addTextChangedListener(afterTextChangedListener)
         binding.editTextPassword.addTextChangedListener(afterTextChangedListener)
         binding.textTelefono.addTextChangedListener(afterTextChangedListener)
-        binding.textGenere.addTextChangedListener(afterTextChangedListener)
+
         binding.textEmail.addTextChangedListener(afterTextChangedListener)
         binding.loginLink.setOnClickListener{
     findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
