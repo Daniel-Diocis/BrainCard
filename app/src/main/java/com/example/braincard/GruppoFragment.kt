@@ -14,6 +14,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ import com.example.braincard.factories.GruppoViewModelFactory
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
 import androidx.core.content.ContextCompat
+import com.example.braincard.data.model.Deck
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -30,6 +32,7 @@ class GruppoFragment : Fragment() {
 
     var count : Int = 0
     lateinit var popUpMessage: PopUpMessage
+    lateinit var gruppoViewModel : GruppoViewModel
     val screenWidth = Resources.getSystem().displayMetrics.widthPixels
     var desiredWidth=0
 
@@ -53,7 +56,7 @@ class GruppoFragment : Fragment() {
         gruppoId=gruppoId.toString()
         //creo viewmodel
         val factory = GruppoViewModelFactory(requireActivity().application, gruppoId)
-        val gruppoViewModel = ViewModelProvider(this, factory).get(GruppoViewModel::class.java)
+        gruppoViewModel = ViewModelProvider(this, factory).get(GruppoViewModel::class.java)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
             findNavController().navigate(R.id.action_gruppoFragment_to_navigation_home)
@@ -101,7 +104,7 @@ class GruppoFragment : Fragment() {
                             )
                         }
                 deckElimina.setOnClickListener{
-                    gruppoViewModel.deleteDeck(deck)
+                    dialogEliminaDeck(deck)
                 }
                 deckMod.setOnClickListener{
                     val bundle = bundleOf("deckId" to deck.id)
@@ -153,8 +156,23 @@ class GruppoFragment : Fragment() {
         })
         return rootView
     }
+fun dialogEliminaDeck(deck : Deck){
+    val builder = AlertDialog.Builder(requireContext())
+    builder.setTitle("Conferma Eliminazione")
+    builder.setMessage("Sei sicuro di voler eliminare questo deck?")
 
+    builder.setPositiveButton("Sì") { dialog, which ->
+        // Operazione di eliminazione qui
+        gruppoViewModel.deleteDeck(deck)
+        dialog.dismiss()
+    }
 
+    builder.setNegativeButton("No") { dialog, which ->
+        dialog.dismiss()
+    }
 
+    val dialog = builder.create()
+    dialog.show()
+}
 
 }

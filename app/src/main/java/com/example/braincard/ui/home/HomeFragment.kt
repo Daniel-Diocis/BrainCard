@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -146,7 +147,23 @@ class HomeFragment : Fragment() {
                 }
 
                 deckElimina.setOnClickListener{
-                    homeViewModel.eliminaGruppo(deckElimina.tag as Gruppo)
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Conferma Eliminazione")
+                    builder.setMessage("Sei sicuro di voler eliminare questo gruppo?")
+
+                    builder.setPositiveButton("Sì") { dialog, which ->
+                        homeViewModel.eliminaGruppo(gruppo)
+
+                        dialog.dismiss()
+                    }
+
+                    builder.setNegativeButton("No") { dialog, which ->
+                        dialog.dismiss()
+                    }
+
+                    val dialog = builder.create()
+                    dialog.show()
+
                 }
                 layout.addView(deckButton)
                 layout.addView(deckElimina)
@@ -176,9 +193,11 @@ class HomeFragment : Fragment() {
     }
 
 
+
     override fun onDestroyView() {
         super.onDestroyView()
 
         _binding = null
     }
+
 }
