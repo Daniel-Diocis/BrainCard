@@ -27,7 +27,8 @@ abstract class BrainCardDatabase : RoomDatabase() {
                     context.applicationContext,
                     BrainCardDatabase::class.java,
                     "BrainCard"
-                ).build()
+                )
+                    .build()
 
                 INSTANCE = instance
                 instance
