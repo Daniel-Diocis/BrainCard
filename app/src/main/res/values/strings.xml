@@ -41,4 +41,9 @@
     <string name="editCreatoreText">Scrivi il tuo messaggio del creatore</string>
     <string name="profilo">Profilo</string>
     <string name="download_deck">Download deck</string>
+    <string-array name="gender_options">
+        <item>Maschio</item>
+        <item>Femmina</item>
+        <item>Altro</item>
+    </string-array>
 </resources>

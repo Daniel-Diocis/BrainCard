@@ -42,7 +42,7 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
                 }
         }
         val gruppoDao= BrainCardDatabase.getDatabase(application).gruppoDao()
-        repository=GruppoRepository(gruppoDao )
+        repository=GruppoRepository(gruppoDao)
         GruppiLocale=repository.AllGruppo
 
     }

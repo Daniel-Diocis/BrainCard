@@ -135,19 +135,13 @@
                     android:textAlignment="center"
                     android:textSize="20sp" />
 
-                <EditText
+                <Spinner
                     android:id="@+id/text_genere"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="8dp"
-                    android:hint="Seleziona il tuo genere"
-                    android:maxLength="10"
-                    android:singleLine="true"
-                    android:textAlignment="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:entries="@array/gender_options"/>
+
+
 
                 <Button
                     android:id="@+id/button_salvaUtente"
