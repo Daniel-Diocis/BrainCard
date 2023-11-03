@@ -134,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           content: TextField(
             controller: _newGroupNameController,
             decoration: InputDecoration(hintText: 'Nome del gruppo'),
+            maxLength: 18,
           ),
           actions: <Widget>[
             TextButton(
@@ -174,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
           content: TextField(
             controller: editingController,
             decoration: InputDecoration(hintText: 'Nuovo nome del gruppo'),
+            maxLength: 18,
           ),
           actions: <Widget>[
             TextButton(

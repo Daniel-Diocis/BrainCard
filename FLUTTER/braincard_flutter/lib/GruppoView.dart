@@ -8,11 +8,9 @@ import 'flashcard_database.dart';
 import 'model/deck.dart' as DeckX;
 import 'model/deck.dart';
 
-
-
 class GruppoView extends StatefulWidget {
   final String gruppoId;
-  
+
   GruppoView({required this.gruppoId});
 
   @override
@@ -23,7 +21,6 @@ class _GruppoViewState extends State<GruppoView> {
   late FlashcardDatabase _database;
   final TextEditingController _newDeckNameController = TextEditingController();
   String message = ""; // Inizializza
-
 
   @override
   void initState() {
@@ -74,43 +71,36 @@ class _GruppoViewState extends State<GruppoView> {
 
                   children: [
                     Container(
-                      width: 0.13 * screenWidth,
-                      child:Center(
-                        child:Text(deck.percentualeCompletamento.toString()+"% ",
-                      style: TextStyle(
-                          fontSize: 20,// Imposta la dimensione del carattere desiderata
-                          fontWeight: FontWeight.bold, // Imposta il testo in grassetto
-                          color: (deck.percentualeCompletamento == 0)
+                        width: 0.13 * screenWidth,
+                        child: Center(
+                            child: Text(
+                          deck.percentualeCompletamento.toString() + "% ",
+                          style: TextStyle(
+                            fontSize:
+                                20, // Imposta la dimensione del carattere desiderata
+                            fontWeight: FontWeight
+                                .bold, // Imposta il testo in grassetto
+                            color: (deck.percentualeCompletamento == 0)
                                 ? Colors.red
                                 : (deck.percentualeCompletamento == 100)
                                     ? Colors.green
-                                    : Colors.black, // Colore predefinito in caso di altre percentuali
-                          
-                           
-                        ),
-                      
-                      )
-                      )
-
-                    ),
-                    
+                                    : Colors
+                                        .black, // Colore predefinito in caso di altre percentuali
+                          ),
+                        ))),
                     Container(
                       width: 0.6 * screenWidth,
                       child: ElevatedButton(
-                        onPressed:() {
-                          
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Fstudio(
-                                              deckId: deck.id,
-                                            ) //DeckStudioView(deckId: deck.id, ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Fstudio(
+                                      deckId: deck.id,
+                                    ) //DeckStudioView(deckId: deck.id, ),
 
-                                        ),
-                                  );
-
-                              
-                          
+                                ),
+                          );
                         },
                         onLongPress: () async {
                           _editDeckName(deck);
@@ -161,9 +151,6 @@ class _GruppoViewState extends State<GruppoView> {
     );
   }
 
-  
-
-
   void _showAddDeckDialog() {
     showDialog(
       context: context,
@@ -173,6 +160,7 @@ class _GruppoViewState extends State<GruppoView> {
           content: TextField(
             controller: _newDeckNameController,
             decoration: InputDecoration(hintText: 'Nome del deck'),
+            maxLength: 18,
           ),
           actions: <Widget>[
             TextButton(
@@ -217,6 +205,7 @@ class _GruppoViewState extends State<GruppoView> {
           content: TextField(
             controller: editingController,
             decoration: InputDecoration(hintText: 'Nuovo nome del deck'),
+            maxLength: 18,
           ),
           actions: <Widget>[
             TextButton(
