@@ -1,6 +1,7 @@
 package com.example.braincard
 
 import android.content.ClipData
+import android.content.pm.PackageManager
 import com.example.braincard.database.BrainCardDatabase
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -26,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val auth = FirebaseAuth.getInstance()
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +64,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         findViewById<BottomNavigationItemView>(R.id.navigation_notifications).setOnClickListener{
-            if(auth.currentUser!=null) {
-                navController.navigate(R.id.navigation_notifications)}
-            else {
-                navController.navigate(R.id.loginFragment)
-            }
+            Log.e("CONTROLLO",(ContextCompat.checkSelfPermission(this, android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED).toString())
+                if (auth.currentUser != null) navController.navigate(R.id.navigation_notifications)
+                else {
+                    navController.navigate(R.id.loginFragment)
+                }
         }
         this.actionBar?.setHomeButtonEnabled(true)
         this.supportActionBar?.setHomeButtonEnabled(true)

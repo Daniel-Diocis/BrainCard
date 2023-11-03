@@ -12,7 +12,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in">Log in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Benvenuto"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -41,4 +41,6 @@
     <string name="editCreatoreText">Scrivi il tuo messaggio del creatore</string>
     <string name="profilo">Profilo</string>
     <string name="download_deck">Download deck</string>
+    <string name="mostra_psw">Mostra password</string>
+    <string name="pswdim">Password dimenticata?</string>
 </resources>

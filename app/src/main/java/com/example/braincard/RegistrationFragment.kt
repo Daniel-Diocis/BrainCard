@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +14,8 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.braincard.database.UtenteDAO
-import com.example.braincard.database.UtenteRepository
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.braincard.databinding.FragmentRegistrationBinding
-import com.example.braincard.factories.FlashcardStudioViewModelFactory
 import com.example.braincard.factories.RegistrationViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -60,6 +58,10 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.mostraPassword.setOnClickListener{
+            mostraPassword()
+        }
 
         viewModel.registrationFormState.observe(viewLifecycleOwner,
             Observer { registrationFormState ->
@@ -151,10 +153,19 @@ class RegistrationFragment : Fragment() {
         binding.textTelefono.addTextChangedListener(afterTextChangedListener)
         binding.textGenere.addTextChangedListener(afterTextChangedListener)
         binding.textEmail.addTextChangedListener(afterTextChangedListener)
-binding.loginLink.setOnClickListener{
+        binding.loginLink.setOnClickListener{
     findNavController().navigate(R.id.action_registrationFragment_to_loginFragment)
 }
         }
+    fun mostraPassword() {
+        val editTextPassword = binding.editTextPassword
+        if (editTextPassword.transformationMethod == PasswordTransformationMethod.getInstance()) {
+            editTextPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+
+        }
+    }
     }
 
     fun generateRandomString(length: Int): String {
@@ -163,4 +174,6 @@ binding.loginLink.setOnClickListener{
             .map { charset.random() }
             .joinToString("")
     }
+
+
 

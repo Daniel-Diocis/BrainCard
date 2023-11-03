@@ -46,12 +46,13 @@ class GruppoUploadViewModel(application: Application, gruppoId : String) : Andro
         repository2= DeckRepository(db.deckDao())
         repository3 = CardRepository(db.cardDao())
         viewModelScope.launch(Dispatchers.IO) {
+            AllCards= repository3.getAllCards()
             // Esegui la query sospesa direttamente in Dispatchers.IO
             val decks = repository2.getDeckByGruppoID(currentGruppoId)
             gruppoCorrente=repository.getGruppoById(currentGruppoId)
             // Ora puoi impostare i dati nel LiveData una volta che la query è completata
             deckGruppo = decks
-            AllCards= repository3.getAllCards()
+
 
         }
         cardCorrenti=MutableLiveData(mutableListOf())

@@ -11,7 +11,7 @@ import com.example.braincard.data.model.Deck
 import com.example.braincard.data.model.Gruppo
 import com.example.braincard.data.model.Utente
 
-@Database(entities = [Card::class, Deck::class,Gruppo::class, Utente::class], version = 5, exportSchema = false)
+@Database(entities = [Card::class, Deck::class,Gruppo::class, Utente::class], version = 6, exportSchema = false)
 abstract class BrainCardDatabase : RoomDatabase() {
     abstract fun cardDao(): CardDAO
     abstract fun deckDao(): DeckDAO
@@ -27,8 +27,7 @@ abstract class BrainCardDatabase : RoomDatabase() {
                     context.applicationContext,
                     BrainCardDatabase::class.java,
                     "BrainCard"
-                )
-                    .build()
+                ).build()
 
                 INSTANCE = instance
                 instance

@@ -3,6 +3,8 @@ package com.example.braincard.ui.login
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -100,8 +102,31 @@ class ChangePassword : Fragment() {
         }
         binding.Vpassword.addTextChangedListener(afterTextChangedListener)
         binding.Npassword.addTextChangedListener(afterTextChangedListener)
+        binding.mostraPassword1.setOnClickListener{
+            mostraPassword1()
+        }
+        binding.mostraPassword2.setOnClickListener{
+            mostraPassword2()
+        }
 
 
+    }
+    fun mostraPassword1() {
+        val editTextPassword = binding.Npassword
+        if (editTextPassword.transformationMethod == PasswordTransformationMethod.getInstance()) {
+            editTextPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
 
+        }
+    }
+    fun mostraPassword2() {
+        val editTextPassword = binding.Vpassword
+        if (editTextPassword.transformationMethod == PasswordTransformationMethod.getInstance()) {
+            editTextPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            editTextPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.braincard
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Handler
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -72,42 +74,45 @@ class GruppoUploadFragment : Fragment() {
 
         viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
                 if(deckList!=null) {
-                    Log.e("INSIDE",deckList.toString())
-                    ContenitoreDecks.removeAllViews()
-                    var count = 0
-                    showLoadingScreen()
-                    for (deck in deckList) {
+                    if(deckList.size==0) showEmptyScreen()
+                    else {
+                        Log.e("INSIDE", deckList.toString())
+                        ContenitoreDecks.removeAllViews()
+                        var count = 0
+                        showLoadingScreen()
+                        for (deck in deckList) {
 
-                        val checkBox = CheckBox(requireContext())
-                        checkDeckOnline(deck.id) { exists ->
-                            if (exists) checkBox.isChecked = true
-                        }
-                        checkBox.text = deck.nome
-                        // Aggiungi il button alla vista dei deck
-                        ContenitoreDecks.addView(checkBox)
-                        checkBox.setOnClickListener {
-                            if (checkBox.isChecked) {
-                                selectedDecks.add(deck)
-                                for (item in deleteDecks) {
-                                    if (item.id == deck.id) {
-                                        deleteDecks.remove(deck)
-                                        break
+                            val checkBox = CheckBox(requireContext())
+                            checkDeckOnline(deck.id) { exists ->
+                                if (exists) checkBox.isChecked = true
+                            }
+                            checkBox.text = deck.nome
+                            // Aggiungi il button alla vista dei deck
+                            ContenitoreDecks.addView(checkBox)
+                            checkBox.setOnClickListener {
+                                if (checkBox.isChecked) {
+                                    selectedDecks.add(deck)
+                                    for (item in deleteDecks) {
+                                        if (item.id == deck.id) {
+                                            deleteDecks.remove(deck)
+                                            break
+                                        }
                                     }
-                                }
-                            } else {
-                                deleteDecks.add(deck)
-                                for (item in selectedDecks) {
-                                    if (item.id == deck.id) {
-                                        selectedDecks.remove(deck)
-                                        break
+                                } else {
+                                    deleteDecks.add(deck)
+                                    for (item in selectedDecks) {
+                                        if (item.id == deck.id) {
+                                            selectedDecks.remove(deck)
+                                            break
+                                        }
                                     }
                                 }
                             }
-                        }
-                        count++
-                        if (count == deckList.size) {
+                            count++
+                            if (count == deckList.size) {
 
-                            hideLoadingScreen()
+                                hideLoadingScreen()
+                            }
                         }
                     }
                 }
@@ -144,5 +149,20 @@ class GruppoUploadFragment : Fragment() {
         progressDialog = null
     }
 
+    fun showEmptyScreen(){
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.apply {
+            setTitle("Nessun Deck")
+            setMessage("Il gruppo non contiene alcun deck.")
+            setPositiveButton("OK"){_, _ ->
+                findNavController().navigate(R.id.navigation_dashboard)
+            }
+            setCancelable(false)
+            create()
+            show()
+        }
+    }
 
 }
+
+
