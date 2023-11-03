@@ -1,32 +1,20 @@
 package com.example.braincard
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import com.example.braincard.database.UtenteDAO
-import com.example.braincard.database.UtenteRepository
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.braincard.databinding.FragmentModprofiloBinding
-import com.example.braincard.databinding.FragmentRegistrationBinding
-import com.example.braincard.factories.FlashcardStudioViewModelFactory
 import com.example.braincard.factories.ModProfiloViewModelFactory
-import com.example.braincard.factories.RegistrationViewModelFactory
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 
 class ModProfilo : Fragment() {
 
@@ -124,7 +112,11 @@ class ModProfilo : Fragment() {
         binding.textNome.setText(arguments?.getString("nome").toString())
         binding.textCognome.setText(arguments?.getString("cognome").toString())
         binding.textTelefono.setText(arguments?.getString("telefono").toString())
-        
+        var selectedItem = (arguments?.getString("genere").toString())
+
+        val selectedPosition =
+            (binding.textGenere.getAdapter() as ArrayAdapter<String?>).getPosition(selectedItem)
+        binding.textGenere.setSelection(selectedPosition);
     }
 
 }
