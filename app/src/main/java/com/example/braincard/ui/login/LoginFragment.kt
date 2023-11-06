@@ -1,5 +1,7 @@
 package com.example.braincard.ui.login
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
@@ -158,6 +160,8 @@ class LoginFragment : Fragment() {
         }
     }
     fun recuperaPassword(){
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
         val builder = AlertDialog.Builder(requireContext())
         val inflater = layoutInflater
         val dialogView = inflater.inflate(R.layout.custom_dialog, null)
@@ -170,9 +174,18 @@ class LoginFragment : Fragment() {
         val dialog = builder.create()
 
         button.setOnClickListener {
-           auth.sendPasswordResetEmail(editText.text.toString())
-            Toast.makeText(requireContext(), "Email inviata", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            if (editText.text.isNullOrEmpty()) Toast.makeText(requireContext(), "Inserisci una mail", Toast.LENGTH_SHORT).show()
+            else {
+                if (networkInfo != null && networkInfo.isConnected) {
+                    auth.sendPasswordResetEmail(editText.text.toString())
+                    Toast.makeText(requireContext(), "Email inviata", Toast.LENGTH_SHORT).show()
+                } else Toast.makeText(
+                    requireContext(),
+                    "Connessione ad Internet non attiva",
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
+            }
         }
         dialog.show()
     }
