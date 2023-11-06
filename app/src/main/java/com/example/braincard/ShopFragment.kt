@@ -114,7 +114,6 @@ class ShopFragment : Fragment() {
         viewModel.AllGruppi.observe(viewLifecycleOwner, Observer { gruppi ->
             Log.e("oo", gruppi.toString())
             ContenitoreOnline.removeAllViews()
-            //if(gruppi.isNullOrEmpty()) viewModel.creaGruppi() al momento sembra non servire
             val bannerAdp=BannerAdapter(gruppi)
             bannerAdp.populate(ContenitoreOnline) { item ->
 
@@ -157,7 +156,6 @@ class ShopFragment : Fragment() {
 
         if (!isFirstLoad) {
             viewModel.refreshData()
-            Log.e("MEOW","")
         }
 
         isFirstLoad = false

@@ -22,7 +22,6 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 
     lateinit var GruppiLocale:LiveData<List<Gruppo>>
     init {
-        Log.e("FATTO","FATTO")
         db=FirebaseFirestore.getInstance()
 
         val gruppiCollection = db.collection("Gruppo")
@@ -63,7 +62,7 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
                     GruppiOnlineCercati.add(GruppoFire(document.data["nome"].toString(),utente, document.data["infoCreatore"].toString(), document.data["download"].toString(), document.id))
 
                 }
-                Log.e("triavto",GruppiOnlineCercati.size.toString())
+
                 GruppiCercati.postValue(GruppiOnlineCercati)
             }
 

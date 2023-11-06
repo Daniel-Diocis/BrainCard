@@ -73,7 +73,6 @@ class Gruppo_DownloadFragment : Fragment() {
         viewModel.deckInRoom.observe(viewLifecycleOwner, Observer { decks->
             if (decks!=null) {
                 viewModel.deckGruppo.observe(viewLifecycleOwner, Observer { deckList ->
-                    // Pulisci la vista dei deck esistente, se necessario
                     ContenitoreDecks.removeAllViews()
                     // Ciclo attraverso i deck e crea le viste o elementi dell'interfaccia utente
                     for (deck in deckList) {
@@ -101,9 +100,6 @@ class Gruppo_DownloadFragment : Fragment() {
                         }
                         ContenitoreDecks.addView(listItemView)
                     }
-
-                    // Aggiungi il button alla vista dei deck
-
 
                 })
             }

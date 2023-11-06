@@ -16,13 +16,13 @@ class LoginDataSource {
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
         return withContext(Dispatchers.IO) {
             try {
-                Log.e("FINALMENTE","")
+
                 val authResult = auth.signInWithEmailAndPassword(username, password).await()
 
                 if (authResult.user != null) {
 
                     val user = LoggedInUser(authResult.user!!.uid.toString(), authResult.user!!.displayName.toString())
-                    Log.e("PROVAAA", user.toString())
+
                     if (user != null) {
                         Result.success(user)
                     } else {

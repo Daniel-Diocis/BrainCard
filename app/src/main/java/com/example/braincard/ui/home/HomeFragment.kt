@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     ): View {
         val deleteIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_delete
-        ) // Sostituisci con l'ID dell'icona
+        )
         val DeckIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_input_get
         )
@@ -76,7 +76,7 @@ class HomeFragment : Fragment() {
                 }
 
 
-                deckButton.setImageDrawable(DeckIcon) // Imposta lo sfondo del pulsante come quadrato
+                deckButton.setImageDrawable(DeckIcon)
 
 
                 val nomeTextView = TextView(requireContext())
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
 
                 val deckLayout = LinearLayout(requireContext())
                 deckLayout.orientation = LinearLayout.VERTICAL
-                val paddingInDp = 20 // La dimensione in dp che desideri impostare
+                val paddingInDp = 20
                 val density = resources.displayMetrics.density
                 val paddingInPx = (paddingInDp * density).toInt() // Converte dp in px
 
@@ -115,7 +115,7 @@ class HomeFragment : Fragment() {
                 layout.orientation = LinearLayout.HORIZONTAL
 
 
-// Calcola la larghezza desiderata per il deckButton (3/5 dello schermo)
+                // Calcola la larghezza desiderata per il deckButton (3/5 dello schermo)
                  desiredWidth = (screenWidth * 6) / 7
                 val layoutParams = LinearLayout.LayoutParams(
                     desiredWidth,
@@ -130,7 +130,7 @@ class HomeFragment : Fragment() {
                 deckElimina.setImageDrawable(deleteIcon)
 
 
-                deckButton.text = gruppo.nome // O qualsiasi altra proprietà del mazzo che vuoi visualizzare
+                deckButton.text = gruppo.nome
                 deckButton.tag = gruppo.id
                 deckElimina.tag=gruppo
 
@@ -143,7 +143,7 @@ class HomeFragment : Fragment() {
                     val action = R.id.action_navigation_home_to_gruppoFragment
 
                     findNavController().navigate(action,bundle)
-                    // Qui gestisci il click sul bottone del mazzo
+
                 }
 
                 deckElimina.setOnClickListener{
@@ -177,10 +177,10 @@ class HomeFragment : Fragment() {
             pop.show((activity as AppCompatActivity).supportFragmentManager, "showPopUp")
 
         }
-        // Osserva l'attributo message quando si crea un gruppo
+
 
         popUpMessage.messageLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
-            // Esegui azioni in risposta ai cambiamenti dell'attributo message
+
             if (popUpMessage.invia){
                 homeViewModel.creaGruppo(newMessage)
                 popUpMessage.invia=false

@@ -130,7 +130,7 @@ class FlashcardStudio : Fragment() {
                                 .translationX(endTranslationX)
                                 .setDuration(300) // Durata dell'animazione in millisecondi
                                 .withEndAction {
-                                    // Alla fine dell'animazione, chiamare la funzione SbagliatoNextCard
+                                    // Alla fine dell'animazione, chiama la funzione SbagliatoNextCard
                                     SbagliatoNextCard()
                                     // Ripristinare la posizione della carta per la prossima animazione
                                     binding.flashcard.translationX = initialTranslationX

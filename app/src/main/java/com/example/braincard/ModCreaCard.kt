@@ -60,9 +60,6 @@ class ModCreaCard : Fragment() {
 
         viewModel.getAllDeckCard(deckProvaID)
         binding.giraCard.setOnClickListener {
-            //if (flashcardPagerAdapter.itemCount == 0) {
-                //toggleFlashcardVisibility()}
-            //else{
                 lastClickedPosition?.let { position ->
                     // Trova il RecyclerView
                     val recyclerView = binding.viewPager.getChildAt(0) as? RecyclerView
@@ -71,7 +68,7 @@ class ModCreaCard : Fragment() {
                         val viewHolder = it.findViewHolderForAdapterPosition(position) as? FlashcardViewHolder
                         viewHolder?.toggleCardVisibility()
 
-                //}
+
                 }
             }
             }
@@ -98,9 +95,6 @@ class ModCreaCard : Fragment() {
                 Log.e("OBSERVER", "DENTRO " + cardList.toString())
                 if (cardList.size==0){flashcardPagerAdapter = FlashcardPagerAdapter(cardList)
                 binding.viewPager.adapter = flashcardPagerAdapter}
-
-                //binding.flashcard.visibility = View.GONE
-                //binding.flashcardBack.visibility = View.GONE
                 Log.e("IF", "DENTRO N.0 : " + flashcardPagerAdapter.getItemCount())
                 // Aggiorna la lista delle carte nell'adapter esistente
                 flashcardPagerAdapter.updateCardList(cardList)

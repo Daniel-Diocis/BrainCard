@@ -7,11 +7,6 @@
 
 
 
-    <fragment
-        android:id="@+id/ai"
-        android:name="com.example.braincard.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"

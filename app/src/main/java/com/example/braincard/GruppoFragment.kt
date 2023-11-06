@@ -46,10 +46,10 @@ class GruppoFragment : Fragment() {
     ): View? {
         val deleteIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_delete
-        ) // Sostituisci con l'ID dell'icona
+        )
         val modIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_menu_edit
-        ) // Sostituisci con l'ID dell'icona
+        )
         popUpMessage = PopUpMessage.getInstance()
         val rootView = inflater.inflate(R.layout.fragment_gruppo, container, false)
         var gruppoId = arguments?.getString("gruppoid")
@@ -89,6 +89,7 @@ class GruppoFragment : Fragment() {
                 )
                 val deckButton = Button(requireContext())
                 deckButton.layoutParams = layoutParams // Imposta i parametri del layout
+
                 val deckElimina=ImageButton (requireContext())
                 deckElimina.setImageDrawable(deleteIcon)
                 val deckMod=ImageButton (requireContext())

@@ -63,7 +63,6 @@ class NotificationsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.e("TEST",(binding.textGenere.text=="").toString()+" "+binding.textGenere.text)
             if (binding.textGenere.text=="") showLoadingScreen()
             binding.buttonLogout.setOnClickListener{
                 auth.signOut()

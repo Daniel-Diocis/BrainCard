@@ -25,7 +25,6 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
 
     lateinit var db : FirebaseFirestore
     val idgruppo=gruppoid
-    // Aggiungi un nuovo LiveData per i deck di un gruppo specifico
     private val repository: CardRepository
     private val repository2 : DeckRepository
     private val repository3 : GruppoRepository
@@ -92,7 +91,7 @@ class GruppoDownloadViewModel(application: Application, gruppoid: String) : Andr
             }}
         if (!trovato) viewModelScope.launch(Dispatchers.IO) { repository3.insertGruppo(gruppo)}
             for (deck in selectedDecks) {
-                // Imposta l'ID del gruppo sul deck prima di salvarlo, se necessario
+                // Imposta l'ID del gruppo sul deck prima di salvarlo
                 deck.idGruppo = currentGruppo
                 deck.percentualeCompletamento = 0
                 // Salva il deck nel database locale

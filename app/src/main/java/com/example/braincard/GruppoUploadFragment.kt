@@ -39,7 +39,6 @@ class GruppoUploadFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.e("AndroidRuntime", gruppoIdSpecifico+":::::: "+arguments?.getString("gruppoId").toString())
         gruppoIdSpecifico = arguments?.getString("gruppoId").toString()
         _binding = FragmentGruppoUploadBinding.inflate(inflater, container, false)
 
@@ -76,7 +75,6 @@ class GruppoUploadFragment : Fragment() {
                 if(deckList!=null) {
                     if(deckList.size==0) showEmptyScreen()
                     else {
-                        Log.e("INSIDE", deckList.toString())
                         ContenitoreDecks.removeAllViews()
                         var count = 0
                         showLoadingScreen()
@@ -87,7 +85,6 @@ class GruppoUploadFragment : Fragment() {
                                 if (exists) checkBox.isChecked = true
                             }
                             checkBox.text = deck.nome
-                            // Aggiungi il button alla vista dei deck
                             ContenitoreDecks.addView(checkBox)
                             checkBox.setOnClickListener {
                                 if (checkBox.isChecked) {

@@ -20,7 +20,6 @@ class NotificationsViewModel(
     val genere = MutableLiveData<String>()
 
     init {
-        // Inizializza i LiveData con i valori iniziali
         this.displayName.value = displayName
         this.nome.value = nome
         this.cognome.value = cognome
