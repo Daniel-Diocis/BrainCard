@@ -1,11 +1,9 @@
 package com.example.braincard
 
-import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +14,17 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.braincard.data.model.Deck
 import com.example.braincard.factories.GruppoViewModelFactory
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.eazegraph.lib.charts.PieChart
 import org.eazegraph.lib.models.PieModel
-import androidx.core.content.ContextCompat
-import com.example.braincard.data.model.Deck
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class GruppoFragment : Fragment() {
@@ -93,7 +92,7 @@ class GruppoFragment : Fragment() {
                 )
                 val deckButton = Button(requireContext())
                 deckButton.layoutParams = layoutParams // Imposta i parametri del layout
-                deckButton.height=154
+
 
                 val deckElimina=ImageButton (requireContext())
                 deckElimina.setImageDrawable(deleteIcon)
@@ -122,6 +121,7 @@ class GruppoFragment : Fragment() {
                 }
                 count++
                 perc+=deck.percentualeCompletamento
+
                 layout.addView(deckButton)
                 layout.addView(deckMod)
                 layout.addView(deckElimina)

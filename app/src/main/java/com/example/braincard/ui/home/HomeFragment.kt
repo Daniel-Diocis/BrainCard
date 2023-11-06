@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
 
                 val deckButton = Button(requireContext())
                 deckButton.layoutParams = layoutParams // Imposta i parametri del layout
-                deckButton.height=154
+
 
 
                 val deckElimina=ImageButton (requireContext())
