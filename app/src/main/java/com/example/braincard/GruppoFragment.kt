@@ -44,6 +44,7 @@ class GruppoFragment : Fragment() {
         savedInstanceState: Bundle?
 
     ): View? {
+
         val deleteIcon = ContextCompat.getDrawable(requireContext(),
             android.R.drawable.ic_delete
         )
@@ -82,13 +83,14 @@ class GruppoFragment : Fragment() {
 
                 val layout=LinearLayout(requireContext())
                 layout.orientation = LinearLayout.HORIZONTAL
-                desiredWidth = (screenWidth * 3) / 4
+                desiredWidth = (screenWidth * 2) / 3
                 val layoutParams = LinearLayout.LayoutParams(
                     desiredWidth,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 val deckButton = Button(requireContext())
                 deckButton.layoutParams = layoutParams // Imposta i parametri del layout
+                deckButton.height=154
 
                 val deckElimina=ImageButton (requireContext())
                 deckElimina.setImageDrawable(deleteIcon)
