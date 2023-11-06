@@ -1,6 +1,7 @@
 package com.example.braincard.ui.home
 
 import android.content.res.Resources
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -109,6 +110,8 @@ class HomeFragment : Fragment() {
 
         homeViewModel.AllGruppo.observe(viewLifecycleOwner, Observer { gruppi ->
             gruppiContainer.removeAllViews()
+            if (gruppi.isNotEmpty()) binding.NoGruppi.visibility = View.GONE
+            else binding.NoGruppi.visibility = View.VISIBLE
             for (gruppo in gruppi) {
                 Log.e("controllo","Gruppo trovato")
                 val layout=LinearLayout(requireContext())
@@ -183,7 +186,8 @@ class HomeFragment : Fragment() {
         popUpMessage.messageLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
 
             if (popUpMessage.invia){
-                homeViewModel.creaGruppo(newMessage)
+                if (newMessage=="") homeViewModel.creaGruppo("Null")
+                else homeViewModel.creaGruppo(newMessage)
                 popUpMessage.invia=false
             }
 

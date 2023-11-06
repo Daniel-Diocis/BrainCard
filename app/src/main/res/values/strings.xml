@@ -43,6 +43,8 @@
     <string name="download_deck">Download deck</string>
     <string name="mostra_psw">Mostra password</string>
     <string name="pswdim">Password dimenticata?</string>
+    <string name="NoGruppi">Non sono presenti gruppi,\ncreane uno o importalo dallo shop</string>
+    <string name="NoDeck">Non sono presenti deck, creane uno</string>
     <string-array name="gender_options">
         <item>Maschio</item>
         <item>Femmina</item>

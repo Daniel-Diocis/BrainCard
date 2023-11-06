@@ -77,6 +77,9 @@ class GruppoFragment : Fragment() {
 
         gruppoViewModel.AllDeck.observe(viewLifecycleOwner, Observer { decks ->
             deckContainer.removeAllViews()
+            val NoDeck = rootView.findViewById<TextView>(R.id.NoDeck)
+            if (decks.isNotEmpty()) NoDeck.visibility = View.GONE
+            else NoDeck.visibility = View.VISIBLE
             count = 0
             var perc=0
             for (deck in decks) {
@@ -150,8 +153,11 @@ class GruppoFragment : Fragment() {
         // Osserva l'attributo message quando si crea un gruppo
         popUpMessage.messageDeckLiveData.observe(viewLifecycleOwner, Observer { newMessage ->
             // Esegui azioni in risposta ai cambiamenti dell'attributo message
+            Log.e("Messaggio", (popUpMessage.messageDeckLiveData.value.toString() == "").toString())
+
             if (popUpMessage.invia){
-                gruppoViewModel.creaDeck(newMessage)
+                if (newMessage=="") gruppoViewModel.creaDeck("Null")
+                else gruppoViewModel.creaDeck(newMessage)
                 popUpMessage.invia=false
             }
 
