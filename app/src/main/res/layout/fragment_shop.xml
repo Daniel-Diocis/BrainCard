@@ -73,7 +73,8 @@
 
                     android:orientation="vertical"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginEnd="10dp"
+                    android:paddingBottom="100dp">
 
                 </LinearLayout>
             </ScrollView>
@@ -92,7 +93,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="20dp"
+                    android:paddingBottom="100dp"/>
             </ScrollView>
 
         </LinearLayout>
@@ -105,7 +107,8 @@
                 android:id="@+id/listaLocale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="100dp">
 
             </LinearLayout>
         </ScrollView>

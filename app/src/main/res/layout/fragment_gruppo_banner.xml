@@ -19,7 +19,7 @@
             android:id="@+id/Layoutbanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#C8C8C8"
+            android:background="@drawable/background_banner"
             android:clickable="true"
             android:focusable="true"
 
@@ -43,10 +43,11 @@
 
                 <TextView
                     android:id="@+id/textView3"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="Autore: "
-                    android:textAlignment="textEnd" />
+                    android:text="   Autore:       "
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/AutoreBanner"
@@ -54,6 +55,7 @@
                     android:layout_height="25dp"
 
                     android:text="@{banner.Autore}"
+                    android:textAlignment="textStart"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -64,10 +66,11 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="200dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="25dp"
-                    android:text="Download: "
-                    android:textAlignment="textEnd" />
+                    android:text="   Download: "
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/DownloadBanner"
