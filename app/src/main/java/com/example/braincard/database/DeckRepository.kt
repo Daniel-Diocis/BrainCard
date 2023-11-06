@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.braincard.data.model.Card
 import com.example.braincard.data.model.Deck
 
-class DeckRepository(private val deckDao: DeckDAO) {
+class  DeckRepository(private val deckDao: DeckDAO) {
 
     // Metodi per interagire con la tabella dei mazzi (Deck)
     val AllDeck: LiveData<List<Deck>> = deckDao.getAllDeck()
