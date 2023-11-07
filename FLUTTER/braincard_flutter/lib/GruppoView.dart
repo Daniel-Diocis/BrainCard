@@ -66,7 +66,7 @@ class _GruppoViewState extends State<GruppoView> {
               itemBuilder: (context, index) {
                 final deck = snapshot.data![index];
                 return Row(
-                  //mainAxisAlignment: MainAxisAlignment.center,
+                  
                   mainAxisAlignment: MainAxisAlignment.center,
 
                   children: [
@@ -97,7 +97,7 @@ class _GruppoViewState extends State<GruppoView> {
                             MaterialPageRoute(
                                 builder: (context) => Fstudio(
                                       deckId: deck.id,
-                                    ) //DeckStudioView(deckId: deck.id, ),
+                                    ) 
 
                                 ),
                           );
@@ -218,7 +218,7 @@ class _GruppoViewState extends State<GruppoView> {
               child: Text('Salva'),
               onPressed: () async {
                 String newName = editingController.text;
-                // Aggiorna il nome del gruppo nel database
+                
                 await _database.updateDeckName(DeckX.Deck(
                   id: deck.id,
                   nome: newName,

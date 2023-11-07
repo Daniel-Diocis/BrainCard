@@ -75,9 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         key: Key(gruppo.id),
                         style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 18.0),
-                          //minimumSize:
-                          //Size(MediaQuery.of(context).size.width - 36, 50),
-                          //COME SONO I BOTTONI??
+                          
                         ),
                         onPressed: () {
                           // Utilizza Navigator.push per navigare a una nuova schermata chiamata "GruppoView"

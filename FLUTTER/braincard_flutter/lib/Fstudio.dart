@@ -35,7 +35,7 @@ class FstudioState extends State<Fstudio> {
     _database = FlashcardDatabase(); // Inizializza il database
     _database.open().then((_) {
       print("Database aperto con successo");
-      // Ora carica le flashcard dal database
+      
       _database.getCardsWithDeckId(widget.deckId).then((cards) {
         setState(() {
           if (cards.length == 0) {
@@ -91,8 +91,7 @@ class FstudioState extends State<Fstudio> {
     progresso = (progresso * 100);
     progresso = (progresso / max);
     int progressoInt = progresso.toInt();
-    //await _database.getDeckById(widget.deckId);
-    //await _database.updateDeck(Deck(id: widget.deckId, nome: nome, percentualeCompletamento: progressoInt, idGruppo: idGruppo))
+    
     print(progressoInt.toString() + "%");
     await _database.updateDeckCompletion(widget.deckId, progressoInt);
     _database.close();
@@ -139,7 +138,7 @@ class FstudioState extends State<Fstudio> {
     return WillPopScope(
       onWillPop: () async {
         salvaProgressi();
-        return true; // o false, a seconda dei tuoi requisiti
+        return true; 
       },
       child: Scaffold(
         appBar: AppBar(
@@ -219,13 +218,12 @@ class FstudioState extends State<Fstudio> {
               child: Align(
                 alignment: Alignment.center,
 
-                // Imposta questa opzione su true se desideri che sia inizialmente visibile
+                
                 child: AnimatedOpacity(
                   duration: Duration(milliseconds: 500),
                   opacity: _opacity,
                   child:
-                      // Spazio inferiore
-
+                      
                       Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[

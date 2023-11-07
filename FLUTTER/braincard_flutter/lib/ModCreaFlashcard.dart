@@ -37,7 +37,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
     _database.open().then((_) {
       print("Database aperto con successo");
 
-      // Ora carica le flashcard dal database
+      
       _database.getCardsWithDeckId(widget.deckId).then((cards) {
         setState(() {
           for (var card in cards) {
@@ -75,7 +75,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
         isFront: true,
       );
       flashcards.add(newFlashcard);
-      // Crea nuovi controller per la nuova flashcard
+      
       newFlashcard.domandaController = TextEditingController();
       newFlashcard.rispostaController = TextEditingController();
       _pageController.animateToPage(
