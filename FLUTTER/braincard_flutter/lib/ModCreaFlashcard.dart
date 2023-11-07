@@ -115,7 +115,7 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
       }
     }
     // Torna alla schermata precedente
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => GruppoView(gruppoId: gruppoId),
@@ -157,6 +157,20 @@ class _ModCreaFlashcardViewState extends State<ModCreaFlashcardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GruppoView(
+                    gruppoId: gruppoId,
+                  ),
+                ),
+              );
+            }),
         title: Text(
           'Modifica/Aggiungi Flashcard',
           style: TextStyle(

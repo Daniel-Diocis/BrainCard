@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:braincard_flutter/Fstudio.dart';
+import 'package:braincard_flutter/home.dart';
 import 'package:flutter/material.dart';
 import 'ModCreaFlashcard.dart';
 import 'flashcard_database.dart';
@@ -37,6 +38,18 @@ class _GruppoViewState extends State<GruppoView> {
     double screenWidth = MediaQuery.of(context).size.width; //larghezza schermo
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              // Codice da eseguire quando si preme la freccia "back"
+              Navigator.pop(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
+                ),
+              );
+            }),
         title: Text(
           'Deck',
           style: TextStyle(
@@ -71,7 +84,8 @@ class _GruppoViewState extends State<GruppoView> {
 
                   children: [
                     Container(
-                        width: 0.13 * screenWidth,
+                        
+                        width: 0.20 * screenWidth,
                         child: Center(
                             child: Text(
                           deck.percentualeCompletamento.toString() + "% ",
@@ -89,7 +103,7 @@ class _GruppoViewState extends State<GruppoView> {
                           ),
                         ))),
                     Container(
-                      width: 0.6 * screenWidth,
+                      width: 0.5 * screenWidth,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -150,6 +164,7 @@ class _GruppoViewState extends State<GruppoView> {
       ),
     );
   }
+  
 
   void _showAddDeckDialog() {
     showDialog(

@@ -93,8 +93,13 @@ class FstudioState extends State<Fstudio> {
     int progressoInt = progresso.toInt();
     
     print(progressoInt.toString() + "%");
-    await _database.updateDeckCompletion(widget.deckId, progressoInt);
-    _database.close();
+    await _database.updateDeckCompletion(widget.deckId, progressoInt).then((_){
+      setState(() {
+      
+    });
+    });
+    
+    
   }
 
   void caricaCarta() async {
